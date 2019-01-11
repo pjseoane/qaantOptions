@@ -5,14 +5,14 @@
  */
 package models2019;
 
-import underlying.Underlying;
+import underlying.cUnderlying;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 /**
  *
  * @author pseoane
  */
-public class cBlackScholes2019 extends Underlying{
+public class cBlackScholes2019 extends cUnderlying{
     protected char callPut,tipoEjercicio;
     protected double strike,daysToExpiration,tasa,impliedVol,optionMktValue,dayYear,sqrDayYear,underlyingNPV,q;
     protected double prima, delta, gamma, vega, theta, rho;
@@ -26,7 +26,7 @@ public class cBlackScholes2019 extends Underlying{
     
         
     public cBlackScholes2019 (){}
-    public cBlackScholes2019 (Underlying und, char callPut, double strike,double daysToExpiration,double tasa,double impliedVol,double optionMktValue){
+    public cBlackScholes2019 (cUnderlying und, char callPut, double strike,double daysToExpiration,double tasa,double impliedVol,double optionMktValue){
       super(und);
       this.callPut              =callPut;  
       this.strike               =strike;
@@ -148,5 +148,12 @@ public class cBlackScholes2019 extends Underlying{
         delta=(prima==0)?0:multCallPut;
        
     }
+    
+    public double getPrima(){return prima;}
+    public double getDelta(){return delta;}
+    public double getGamma(){return gamma;}
+    public double getVega() {return vega;}
+    public double getTheta(){return theta;}
+    public double getRho()  {return rho;}
     
 }

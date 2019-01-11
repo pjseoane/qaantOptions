@@ -9,7 +9,7 @@ package underlying;
  *
  * @author Paulino
  */
-public class Underlying {
+public class cUnderlying {
    
     enum tipoContrato {STOCK,FUTURES};
     public final static char STOCK='S';
@@ -22,17 +22,17 @@ public class Underlying {
     protected double underlyingHistVolatility;
     protected double dividendRate;
     
-    public Underlying(){}
+    public cUnderlying(){}
     
    
-    public Underlying(Underlying und){
+    public cUnderlying(cUnderlying und){
         this.tipoContrato               =und.tipoContrato;
         this.underlyingValue            =und.underlyingValue;
         this.underlyingHistVolatility   =und.underlyingHistVolatility;
         this.dividendRate               =und.dividendRate;
         this.ticker                     =und.ticker;
     }
-    public Underlying(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate)
+    public cUnderlying(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate)
     {
         this.tipoContrato               =tipoContrato;
         this.underlyingValue            =underlyingValue;
@@ -41,7 +41,7 @@ public class Underlying {
         ticker                          ="TICKER";
     }
     
-    public Underlying(String ticker,char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate){
+    public cUnderlying(String ticker,char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate){
         this.ticker                     =ticker;
         this.tipoContrato               =tipoContrato;
         this.underlyingValue            =underlyingValue;
