@@ -81,11 +81,23 @@ public class ImpliedVolCalc
   public static double ivVega(DoubleUnaryOperator func, double vol, double vega,
                                int maxIterations, double tolerance)
         throws IllegalArgumentException, ArithmeticException{
-    int cont=0;
+      
+    int c=0;
+    double iv=vol;
+    double dif=func.applyAsDouble(iv);
+    
+    while (Math.abs(dif)> tolerance && c < maxIterations && iv >tolerance){
+            {  
+            dif=func.applyAsDouble(iv);    
+            iv +=(dif/vega/100);
+            
+            c++;
+            
+            }
+        return iv;
+    }
       
       
-      
-      
-      throw new ArithmeticException("Bisection Algorithm failed to converge");          
-  }
+      throw new ArithmeticException("IV Vega Algorithm failed to converge");          
+    }
 }

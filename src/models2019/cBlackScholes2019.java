@@ -214,6 +214,15 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
     return impliedVol;
     }
     
+    public double getIV2(){
+        if(optionMktValue>0 && daysToExpiration>0){
+        DoubleUnaryOperator opt1 = x-> optionMktValue-new cBlackScholes2019(tipoContrato, underlyingValue, underlyingHistVolatility,dividendRate, callPut, strike, daysToExpiration,tasa,x,0).getPrima();
+        impliedVol= ImpliedVolCalc.ivVega(opt1, impliedVol, vega,
+                               20, 0.00001);    
+        }
+        return impliedVol;
+    }
+    
     @Override
     public void fillDerivativesArray(){
         derivativesArray[0][0]=prima;

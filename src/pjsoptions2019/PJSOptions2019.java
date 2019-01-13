@@ -32,7 +32,7 @@ public class PJSOptions2019 {
         double viOption     =.30;
         double riskFreeRate =.10;
         double divYield     =0;
-        double mktValue     =7.90;
+        double mktValue     =7.20;
         
         cUnderlying someStock   = new cUnderlying(contrato, undValue, vh30Und, divYield);
         cBlackScholes2019 bs    = new cBlackScholes2019(someStock, option, X,days,riskFreeRate,viOption,mktValue);
@@ -47,6 +47,7 @@ public class PJSOptions2019 {
         System.out.println("Prima bs  :"+bs.getPrima());
         System.out.println("Prima mkt  :"+bs.getOptionMktValue());
         System.out.println("Prima IV :" + bs.getImpliedVlt());
+        System.out.println("Prima IV2 :" + bs.getIV2());
        // bs1.setOptionVlt(iv);
         //bs1.runModel();
         System.out.println("Prima bs1 :" + Arrays.toString(bs1.getDerivativesArray()[0]));
