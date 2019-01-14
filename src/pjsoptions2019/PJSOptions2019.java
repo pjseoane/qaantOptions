@@ -21,9 +21,9 @@ public class PJSOptions2019 {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        char   contrato     ='F';
+        char   contrato     ='S';
         char   option       ='P';
-        double undValue     =105;
+        double undValue     =100;
         double X            =100;
         double days         =365;
         
@@ -32,7 +32,7 @@ public class PJSOptions2019 {
         
         double riskFreeRate =.10;
         double divYield     =0;
-        double mktValue     =0;
+        double mktValue     =9;
         
         cUnderlying someStock   = new cUnderlying(contrato, undValue, vh30Und, divYield);
         cBlackScholes2019 bs    = new cBlackScholes2019(someStock, option, X,days,riskFreeRate,mktValue);
@@ -57,9 +57,9 @@ public class PJSOptions2019 {
         System.out.println("Whaley:" + Arrays.toString(opW.getDerivativesArray()[0]));
         */
         
-        cTestWhaley opt= new cTestWhaley(contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue);
-        System.out.println("Tst Inh:" + Arrays.toString(opt.getDerivativesArray()[0]));
-       
+        cWhaley2019 opW= new cWhaley2019(contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue);
+        System.out.println("Tst W:" + Arrays.toString(opW.getDerivativesArray()[0]));
+        System.out.println("Prima IV W:" + opW.getImpliedVlt());
         
         /*
         bs.setUnderlyingValue(102);

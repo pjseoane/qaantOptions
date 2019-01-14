@@ -45,10 +45,13 @@ public class ImpliedVolCalc
           }
         else if (func.applyAsDouble(a)*func.applyAsDouble(b) > 0.0)
           {
+              /*
             String message = "function values at " + a + " and " + b
                 +  " should have opposite signs; func.applyAsDouble(" + a + ") = " + func.applyAsDouble(a)
                 + ", func.applyAsDouble(" + b + ") = " + func.applyAsDouble(b);
             throw new IllegalArgumentException(message);
+              */
+              return 0;
           }
           
         int    iterations = 1;

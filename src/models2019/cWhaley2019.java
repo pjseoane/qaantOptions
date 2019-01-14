@@ -5,65 +5,49 @@
  */
 package models2019;
 
+import java.util.function.DoubleUnaryOperator;
+import static models2019.cBlackScholes2019.CALL;
+import static models2019.cBlackScholes2019.PUT;
 import org.apache.commons.math3.distribution.NormalDistribution;
+import static underlying.cUnderlying.STOCK;
 
 /**
  *
- * @author pseoane
+ * @author pauli
  */
 public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
-    private double drift,vlt2,VltSqrDayYear,h,alfa,beta,lambda,eex,s1,zerror,xx,corr,mBlackScholes,rhs,lhs,nd1,slope,a,vv;
-
+   
+    
     public cWhaley2019(){}
+    
     public cWhaley2019(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato,underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike,daysToExpiration, rate, optionMktValue);
-               
-        buildWBA();
-    
-        }
-        
-        private void buildWBA(){
-        
-        runModel();
-    }   
-        
-        
-        
-    
-   
-     public void opcionConVida(){
-        /*
-        cBlackScholes2019 BSOption=new cBlackScholes2019(tipoContrato, underlyingValue,histVolatility, dividendRate, callPut, strike, daysToExpiration, rate, 0);
-        prima=BSOption.getPrima();
-        
-        this.multCallPut=BSOption.multCallPut;
-        */
-        prima=super.prima;
-        delta=4;
-        
-        if(tipoContrato=='F' || callPut=='P') {
-            wWhaley();
-        }
-       
-        //greeks se devuelven de BScholes
-        /*
-        delta   = BSOption.getDelta();
-	gamma   = BSOption.getGamma();
-	vega    = BSOption.getVega();
-	theta   = BSOption.getTheta();
-	rho     = BSOption.getRho();
-        */
+        //aqui corre runModel() de este modelo si esta definido sino corre el BS
+        //luego corre fillderivativesArray() de BS
+        runWhaley();
     }
- private void wWhaley(){
+    private void runWhaley(){
+     if(tipoContrato=='F' || callPut=='P') {
+         
+         wWhaley();
+         fillDerivativesArray();   
+        }
+    }    
+    
+       
+    public void wWhaley(){
+        //System.out.println("Salio por wWhaley**:"+callPut);
+        double histVolatility=underlyingHistVolatility;
+        
         double zz;
+        double b=0;
+        double xx;
+        //Los siguientes valores vienen heredados de BS
         //dayYear=daysToExpiration/365;
         //sqrDayYear = Math.sqrt(dayYear);
         //underlyingNPV=underlyingValue*Math.exp(-dividendRate*dayYear);
         
-        drift=(tipoContrato==STOCK) ? (rate-dividendRate):-rate; 
-        
-        /*
-        switch(tipoContrato){
+         switch(tipoContrato){
           case STOCK:
               q=dividendRate;
               b=rate;
@@ -73,52 +57,50 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
               q=rate;
               b=0;
               break;
-         
         }
-        */
-        //zz=Math.exp((b-tasa))*dayYear; //para STOCK queda 1, 
-        vlt2 = volatModel*volatModel;
         
-        double d1 = (Math.log(underlyingValue / strike) + ((rate-q) + vlt2 / 2)*dayYear) / (volatModel*sqrDayYear);
-        double d2 = d1 - (volatModel*sqrDayYear);
+        //zz=Math.exp((b-tasa))*dayYear; //para STOCK queda 1, 
+        double vlt2 = histVolatility*histVolatility;
+        
+        //double d1 = (Math.log(underlyingValue / strike) + ((rate-q) + vlt2 / 2)*dayYear) / (histVolatility*sqrDayYear);
+        //double d2 = d1 - (histVolatility*sqrDayYear);
        
-        VltSqrDayYear = volatModel*sqrDayYear;
-	h = 1 - Math.exp(-rate*dayYear); //descuento para valor presente
-	alfa = 2 * rate / vlt2;
-	beta = 2 * drift / vlt2;
+        double VltSqrDayYear = histVolatility*sqrDayYear;
+	double h = 1 - Math.exp(-rate*dayYear); //descuento para valor presente
+	double alfa = 2 * rate / vlt2;
+	double beta = 2 * (b-q) / vlt2;
 
-	lambda = (-(beta - 1) + cpFlag*Math.sqrt((beta - 1)*(beta-1) + 4 * alfa / h)) / 2;
+	double lambda = (-(beta - 1) + cpFlag*Math.sqrt((beta - 1)*(beta-1) + 4 * alfa / h)) / 2;
 
-	eex = Math.exp(-q*dayYear);//descuento por dividendos
+	double eex = Math.exp(-q*dayYear);//descuento por dividendos
 
-	s1 = strike;
+	double s1 = strike;
 	zz = 1 / Math.sqrt(2 * Math.PI);
-	zerror = 1;
+	double zerror = 1;
 	do
 	{
-		d1=(Math.log(s1 / strike) + ((rate-q) + vlt2/2)*dayYear) / VltSqrDayYear;
+		double d1=(Math.log(s1 / strike) + ((rate-q) + vlt2/2)*dayYear) / VltSqrDayYear;
                 
-                //NormalDistribution nD=new NormalDistribution();
-                //xx = (1 - eex*nD.cumulativeProbability(cpFlag*d1));
-		xx=(1-eex*new NormalDistribution().cumulativeProbability(cpFlag*d1));
+               
+                xx=(1-eex*new NormalDistribution().cumulativeProbability(cpFlag*d1)); 
                 
-                corr = s1 / lambda*xx;
+		double corr = s1 / lambda*xx;
 
              //   Underlying Und1=new Underlying(tipoContrato,s1,histVolatility,dividendRate); 
-               	cBlackScholes2019 option=new cBlackScholes2019 (tipoContrato,s1,volatModel,dividendRate, callPut,strike, daysToExpiration,rate,0);
+               	cBlackScholes2019 option=new cBlackScholes2019 (tipoContrato,s1,histVolatility,dividendRate, callPut,strike, daysToExpiration,rate,0);
                                                                 
-                mBlackScholes = option.getPrima();
-                rhs = mBlackScholes + cpFlag*corr;
+                double mBlackScholes = option.getPrima();
+                double rhs = mBlackScholes + cpFlag*corr;
 
-		lhs = cpFlag*(s1 - strike);
+		double lhs = cpFlag*(s1 - strike);
 		zerror = lhs - rhs;
-                nd1 = zz*Math.exp(-0.5*d1*d1); //standard normal prob?
-		slope = cpFlag*(1 - 1 / lambda)*xx + 1 / lambda*(eex*nd1) * 1 / VltSqrDayYear;
+                double nd1 = zz*Math.exp(-0.5*d1*d1); //standard normal prob?
+		double slope = cpFlag*(1 - 1 / lambda)*xx + 1 / lambda*(eex*nd1) * 1 / VltSqrDayYear;
 		s1 = s1 - zerror / slope;
 
 	} while (Math.abs(zerror)>0.000001);
 
-	a = cpFlag*s1 / lambda*xx;
+	double a = cpFlag*s1 / lambda*xx;
 	
 	switch (callPut)
 	{
@@ -136,9 +118,42 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
 		}else{
                 	prima += a*Math.pow((underlyingValue / s1), lambda);   
                 }
+               //prima=10.1;
 		break;
 	}
+    
     }
- }        
-         
+    
+    @Override
+    public double getImpliedVlt() {
+        double impliedVol=underlyingHistVolatility;
+        
+        if(optionMktValue>0 && daysToExpiration>0){
+            double min;
+            double max;
+            int iter=50;
+            double precision=0.00001;
+    
+        if(prima<=optionMktValue){
+            min=0; //impliedVol;
+            max=2;//min*4;
+            }else{
+                min=0;// impliedVol/3;
+                max=2;//impliedVol;
+            }
+        
+        DoubleUnaryOperator opt1 = x-> optionMktValue-new cWhaley2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
+               
+        impliedVol= ImpliedVolCalc.bisection(opt1, min, max, iter, precision);
+        //***********************************
+       
+    }
+    return impliedVol;
+    }
+}
+     
+    
+        
+    
+   
 
