@@ -11,7 +11,7 @@ import org.apache.commons.math3.distribution.NormalDistribution;
 
 /**
  *
- * @author pseoane
+ * @author pseoane.
  */
 public class cBlackScholes2019 extends cUnderlying implements Optionable{
     protected char callPut;

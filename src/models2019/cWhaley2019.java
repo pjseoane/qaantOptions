@@ -47,8 +47,7 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
     
        
     public void wWhaley(){
-        //System.out.println("Salio por wWhaley**:"+callPut);
-        //double histVolatility=underlyingHistVolatility;
+        
         
         double zz;
         double b=0;
@@ -70,12 +69,10 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
               break;
         }
         
-        //zz=Math.exp((b-tasa))*dayYear; //para STOCK queda 1, 
+        
         double vlt2 = volatModel*volatModel;
         
-        //double d1 = (Math.log(underlyingValue / strike) + ((rate-q) + vlt2 / 2)*dayYear) / (histVolatility*sqrDayYear);
-        //double d2 = d1 - (histVolatility*sqrDayYear);
-       
+               
         double VltSqrDayYear = volatModel*sqrDayYear;
 	double h = 1 - Math.exp(-rate*dayYear); //descuento para valor presente
 	double alfa = 2 * rate / vlt2;
@@ -97,8 +94,7 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
                 
 		double corr = s1 / lambda*xx;
 
-             //   Underlying Und1=new Underlying(tipoContrato,s1,histVolatility,dividendRate); 
-               	cBlackScholes2019 option=new cBlackScholes2019 (tipoContrato,s1,volatModel,dividendRate, callPut,strike, daysToExpiration,rate,0);
+                cBlackScholes2019 option=new cBlackScholes2019 (tipoContrato,s1,volatModel,dividendRate, callPut,strike, daysToExpiration,rate,0);
                                                                 
                 double mBlackScholes = option.getPrima();
                 double rhs = mBlackScholes + cpFlag*corr;
@@ -157,8 +153,7 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
                
         impliedVol= ImpliedVolCalc.bisection(opt1, min, max, iter, precision);
         //impliedVol=.4444;
-        //***********************************
-       
+              
     }
     return impliedVol;
     }
