@@ -32,7 +32,7 @@ public class PJSOptions2019 {
         
         double riskFreeRate =.10;
         double divYield     =0;
-        double mktValue     =9;
+        double mktValue     =8.4;
         
         cUnderlying someStock   = new cUnderlying(contrato, undValue, vh30Und, divYield);
         cBlackScholes2019 bs    = new cBlackScholes2019(someStock, option, X,days,riskFreeRate,mktValue);

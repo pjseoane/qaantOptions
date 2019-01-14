@@ -15,7 +15,7 @@ import org.apache.commons.math3.distribution.NormalDistribution;
  */
 public class cBlackScholes2019 extends cUnderlying implements Optionable{
     protected char callPut;
-    protected double strike,daysToExpiration,rate,optionMktValue,dayYear,sqrDayYear,underlyingNPV,q;
+    protected double strike,daysToExpiration,rate,optionMktValue,dayYear,sqrDayYear,underlyingNPV,q,impliedVol;
     protected double prima, delta, gamma, vega, theta, rho;
     //protected 
     protected int  cpFlag;
@@ -136,7 +136,11 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
                 break;
                 
         }//end switch
-    
+       
+        //Aca calcula IV si se informa algun mktValue
+        if(optionMktValue>0 && daysToExpiration>0){
+            impliedVol=getImpliedVlt();
+        }
     }
     
     public void opcionSinVida(){
@@ -193,7 +197,7 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
     
     @Override
     public double getImpliedVlt() {
-        double impliedVol=volatModel;
+        impliedVol=volatModel;
         
         if(optionMktValue>0 && daysToExpiration>0){
             double min;
@@ -219,11 +223,10 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
     }
     
     public double getIV2(){
-        double impliedVol=volatModel;
+        impliedVol=volatModel;
         if(optionMktValue>0 && daysToExpiration>0){
         DoubleUnaryOperator opt1 = x-> optionMktValue-new cBlackScholes2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
-        impliedVol= ImpliedVolCalc.ivVega(opt1, impliedVol, vega,
-                               20, 0.00001);    
+        impliedVol= ImpliedVolCalc.ivVega(opt1, volatModel, vega, 20, 0.00001);    
         }
         return impliedVol;
     }
@@ -238,7 +241,7 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
         derivativesArray[0][5]=rho;
         derivativesArray[0][6]=volatModel;
         derivativesArray[0][7]=elapsedTime;
-        derivativesArray[0][8]=optionMktValue;
+        derivativesArray[0][8]=impliedVol;
         derivativesArray[0][9]=modelNumber;
       
     }
