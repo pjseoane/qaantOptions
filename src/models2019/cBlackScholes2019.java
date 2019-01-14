@@ -213,9 +213,8 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
         DoubleUnaryOperator opt1 = x-> optionMktValue-new cBlackScholes2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
                
         impliedVol= ImpliedVolCalc.bisection(opt1, min, max, iter, precision);
-        //***********************************
-       
-    }
+              
+        }
     return impliedVol;
     }
     
@@ -268,6 +267,8 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
         builder.append(theta);
         builder.append("/rho->");
         builder.append(rho);
+        builder.append("/optionMktValue->");
+        builder.append(optionMktValue);
         builder.append("/impVlt->");
         builder.append(volatModel);
         builder.append("z");

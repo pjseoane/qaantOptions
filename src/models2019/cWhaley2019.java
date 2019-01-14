@@ -23,18 +23,26 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
     public cWhaley2019(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato,underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike,daysToExpiration, rate, optionMktValue);
         //aqui corre runModel() de este modelo si esta definido sino corre el BS
-        
-        //luego corre fillderivativesArray() de BS
-        runWhaley();
+                
     }
-   // public void runModel(){
-    private void runWhaley(){
-     if(tipoContrato=='F' || callPut=='P') {
-         
+    @Override
+    public void runModel(){
+    //recalcula un modelo BS para obtener las greeks por BS
+    cBlackScholes2019 optW= new cBlackScholes2019(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike, daysToExpiration, rate, 0);
+        
+    prima=optW.getPrima();
+    delta=optW.getDelta();
+    gamma=optW.getGamma();
+    vega=optW.getVega();
+    theta=optW.getTheta();
+    rho=optW.getRho();
+    
+    if(tipoContrato=='F' || callPut=='P') {
          wWhaley();
-         impliedVol=getImpliedVlt();
-         fillDerivativesArray();   
         }
+      //  impliedVol=getImpliedVlt();
+      //  fillDerivativesArray();   
+    
     }    
     
        
@@ -148,6 +156,7 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
         DoubleUnaryOperator opt1 = x-> optionMktValue-new cWhaley2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
                
         impliedVol= ImpliedVolCalc.bisection(opt1, min, max, iter, precision);
+        //impliedVol=.4444;
         //***********************************
        
     }
