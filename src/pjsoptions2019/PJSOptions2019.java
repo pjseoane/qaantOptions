@@ -6,7 +6,7 @@
 package pjsoptions2019;
 
 import java.util.Arrays;
-import models2019.cBlackScholes2019;
+import models2019.*;
 import underlying.cUnderlying;
 
 /**
@@ -21,25 +21,26 @@ public class PJSOptions2019 {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        char   contrato     ='S';
+        char   contrato     ='F';
         char   option       ='P';
-        double undValue     =100;
+        double undValue     =105;
         double X            =100;
         double days         =365;
         
         
         double vh30Und      =.30;
-        double viOption     =.30;
+        
         double riskFreeRate =.10;
         double divYield     =0;
-        double mktValue     =7.20;
+        double mktValue     =0;
         
         cUnderlying someStock   = new cUnderlying(contrato, undValue, vh30Und, divYield);
-        cBlackScholes2019 bs    = new cBlackScholes2019(someStock, option, X,days,riskFreeRate,viOption,mktValue);
+        cBlackScholes2019 bs    = new cBlackScholes2019(someStock, option, X,days,riskFreeRate,mktValue);
         
+        /*
         double iv=bs.getImpliedVlt();
-        cBlackScholes2019 bs1   = new cBlackScholes2019(contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,iv,mktValue);
-        
+        cBlackScholes2019 bs1   = new cBlackScholes2019(contrato, undValue, iv,divYield,option, X,days,riskFreeRate,mktValue);
+        */
         
         
         System.out.println("Model Name:"+ bs.getModelName());
@@ -48,9 +49,17 @@ public class PJSOptions2019 {
         System.out.println("Prima mkt  :"+bs.getOptionMktValue());
         System.out.println("Prima IV :" + bs.getImpliedVlt());
         System.out.println("Prima IV2 :" + bs.getIV2());
-       // bs1.setOptionVlt(iv);
-        //bs1.runModel();
-        System.out.println("Prima bs1 :" + Arrays.toString(bs1.getDerivativesArray()[0]));
+       
+        //System.out.println("Prima bs1 :" + Arrays.toString(bs1.getDerivativesArray()[0]));
+        
+        /*
+        cWhaley2019 opW= new cWhaley2019(contrato, undValue, iv,divYield,option, X,days,riskFreeRate,mktValue);
+        System.out.println("Whaley:" + Arrays.toString(opW.getDerivativesArray()[0]));
+        */
+        
+        cTestWhaley opt= new cTestWhaley(contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue);
+        System.out.println("Tst Inh:" + Arrays.toString(opt.getDerivativesArray()[0]));
+       
         
         /*
         bs.setUnderlyingValue(102);
