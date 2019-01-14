@@ -37,7 +37,7 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
        
     public void wWhaley(){
         //System.out.println("Salio por wWhaley**:"+callPut);
-        double histVolatility=underlyingHistVolatility;
+        //double histVolatility=underlyingHistVolatility;
         
         double zz;
         double b=0;
@@ -60,12 +60,12 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
         }
         
         //zz=Math.exp((b-tasa))*dayYear; //para STOCK queda 1, 
-        double vlt2 = histVolatility*histVolatility;
+        double vlt2 = volatModel*volatModel;
         
         //double d1 = (Math.log(underlyingValue / strike) + ((rate-q) + vlt2 / 2)*dayYear) / (histVolatility*sqrDayYear);
         //double d2 = d1 - (histVolatility*sqrDayYear);
        
-        double VltSqrDayYear = histVolatility*sqrDayYear;
+        double VltSqrDayYear = volatModel*sqrDayYear;
 	double h = 1 - Math.exp(-rate*dayYear); //descuento para valor presente
 	double alfa = 2 * rate / vlt2;
 	double beta = 2 * (b-q) / vlt2;
@@ -87,7 +87,7 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
 		double corr = s1 / lambda*xx;
 
              //   Underlying Und1=new Underlying(tipoContrato,s1,histVolatility,dividendRate); 
-               	cBlackScholes2019 option=new cBlackScholes2019 (tipoContrato,s1,histVolatility,dividendRate, callPut,strike, daysToExpiration,rate,0);
+               	cBlackScholes2019 option=new cBlackScholes2019 (tipoContrato,s1,volatModel,dividendRate, callPut,strike, daysToExpiration,rate,0);
                                                                 
                 double mBlackScholes = option.getPrima();
                 double rhs = mBlackScholes + cpFlag*corr;
@@ -126,7 +126,7 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
     
     @Override
     public double getImpliedVlt() {
-        double impliedVol=underlyingHistVolatility;
+        double impliedVol=volatModel;
         
         if(optionMktValue>0 && daysToExpiration>0){
             double min;
@@ -135,11 +135,11 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
             double precision=0.00001;
     
         if(prima<=optionMktValue){
-            min=0; //impliedVol;
-            max=2;//min*4;
+            min=volatModel;
+            max=min*3;
             }else{
                 min=0;// impliedVol/3;
-                max=2;//impliedVol;
+                max=volatModel;
             }
         
         DoubleUnaryOperator opt1 = x-> optionMktValue-new cWhaley2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();

@@ -59,7 +59,8 @@ public class PJSOptions2019 {
         
         cWhaley2019 opW= new cWhaley2019(contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue);
         System.out.println("Tst W:" + Arrays.toString(opW.getDerivativesArray()[0]));
-        System.out.println("Prima IV W:" + opW.getImpliedVlt());
+        System.out.println("prima W "+opW.getPrima());
+        System.out.println("Prima IV W: " + opW.getImpliedVlt());
         
         /*
         bs.setUnderlyingValue(102);

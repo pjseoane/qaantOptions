@@ -193,7 +193,7 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
     
     @Override
     public double getImpliedVlt() {
-        double impliedVol=underlyingHistVolatility;
+        double impliedVol=volatModel;
         
         if(optionMktValue>0 && daysToExpiration>0){
             double min;
@@ -202,11 +202,11 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
             double precision=0.00001;
     
         if(prima<=optionMktValue){
-            min=0; //impliedVol;
-            max=2;//min*4;
+            min=volatModel;
+            max=min*3;
             }else{
                 min=0;// impliedVol/3;
-                max=2;//impliedVol;
+                max=volatModel;
             }
         
         DoubleUnaryOperator opt1 = x-> optionMktValue-new cBlackScholes2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
@@ -219,7 +219,7 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
     }
     
     public double getIV2(){
-        double impliedVol=underlyingHistVolatility;
+        double impliedVol=volatModel;
         if(optionMktValue>0 && daysToExpiration>0){
         DoubleUnaryOperator opt1 = x-> optionMktValue-new cBlackScholes2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
         impliedVol= ImpliedVolCalc.ivVega(opt1, impliedVol, vega,
