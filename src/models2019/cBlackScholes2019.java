@@ -27,11 +27,15 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
     protected double[][] derivativesArray = new double[1][10];
     
     //enum TipoOpcion {CALL,PUT};
-    public final static char CALL   ='C';
-    public final static char PUT    ='P';
+    public final static char CALL       ='C';
+    public final static char PUT        ='P';
+    public final static char EUROPEAN   ='E';
+    public final static char AMERICAN   ='A';
+        
+    
     protected String pModelName="Black-Scholes ver2019";
     protected int modelNumber=1;
-    protected static char tipoEjercicio ='E';
+    protected static char tipoEjercicio =EUROPEAN;
     
     
         

@@ -46,7 +46,7 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
     public void wWhaley(){
         pModelName="Black-Scholes ver2019";
         modelNumber=2;
-        tipoEjercicio ='A';
+        tipoEjercicio =AMERICAN;
         
         double zz;
         double b=0;

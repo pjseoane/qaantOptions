@@ -26,10 +26,7 @@ public class PJSOptions2019 {
         double undValue     =100;
         double X            =100;
         double days         =365;
-        
-        
         double vh30Und      =0.3;
-        
         double riskFreeRate =.10;
         double divYield     =0;
         double mktValue     =9.0;
@@ -37,10 +34,10 @@ public class PJSOptions2019 {
         cUnderlying someStock   = new cUnderlying(contrato, undValue, vh30Und, divYield);
         cBlackScholes2019 bs    = new cBlackScholes2019(someStock, option, X,days,riskFreeRate,mktValue);
         
-        /*
+        
         double iv=bs.getImpliedVlt();
         cBlackScholes2019 bs1   = new cBlackScholes2019(contrato, undValue, iv,divYield,option, X,days,riskFreeRate,mktValue);
-        */
+        
         
         
         System.out.println("Model Name:"+ bs.getModelName());
@@ -50,13 +47,9 @@ public class PJSOptions2019 {
         System.out.println("Prima IV :" + bs.getImpliedVlt());
         System.out.println("Prima IV2 :" + bs.getIV2());
        
-        //System.out.println("Prima bs1 :" + Arrays.toString(bs1.getDerivativesArray()[0]));
+        System.out.println("Prima bs1 :" + Arrays.toString(bs1.getDerivativesArray()[0]));
         
-        /*
-        cWhaley2019 opW= new cWhaley2019(contrato, undValue, iv,divYield,option, X,days,riskFreeRate,mktValue);
-        System.out.println("Whaley:" + Arrays.toString(opW.getDerivativesArray()[0]));
-        */
-        
+               
         cWhaley2019 opW= new cWhaley2019(contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue);
         System.out.println("Tst W:" + Arrays.toString(opW.getDerivativesArray()[0]));
         System.out.println("prima W "+opW.getPrima());
