@@ -23,13 +23,16 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
     public cWhaley2019(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato,underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike,daysToExpiration, rate, optionMktValue);
         //aqui corre runModel() de este modelo si esta definido sino corre el BS
+        
         //luego corre fillderivativesArray() de BS
         runWhaley();
     }
+   // public void runModel(){
     private void runWhaley(){
      if(tipoContrato=='F' || callPut=='P') {
          
          wWhaley();
+         impliedVol=getImpliedVlt();
          fillDerivativesArray();   
         }
     }    

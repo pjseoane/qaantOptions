@@ -66,23 +66,22 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
         opcionConVida=(daysToExpiration>0);
         
         if (opcionConVida){
-             volatModel = underlyingHistVolatility;
-                
+            volatModel = underlyingHistVolatility;
             dayYear=daysToExpiration/365;
             sqrDayYear = Math.sqrt(dayYear);
             underlyingNPV=underlyingValue*Math.exp(-dividendRate*dayYear);
             q=(tipoContrato==STOCK) ? dividendRate:rate; 
             //q: si es una accion q es el dividendo, si es un futuro q se toma la rate para descontar el valor futr a presente 
             //Se hace este reemplazo para poder usar la misma form en STOCK y FUTURO
-            
-            
-            
+                      
             runModel();
         }else{
             opcionSinVida();
         } 
         
         elapsedTime = System.currentTimeMillis() - startTime;
+                
+        impliedVol=getImpliedVlt();
         fillDerivativesArray();
     
     }
@@ -138,9 +137,7 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
         }//end switch
        
         //Aca calcula IV si se informa algun mktValue
-        if(optionMktValue>0 && daysToExpiration>0){
-            impliedVol=getImpliedVlt();
-        }
+        
     }
     
     public void opcionSinVida(){
@@ -239,9 +236,9 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
         derivativesArray[0][3]=vega;
         derivativesArray[0][4]=theta;
         derivativesArray[0][5]=rho;
-        derivativesArray[0][6]=volatModel;
-        derivativesArray[0][7]=elapsedTime;
-        derivativesArray[0][8]=impliedVol;
+        derivativesArray[0][6]=optionMktValue;
+        derivativesArray[0][7]=impliedVol;
+        derivativesArray[0][8]=elapsedTime;
         derivativesArray[0][9]=modelNumber;
       
     }
