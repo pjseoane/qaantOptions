@@ -218,6 +218,11 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
     return impliedVol;
     }
     
+    public double getIVlambda(){
+    
+        return impliedVol;
+    }
+    
     public double getIV2(){
         impliedVol=volatModel;
         if(optionMktValue>0 && daysToExpiration>0){

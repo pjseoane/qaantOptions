@@ -16,14 +16,14 @@ import static underlying.cUnderlying.STOCK;
  * @author pauli
  */
 public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
-   
+    
     
     public cWhaley2019(){}
     
     public cWhaley2019(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato,underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike,daysToExpiration, rate, optionMktValue);
         //aqui corre runModel() de este modelo si esta definido sino corre el BS
-                
+        
     }
     @Override
     public void runModel(){
@@ -40,14 +40,13 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
     if(tipoContrato=='F' || callPut=='P') {
          wWhaley();
         }
-      //  impliedVol=getImpliedVlt();
-      //  fillDerivativesArray();   
-    
     }    
     
        
     public void wWhaley(){
-        
+        pModelName="Black-Scholes ver2019";
+        modelNumber=2;
+        tipoEjercicio ='A';
         
         double zz;
         double b=0;
@@ -133,7 +132,7 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
     
     @Override
     public double getImpliedVlt() {
-        double impliedVol=volatModel;
+        impliedVol=volatModel;
         
         if(optionMktValue>0 && daysToExpiration>0){
             double min;
