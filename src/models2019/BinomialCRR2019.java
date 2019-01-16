@@ -16,9 +16,9 @@ public class BinomialCRR2019 extends BlackScholes2019 implements Optionable{
     
     public BinomialCRR2019(){}
     public BinomialCRR2019(char tipoEjercicio,char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
-        //super(tipoContrato,underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike,daysToExpiration, rate, optionMktValue);
+        super(tipoContrato,underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike,daysToExpiration, rate, optionMktValue);
         // puede servir en este modelp construir un BS para aproximar algun valor??
-        
+        /*
         this.tipoEjercicio        =tipoEjercicio;
         this.tipoContrato         =tipoContrato;
         this.underlyingValue      =underlyingValue;
@@ -29,8 +29,10 @@ public class BinomialCRR2019 extends BlackScholes2019 implements Optionable{
         this.daysToExpiration     =daysToExpiration;
         this.rate                 =rate;
         this.optionMktValue       =optionMktValue;
+        */
         this.steps                =steps;
-        build();
+        
+        //build();
     }
     
     @Override
@@ -39,9 +41,11 @@ public class BinomialCRR2019 extends BlackScholes2019 implements Optionable{
         pModelName="Binomial Cox-Ross-Rubinstein ver2019";
         modelNumber=3;
         
-        
+        volatModel = underlyingHistVolatility;
         prima=88.88;
         delta=-0.88;
+        
+        //vega=;
      }
    
     @Override

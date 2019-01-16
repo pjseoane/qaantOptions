@@ -22,9 +22,9 @@ public class Whaley2019 extends BlackScholes2019 implements Optionable{
     
     public Whaley2019(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato,underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike,daysToExpiration, rate, optionMktValue);
-        //aqui corre runModel() de este modelo si esta definido sino corre el BS
        
     }
+    
     @Override
     public void runModel(){
     //recalcula un modelo BS para obtener las greeks por BS
