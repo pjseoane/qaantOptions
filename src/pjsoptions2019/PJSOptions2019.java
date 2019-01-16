@@ -56,8 +56,12 @@ public class PJSOptions2019 {
         System.out.println("prima W "+opW.getPrima());
         System.out.println("Prima IV W: " + opW.getImpliedVlt());
         
-        JarrowRudd2019 optJR=new JarrowRudd2019('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,0,steps);
-        System.out.println("Tst JR:" + Arrays.toString(optJR.getDerivativesArray()[0]));
+        BinomialCRR2019 optJR=new BinomialCRR2019('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,0,steps);
+        System.out.println("Tst CRR:" + Arrays.toString(optJR.getDerivativesArray()[0]));
+        
+        BinomialJarrowRudd optCRR = new BinomialJarrowRudd('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,0,steps);
+        System.out.println("Tst JR:" + Arrays.toString(optCRR.getDerivativesArray()[0]));
+        
         /*
         bs.setUnderlyingValue(102);
         bs.setStrike(105);
