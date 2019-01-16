@@ -23,11 +23,12 @@ public class Whaley2019 extends BlackScholes2019 implements Optionable{
     public Whaley2019(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato,underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike,daysToExpiration, rate, optionMktValue);
         //aqui corre runModel() de este modelo si esta definido sino corre el BS
-        
+       
     }
     @Override
     public void runModel(){
     //recalcula un modelo BS para obtener las greeks por BS
+   
     BlackScholes2019 optW= new BlackScholes2019(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike, daysToExpiration, rate, 0);
         
     prima=optW.getPrima();
@@ -44,7 +45,7 @@ public class Whaley2019 extends BlackScholes2019 implements Optionable{
     
        
     public void wWhaley(){
-        pModelName="Black-Scholes ver2019";
+        pModelName="Whaley ver2019";
         modelNumber=2;
         tipoEjercicio =AMERICAN;
         

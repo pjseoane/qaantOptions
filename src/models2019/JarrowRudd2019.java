@@ -17,6 +17,7 @@ public class JarrowRudd2019 extends BlackScholes2019 implements Optionable{
     public JarrowRudd2019(){}
     public JarrowRudd2019(char tipoEjercicio,char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         //super(tipoContrato,underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike,daysToExpiration, rate, optionMktValue);
+        // puede servir en este modelp construir un BS para aproximar algun valor??
         
         this.tipoEjercicio        =tipoEjercicio;
         this.tipoContrato         =tipoContrato;
@@ -29,36 +30,18 @@ public class JarrowRudd2019 extends BlackScholes2019 implements Optionable{
         this.rate                 =rate;
         this.optionMktValue       =optionMktValue;
         this.steps                =steps;
-        buildJarrowRudd();
+        build();
     }
-    private void buildJarrowRudd(){
     
-        pModelName="Binomial Jarrow-Rudd ver2019";
-        modelNumber=4;
-        
-        double startTime=System.currentTimeMillis();
-        cpFlag=(callPut==CALL)?1:-1;
-        
-        opcionConVida=(daysToExpiration>0);
-        
-        if (opcionConVida){
-            
-            runModel();
-            
-        }else{
-            opcionSinVida();
-        } 
-        impliedVol=getImpliedVlt();
-        elapsedTime = System.currentTimeMillis() - startTime;
-               
-       
-        fillDerivativesArray();
-    
-    }
     @Override
      public void runModel(){
         System.out.println("Run Model JR....");
+        pModelName="Binomial Jarrow-Rudd ver2019";
+        modelNumber=4;
+        
+        
         prima=88.88;
+        delta=-0.88;
      }
    
     @Override

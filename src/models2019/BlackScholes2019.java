@@ -48,7 +48,7 @@ public class BlackScholes2019 extends cUnderlying implements Optionable{
         this.daysToExpiration     =daysToExpiration;
         this.rate                 =rate;
         this.optionMktValue       =optionMktValue;
-        buildBS();
+        build();
     }
     
     public BlackScholes2019 (char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
@@ -59,17 +59,17 @@ public class BlackScholes2019 extends cUnderlying implements Optionable{
         this.daysToExpiration     =daysToExpiration;
         this.rate                 =rate;
         this.optionMktValue       =optionMktValue;
-        buildBS();
+        build();
     }
     
-    private void buildBS(){
+    public void build(){
         double startTime=System.currentTimeMillis();
         cpFlag=(callPut==CALL)?1:-1;
         
         opcionConVida=(daysToExpiration>0);
         if (opcionConVida){
               
-            runModel();
+            runModel(); // cada modelo implementa su runModel
         }else{
             opcionSinVida();
         } 
@@ -81,6 +81,9 @@ public class BlackScholes2019 extends cUnderlying implements Optionable{
     
     @Override
     public void runModel(){
+            pModelName="Black-Scholes ver2019";
+            modelNumber=1;
+            tipoEjercicio =EUROPEAN;
        
             volatModel = underlyingHistVolatility;
             dayYear=daysToExpiration/365;
