@@ -11,13 +11,14 @@ import java.util.function.DoubleUnaryOperator;
  *
  * @author pauli
  */
-public class JarrowRudd2019 extends BlackScholes2019 implements Optionable{
+public class BinomialCRR2019 extends BlackScholes2019 implements Optionable{
     protected int steps;
     
-    public JarrowRudd2019(){}
-    public JarrowRudd2019(char tipoEjercicio,char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
-        //super(tipoContrato,underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike,daysToExpiration, rate, optionMktValue);
-        
+    public BinomialCRR2019(){}
+    public BinomialCRR2019(char tipoEjercicio,char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
+        super(tipoContrato,underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike,daysToExpiration, rate, optionMktValue);
+        // puede servir en este modelp construir un BS para aproximar algun valor??
+        /*
         this.tipoEjercicio        =tipoEjercicio;
         this.tipoContrato         =tipoContrato;
         this.underlyingValue      =underlyingValue;
@@ -28,35 +29,23 @@ public class JarrowRudd2019 extends BlackScholes2019 implements Optionable{
         this.daysToExpiration     =daysToExpiration;
         this.rate                 =rate;
         this.optionMktValue       =optionMktValue;
+        */
         this.steps                =steps;
-        buildJarrowRudd();
+        
+        //build();
     }
-    private void buildJarrowRudd(){
     
-        pModelName="Binomial Jarrow-Rudd ver2019";
-        modelNumber=4;
-        
-        double startTime=System.currentTimeMillis();
-        cpFlag=(callPut==CALL)?1:-1;
-        
-        opcionConVida=(daysToExpiration>0);
-        
-        if (opcionConVida){
-            
-            runModel();
-            
-        }else{
-            opcionSinVida();
-        } 
-        impliedVol=getImpliedVlt();
-        elapsedTime = System.currentTimeMillis() - startTime;
-        fillDerivativesArray();
-    
-    }
     @Override
      public void runModel(){
-        System.out.println("Run Model JR....");
+        System.out.println("Run Model CRR...");
+        pModelName="Binomial Cox-Ross-Rubinstein ver2019";
+        modelNumber=3;
+        
+        volatModel = underlyingHistVolatility;
         prima=88.88;
+        delta=-0.88;
+        
+        //vega=;
      }
    
     @Override
@@ -77,7 +66,7 @@ public class JarrowRudd2019 extends BlackScholes2019 implements Optionable{
                 max=volatModel;
             }
         
-        DoubleUnaryOperator opt1 = x-> optionMktValue-new JarrowRudd2019(tipoEjercicio, tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
+        DoubleUnaryOperator opt1 = x-> optionMktValue-new BinomialCRR2019(tipoEjercicio, tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
                
         impliedVol= ImpliedVolCalc.bisection(opt1, min, max, iter, precision);
         //impliedVol=.4444;
