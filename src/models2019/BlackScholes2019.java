@@ -13,7 +13,7 @@ import org.apache.commons.math3.distribution.NormalDistribution;
  *
  * @author pseoane.
  */
-public class cBlackScholes2019 extends cUnderlying implements Optionable{
+public class BlackScholes2019 extends cUnderlying implements Optionable{
     protected char callPut;
     protected double strike,daysToExpiration,rate,optionMktValue,dayYear,sqrDayYear,underlyingNPV,q,impliedVol;
     protected double prima, delta, gamma, vega, theta, rho;
@@ -35,12 +35,12 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
     
     protected String pModelName="Black-Scholes ver2019";
     protected int modelNumber=1;
-    protected static char tipoEjercicio =EUROPEAN;
+    protected char tipoEjercicio =EUROPEAN;
     
     
         
-    public cBlackScholes2019 (){}
-    public cBlackScholes2019 (cUnderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
+    public BlackScholes2019 (){}
+    public BlackScholes2019 (cUnderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und);
      
         this.callPut              =callPut;  
@@ -51,7 +51,7 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
         buildBS();
     }
     
-    public cBlackScholes2019 (char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
+    public BlackScholes2019 (char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate);
        
         this.callPut              =callPut;  
@@ -64,28 +64,17 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
     
     private void buildBS(){
         double startTime=System.currentTimeMillis();
-        
         cpFlag=(callPut==CALL)?1:-1;
-        // Aca verificar vida opcion <> 0
-        opcionConVida=(daysToExpiration>0);
         
+        opcionConVida=(daysToExpiration>0);
         if (opcionConVida){
-            volatModel = underlyingHistVolatility;
-            dayYear=daysToExpiration/365;
-            sqrDayYear = Math.sqrt(dayYear);
-            underlyingNPV=underlyingValue*Math.exp(-dividendRate*dayYear);
-            q=(tipoContrato==STOCK) ? dividendRate:rate; 
-            //q: si es una accion q es el dividendo, si es un futuro q se toma la rate para descontar el valor futr a presente 
-            //Se hace este reemplazo para poder usar la misma form en STOCK y FUTURO
-                      
+              
             runModel();
         }else{
             opcionSinVida();
         } 
-        
-        elapsedTime = System.currentTimeMillis() - startTime;
-                
         impliedVol=getImpliedVlt();
+        elapsedTime = System.currentTimeMillis() - startTime;
         fillDerivativesArray();
     
     }
@@ -93,6 +82,15 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
     @Override
     public void runModel(){
        
+            volatModel = underlyingHistVolatility;
+            dayYear=daysToExpiration/365;
+            sqrDayYear = Math.sqrt(dayYear);
+            underlyingNPV=underlyingValue*Math.exp(-dividendRate*dayYear);
+            q=(tipoContrato==STOCK) ? dividendRate:rate; 
+            //q: si es una accion q es el dividendo, si es un futuro q se toma la rate para descontar el valor futr a presente 
+            //Se hace este reemplazo para poder usar la misma form en STOCK y FUTURO
+        
+        
          
        double z  = Math.exp(-rate*dayYear); // e^(-r*t);
        //double ww = Math.exp(-dividendRate*dayYear); // e^(-dividendRate*t) //stocks
@@ -214,7 +212,7 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
                 max=volatModel;
             }
         
-        DoubleUnaryOperator opt1 = x-> optionMktValue-new cBlackScholes2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
+        DoubleUnaryOperator opt1 = x-> optionMktValue-new BlackScholes2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
                
         impliedVol= ImpliedVolCalc.bisection(opt1, min, max, iter, precision);
               
@@ -230,7 +228,7 @@ public class cBlackScholes2019 extends cUnderlying implements Optionable{
     public double getIV2(){
         impliedVol=volatModel;
         if(optionMktValue>0 && daysToExpiration>0){
-        DoubleUnaryOperator opt1 = x-> optionMktValue-new cBlackScholes2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
+        DoubleUnaryOperator opt1 = x-> optionMktValue-new BlackScholes2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
         impliedVol= ImpliedVolCalc.ivVega(opt1, volatModel, vega, 20, 0.00001);    
         }
         return impliedVol;

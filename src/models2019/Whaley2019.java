@@ -6,8 +6,8 @@
 package models2019;
 
 import java.util.function.DoubleUnaryOperator;
-import static models2019.cBlackScholes2019.CALL;
-import static models2019.cBlackScholes2019.PUT;
+import static models2019.BlackScholes2019.CALL;
+import static models2019.BlackScholes2019.PUT;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import static underlying.cUnderlying.STOCK;
 
@@ -15,12 +15,12 @@ import static underlying.cUnderlying.STOCK;
  *
  * @author pauli
  */
-public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
+public class Whaley2019 extends BlackScholes2019 implements Optionable{
     
     
-    public cWhaley2019(){}
+    public Whaley2019(){}
     
-    public cWhaley2019(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
+    public Whaley2019(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato,underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike,daysToExpiration, rate, optionMktValue);
         //aqui corre runModel() de este modelo si esta definido sino corre el BS
         
@@ -28,7 +28,7 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
     @Override
     public void runModel(){
     //recalcula un modelo BS para obtener las greeks por BS
-    cBlackScholes2019 optW= new cBlackScholes2019(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike, daysToExpiration, rate, 0);
+    BlackScholes2019 optW= new BlackScholes2019(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike, daysToExpiration, rate, 0);
         
     prima=optW.getPrima();
     delta=optW.getDelta();
@@ -51,10 +51,14 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
         double zz;
         double b=0;
         double xx;
-        //Los siguientes valores vienen heredados de BS
-        //dayYear=daysToExpiration/365;
-        //sqrDayYear = Math.sqrt(dayYear);
-        //underlyingNPV=underlyingValue*Math.exp(-dividendRate*dayYear);
+               
+        volatModel = underlyingHistVolatility;
+        dayYear=daysToExpiration/365;
+        sqrDayYear = Math.sqrt(dayYear);
+        underlyingNPV=underlyingValue*Math.exp(-dividendRate*dayYear);
+       //     q=(tipoContrato==STOCK) ? dividendRate:rate; 
+            //q: si es una accion q es el dividendo, si es un futuro q se toma la rate para descontar el valor futr a presente 
+            //Se hace este reemplazo para poder usar la misma form en STOCK y FUTURO
         
          switch(tipoContrato){
           case STOCK:
@@ -93,7 +97,7 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
                 
 		double corr = s1 / lambda*xx;
 
-                cBlackScholes2019 option=new cBlackScholes2019 (tipoContrato,s1,volatModel,dividendRate, callPut,strike, daysToExpiration,rate,0);
+                BlackScholes2019 option=new BlackScholes2019 (tipoContrato,s1,volatModel,dividendRate, callPut,strike, daysToExpiration,rate,0);
                                                                 
                 double mBlackScholes = option.getPrima();
                 double rhs = mBlackScholes + cpFlag*corr;
@@ -148,7 +152,7 @@ public class cWhaley2019 extends cBlackScholes2019 implements Optionable{
                 max=volatModel;
             }
         
-        DoubleUnaryOperator opt1 = x-> optionMktValue-new cWhaley2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
+        DoubleUnaryOperator opt1 = x-> optionMktValue-new Whaley2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
                
         impliedVol= ImpliedVolCalc.bisection(opt1, min, max, iter, precision);
         //impliedVol=.4444;

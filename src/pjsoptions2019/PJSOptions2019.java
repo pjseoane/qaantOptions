@@ -30,13 +30,14 @@ public class PJSOptions2019 {
         double riskFreeRate =.10;
         double divYield     =0;
         double mktValue     =9.0;
+        int steps           =200;
         
         cUnderlying someStock   = new cUnderlying(contrato, undValue, vh30Und, divYield);
-        cBlackScholes2019 bs    = new cBlackScholes2019(someStock, option, X,days,riskFreeRate,mktValue);
+        BlackScholes2019 bs    = new BlackScholes2019(someStock, option, X,days,riskFreeRate,mktValue);
         
         
         double iv=bs.getImpliedVlt();
-        cBlackScholes2019 bs1   = new cBlackScholes2019(contrato, undValue, iv,divYield,option, X,days,riskFreeRate,mktValue);
+        BlackScholes2019 bs1   = new BlackScholes2019(contrato, undValue, iv,divYield,option, X,days,riskFreeRate,mktValue);
         
         
         
@@ -50,11 +51,13 @@ public class PJSOptions2019 {
         System.out.println("Prima bs1 :" + Arrays.toString(bs1.getDerivativesArray()[0]));
         
                
-        cWhaley2019 opW= new cWhaley2019(contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue);
+        Whaley2019 opW= new Whaley2019(contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue);
         System.out.println("Tst W:" + Arrays.toString(opW.getDerivativesArray()[0]));
         System.out.println("prima W "+opW.getPrima());
         System.out.println("Prima IV W: " + opW.getImpliedVlt());
         
+        JarrowRudd2019 optJR=new JarrowRudd2019('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,0,steps);
+        System.out.println("Tst JR:" + Arrays.toString(optJR.getDerivativesArray()[0]));
         /*
         bs.setUnderlyingValue(102);
         bs.setStrike(105);
