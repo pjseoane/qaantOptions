@@ -50,8 +50,6 @@ public class JarrowRudd2019 extends BlackScholes2019 implements Optionable{
         } 
         impliedVol=getImpliedVlt();
         elapsedTime = System.currentTimeMillis() - startTime;
-               
-       
         fillDerivativesArray();
     
     }
