@@ -21,9 +21,37 @@ public class BinomialJarrowRudd extends BinomialCRR2019 implements Optionable{
         pModelName="Binomial Jarrow-Rudd";
         modelNumber=4;
         
+        dayYear=daysToExpiration/365;
+        double h=dayYear/steps;
+        double z=Math.exp(rate*h);
+        double drift=(tipoContrato=='F')? 1: z;
         
-        prima=99.99;
-        delta=-0.99;
+        underlyingNPV=underlyingValue*Math.exp(-dividendRate*dayYear);
+        double firstTerm=(rate*0.5*Math.pow(volatModel,2))*h;
+        double secondTerm=volatModel*Math.sqrt(h);
+        double u= Math.exp(firstTerm+secondTerm);
+        double d= Math.exp(firstTerm-secondTerm);
+        
+        double p=(drift-d)/(u-d);
+        
+        double[][] undTree=buildUnderlyingTree(u,d);
+        double[][] optTree=buildOptionTree(undTree,p,z);
+        
+        prima=optTree[0][0];
+        delta=(optTree[1][1] - optTree[1][0]) / (undTree[1][1] - undTree[1][0]);
+        gamma=((optTree[2][0] - optTree[2][1]) / (undTree[2][0] - undTree[2][1]) - (
+                    optTree[2][1] - optTree[2][2]) / (undTree[2][1] - undTree[2][2])) / (
+                                 (undTree[2][0] - undTree[2][2]) / 2);
+        theta=(optTree[2][1] - optTree[0][0]) / (2 * 365 * h);
+        
+        vega=0;
+        rho=0;
+        
+        if(optionMktValue>-1){
+            BinomialJarrowRudd optJR=new BinomialJarrowRudd(tipoEjercicio,tipoContrato, underlyingValue, underlyingHistVolatility+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
+            vega=optJR.getPrima();
+                    
+        }
      }
    
     @Override

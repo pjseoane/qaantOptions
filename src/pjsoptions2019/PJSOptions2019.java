@@ -25,7 +25,7 @@ public class PJSOptions2019 {
         char   option       ='P';
         double undValue     =100;
         double X            =100;
-        double days         =365;
+        double days         =364;
         double vh30Und      =0.3;
         double riskFreeRate =.10;
         double divYield     =0;

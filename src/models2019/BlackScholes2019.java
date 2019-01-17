@@ -62,7 +62,7 @@ public class BlackScholes2019 extends cUnderlying implements Optionable{
         build();
     }
     
-    public void build(){
+    protected void build(){
         double startTime=System.currentTimeMillis();
         cpFlag=(callPut==CALL)?1:-1;
         
@@ -148,11 +148,14 @@ public class BlackScholes2019 extends cUnderlying implements Optionable{
     public void opcionSinVida(){
         delta=cpFlag;  
         gamma=vega=theta=rho=0;
-        prima = Math.max((underlyingValue - strike)*cpFlag, 0);
+        prima = payoff(underlyingValue,strike,cpFlag);
         delta=(prima==0)?0:cpFlag;
        
     }
     
+    public double payoff(double underlyingValue, double strike, int cpFlag){
+        return Math.max((underlyingValue - strike) * cpFlag, 0);
+        }
     //getters
 
     /**
