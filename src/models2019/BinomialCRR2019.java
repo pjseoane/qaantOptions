@@ -36,7 +36,7 @@ public class BinomialCRR2019 extends BlackScholes2019 implements Optionable{
     
     @Override
      public void runModel(){
-        System.out.println("Run Model CRR...");
+        System.out.println("Run Model CRR..."+tipoEjercicio);
         pModelName="Binomial Cox-Ross-Rubinstein ver2019";
         modelNumber=3;
         
@@ -81,6 +81,7 @@ public class BinomialCRR2019 extends BlackScholes2019 implements Optionable{
                     
                     if (tipoEjercicio==AMERICAN){
                         optionTree[i][j]=Math.max(optionTree[i][j],payoff(underlyingTree[i][j],strike,cpFlag));
+                        
                     }
                 }
              

@@ -48,8 +48,13 @@ public class BinomialJarrowRudd extends BinomialCRR2019 implements Optionable{
         rho=0;
         
         if(optionMktValue>-1){
-            BinomialJarrowRudd optJR=new BinomialJarrowRudd(tipoEjercicio,tipoContrato, underlyingValue, underlyingHistVolatility+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
-            vega=optJR.getPrima();
+            BinomialJarrowRudd optJR=new BinomialJarrowRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
+            //System.out.print("Volat ..."+(volatModel));
+            vega=optJR.getPrima()-prima;
+            
+            optJR=new BinomialJarrowRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.01, -1, steps);
+            //System.out.print("Volat ..."+(volatModel));
+            rho=optJR.getPrima()-prima;
                     
         }
      }

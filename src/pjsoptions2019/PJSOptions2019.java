@@ -22,15 +22,15 @@ public class PJSOptions2019 {
         // TODO code application logic here
         
         char   contrato     ='S';
-        char   option       ='P';
-        double undValue     =100;
-        double X            =100;
-        double days         =364;
-        double vh30Und      =0.3;
-        double riskFreeRate =.10;
+        char   option       ='C';
+        double undValue     =54.6;
+        double X            =52;
+        double days         =93;
+        double vh30Und      =0.36;
+        double riskFreeRate =.45;
         double divYield     =0;
-        double mktValue     =9.0;
-        int steps           =200;
+        double mktValue     =0;
+        int steps           =300;
         
         cUnderlying someStock   = new cUnderlying(contrato, undValue, vh30Und, divYield);
         BlackScholes2019 bs    = new BlackScholes2019(someStock, option, X,days,riskFreeRate,mktValue);
@@ -56,11 +56,27 @@ public class PJSOptions2019 {
         System.out.println("prima W "+opW.getPrima());
         System.out.println("Prima IV W: " + opW.getImpliedVlt());
         
-        BinomialCRR2019 optJR=new BinomialCRR2019('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,0,steps);
-        System.out.println("Tst CRR:" + Arrays.toString(optJR.getDerivativesArray()[0]));
+        BinomialCRR2019 optCRR=new BinomialCRR2019('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,0,steps);
+        System.out.println("Tst CRR:" + Arrays.toString(optCRR.getDerivativesArray()[0]));
         
-        BinomialJarrowRudd optCRR = new BinomialJarrowRudd('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,0,steps);
-        System.out.println("Tst JR:" + Arrays.toString(optCRR.getDerivativesArray()[0]));
+        
+        BinomialJarrowRudd optJR = new BinomialJarrowRudd('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,0,steps);
+        System.out.println("Tst JR:" + Arrays.toString(optJR.getDerivativesArray()[0]));
+        
+       System.out.println("\nJR Put Call Parity European Futures:\n");
+       optJR = new BinomialJarrowRudd('E',contrato, undValue, vh30Und,divYield,'C', X,days,riskFreeRate,0,steps);
+       System.out.println("Call JR:\n" + Arrays.toString(optJR.getDerivativesArray()[0]));
+       optJR = new BinomialJarrowRudd('E',contrato, undValue, vh30Und,divYield,'P', X,days,riskFreeRate,0,steps);
+       System.out.println("Put JR:\n" + Arrays.toString(optJR.getDerivativesArray()[0]));
+       
+       System.out.println("\nJR Put Call Parity American Futures:\n");
+       optJR = new BinomialJarrowRudd('A',contrato, undValue, vh30Und,divYield,'C', X,days,riskFreeRate,0,steps);
+       System.out.println("Call JR:\n" + Arrays.toString(optJR.getDerivativesArray()[0]));
+       optJR = new BinomialJarrowRudd('A',contrato, undValue, vh30Und,divYield,'P', X,days,riskFreeRate,0,steps);
+       System.out.println("Put JR:\n" + Arrays.toString(optJR.getDerivativesArray()[0]));
+       
+       
+       
         
         /*
         bs.setUnderlyingValue(102);
