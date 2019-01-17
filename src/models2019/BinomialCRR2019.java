@@ -29,7 +29,7 @@ public class BinomialCRR2019 extends BlackScholes2019 implements Optionable{
         this.daysToExpiration     =daysToExpiration;
         this.rate                 =rate;
         this.optionMktValue       =optionMktValue;
-        this.steps                = ((int)(steps/2)+1)*2;
+        this.steps                = steps;
         
         build();
     }
@@ -45,7 +45,7 @@ public class BinomialCRR2019 extends BlackScholes2019 implements Optionable{
         double h=dayYear/steps;
         underlyingNPV=underlyingValue*Math.exp(-dividendRate*dayYear);
         
-        double z=Math.exp(rate*h);
+        double z=Math.exp(-rate*h);
         
         
         
@@ -53,42 +53,7 @@ public class BinomialCRR2019 extends BlackScholes2019 implements Optionable{
         delta=underlyingNPV*cpFlag;
         //vega=;
      }
-     protected double[][] buildUnderlyingTree(double u, double d){
-            double underlyingTree[][]=new double[steps+1][steps+1];
-            underlyingTree[0][0]=underlyingNPV;
-            
-            for(int i=1;i<steps+1;i++){
-                underlyingTree[i][0]=underlyingTree[i-1][0]*u;
-                
-                for(int j=1;j<i+1;j++){
-                    underlyingTree[i][j]=underlyingTree[i-1][j-1]*d;
-                }
-            }
-            return underlyingTree;
-     }
-     protected double[][] buildOptionTree(double[][] underlyingTree,double p,double z){
-            double optionTree[][]=new double[steps+1][steps+1];
-            double px=1-p;
-            
-            for (int j=0;j<steps+1;j++){
-                optionTree[steps][j] = Math.max(0, payoff(underlyingTree[steps][j],strike, cpFlag));
-            }
-            
-            for (int m=0;m<steps;m++){
-                int i=steps-m-1;
-                for (int j=0;j<(i+1);j++){
-                    optionTree[i][j]=(p*optionTree[i+1][j]+px*optionTree[i+1][j+1])*z;
-                    
-                    if (tipoEjercicio==AMERICAN){
-                        optionTree[i][j]=Math.max(optionTree[i][j],payoff(underlyingTree[i][j],strike,cpFlag));
-                        
-                    }
-                }
-             
-            }
-        return optionTree;
-     }
-     
+    
    
     @Override
     public double getImpliedVlt() {
