@@ -15,6 +15,7 @@ public interface OptionModel {
     public final static char PUT        ='P';
     public final static char EUROPEAN   ='E';
     public final static char AMERICAN   ='A';
-    
+    public final static char STOCK      ='S';
+    public final static char FUTURE     ='F';
     
 }
