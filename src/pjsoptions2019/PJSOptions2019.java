@@ -21,16 +21,16 @@ public class PJSOptions2019 {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        char   contrato     ='S';
-        char   option       ='C';
-        double undValue     =54.6;
-        double X            =52;
-        double days         =93;
-        double vh30Und      =0.36;
-        double riskFreeRate =.45;
+        char   contrato     ='F';
+        char   option       ='P';
+        double undValue     =100;
+        double X            =100;
+        double days         =365;
+        double vh30Und      =0.30;
+        double riskFreeRate =.10;
         double divYield     =0;
         double mktValue     =0;
-        int steps           =300;
+        int steps           =1000;
         
         cUnderlying someStock   = new cUnderlying(contrato, undValue, vh30Und, divYield);
         BlackScholes2019 bs    = new BlackScholes2019(someStock, option, X,days,riskFreeRate,mktValue);

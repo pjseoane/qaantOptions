@@ -23,11 +23,11 @@ public class BinomialJarrowRudd extends BinomialCRR2019 implements Optionable{
         
         dayYear=daysToExpiration/365;
         double h=dayYear/steps;
-        double z=Math.exp(rate*h);
-        double drift=(tipoContrato=='F')? 1: z;
+        double z=Math.exp(-rate*h);
+        double drift=(tipoContrato=='F')? 1: Math.exp(rate*h);
         
         underlyingNPV=underlyingValue*Math.exp(-dividendRate*dayYear);
-        double firstTerm=(rate*0.5*Math.pow(volatModel,2))*h;
+        double firstTerm=(rate-0.5*Math.pow(volatModel,2))*h;
         double secondTerm=volatModel*Math.sqrt(h);
         double u= Math.exp(firstTerm+secondTerm);
         double d= Math.exp(firstTerm-secondTerm);
