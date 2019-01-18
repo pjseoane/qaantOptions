@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models2019;
+package com.qaant.optionModels;
 
 import java.util.function.DoubleUnaryOperator;
-import static models2019.BlackScholes2019.CALL;
-import static models2019.BlackScholes2019.PUT;
+import static com.qaant.optionModels.BlackScholes2019.CALL;
+import static com.qaant.optionModels.BlackScholes2019.PUT;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import static underlying.cUnderlying.STOCK;
 

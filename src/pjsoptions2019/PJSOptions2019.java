@@ -5,8 +5,11 @@
  */
 package pjsoptions2019;
 
+import com.qaant.optionModels.Whaley2019;
+import com.qaant.optionModels.BlackScholes2019;
+import com.qaant.optionModels.BinomialJarrowRudd;
+import com.qaant.optionModels.BinomialCRR2019;
 import java.util.Arrays;
-import models2019.*;
 import underlying.cUnderlying;
 
 /**

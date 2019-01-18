@@ -3,9 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models2019;
+package com.qaant.optionModels;
 
 import java.util.function.DoubleUnaryOperator;
+import com.qaant.optionModels.BlackScholes2019;
+import com.qaant.optionModels.ImpliedVolCalc;
+import com.qaant.optionModels.Optionable;
 
 /**
  *

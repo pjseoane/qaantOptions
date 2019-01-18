@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package models2019;
+package com.qaant.optionModels;
 
 import java.util.function.DoubleUnaryOperator;
 
@@ -12,6 +12,7 @@ import java.util.function.DoubleUnaryOperator;
  * @author pseoane
  */
 public class BinomialJarrowRudd extends BinomialCRR2019 implements Optionable{
+    public BinomialJarrowRudd(){}
     public BinomialJarrowRudd(char tipoEjercicio,char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super(tipoEjercicio,tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut,  strike, daysToExpiration, rate, optionMktValue, steps);
 }
