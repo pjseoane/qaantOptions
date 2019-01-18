@@ -11,6 +11,7 @@ import com.qaant.optionModels.BinomialJarrowRudd;
 import com.qaant.optionModels.BinomialCRR2019;
 import java.util.Arrays;
 import underlying.cUnderlying;
+import com.qaant.optionModelsV2.*;
 
 /**
  *
@@ -63,6 +64,11 @@ public class PJSOptions2019 {
         
         BinomialJarrowRudd optJRa = new BinomialJarrowRudd('A',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue,steps);
         System.out.println("Binomial  JR      :" + Arrays.toString(optJRa.getDerivativesArray()[0]));
+        
+        System.out.println("\nTEST QAANT Models :\n");
+        BlackScholesV2 op1=new BlackScholesV2 (someStock, option, X,days,riskFreeRate,mktValue);
+        System.out.println("Balck Scholes bs-QAANT  :" + Arrays.toString(op1.getDerivativesArray()[0]));
+        
         
         /*
         double iv=bs.getImpliedVlt();

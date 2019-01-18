@@ -12,6 +12,11 @@ import java.util.function.DoubleUnaryOperator;
  * @author pseoane
  */
 public class BinomialJarrowRudd extends BinomialCRR2019 implements Optionable{
+    protected double u,d,p,z;
+    protected double[][]undTree,optTree,underlyingTree;
+    
+    
+    
     public BinomialJarrowRudd(){}
     public BinomialJarrowRudd(char tipoEjercicio,char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super(tipoEjercicio,tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut,  strike, daysToExpiration, rate, optionMktValue, steps);
@@ -25,19 +30,19 @@ public class BinomialJarrowRudd extends BinomialCRR2019 implements Optionable{
         
         dayYear=daysToExpiration/365;
         double h=dayYear/steps;
-        double z=Math.exp(-rate*h);
+        z=Math.exp(-rate*h);
         double drift=(tipoContrato=='F')? 1: Math.exp(rate*h);
         
         underlyingNPV=underlyingValue*Math.exp(-dividendRate*dayYear);
         double firstTerm=(rate-0.5*Math.pow(volatModel,2))*h;
         double secondTerm=volatModel*Math.sqrt(h);
-        double u= Math.exp(firstTerm+secondTerm);
-        double d= Math.exp(firstTerm-secondTerm);
+        u= Math.exp(firstTerm+secondTerm);
+        d= Math.exp(firstTerm-secondTerm);
         
-        double p=(drift-d)/(u-d);
+        p=(drift-d)/(u-d);
         
-        double[][] undTree=buildUnderlyingTree(u,d);
-        double[][] optTree=buildOptionTree(undTree,p,z);
+        undTree=buildUnderlyingTree();
+        optTree=buildOptionTree();
         
         prima=optTree[0][0];
         delta=(optTree[1][1] - optTree[1][0]) / (undTree[1][1] - undTree[1][0]);
@@ -60,25 +65,25 @@ public class BinomialJarrowRudd extends BinomialCRR2019 implements Optionable{
                     
         }
      }
-      protected double[][] buildUnderlyingTree(double u, double d){
-            double underlyingTree[][]=new double[steps+1][steps+1];
-            underlyingTree[0][0]=underlyingNPV;
+     protected double[][] buildUnderlyingTree(){
+            undTree=new double[steps+1][steps+1];
+            undTree[0][0]=underlyingNPV;
             
             for(int i=1;i<steps+1;i++){
-                underlyingTree[i][0]=underlyingTree[i-1][0]*u;
+                undTree[i][0]=undTree[i-1][0]*u;
                 
                 for(int j=1;j<i+1;j++){
-                    underlyingTree[i][j]=underlyingTree[i-1][j-1]*d;
+                    undTree[i][j]=undTree[i-1][j-1]*d;
                 }
             }
-            return underlyingTree;
+            return undTree;
      }
-     protected double[][] buildOptionTree(double[][] underlyingTree,double p,double z){
+     protected double[][] buildOptionTree(){
             double optionTree[][]=new double[steps+1][steps+1];
             double px=1-p;
             
             for (int j=0;j<steps+1;j++){
-                optionTree[steps][j] = Math.max(0, payoff(underlyingTree[steps][j],strike, cpFlag));
+                optionTree[steps][j] = Math.max(0, payoff(undTree[steps][j],strike, cpFlag));
             }
             
             for (int m=0;m<steps;m++){
@@ -87,7 +92,7 @@ public class BinomialJarrowRudd extends BinomialCRR2019 implements Optionable{
                     optionTree[i][j]=(p*optionTree[i+1][j]+px*optionTree[i+1][j+1])*z;
                     
                     if (tipoEjercicio==AMERICAN){
-                        optionTree[i][j]=Math.max(optionTree[i][j],payoff(underlyingTree[i][j],strike,cpFlag));
+                        optionTree[i][j]=Math.max(optionTree[i][j],payoff(undTree[i][j],strike,cpFlag));
                         
                     }
                 }

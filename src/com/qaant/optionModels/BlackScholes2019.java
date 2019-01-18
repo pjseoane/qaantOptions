@@ -36,7 +36,7 @@ public class BlackScholes2019 extends cUnderlying implements Optionable{
     public BlackScholes2019 (cUnderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und);
         
-       this.underlyingHistVolatility=und.getUnderlyingHistVlt();
+        this.underlyingHistVolatility=und.getUnderlyingHistVlt();
         this.callPut              =callPut;  
         this.strike               =strike;
         this.daysToExpiration     =daysToExpiration;
