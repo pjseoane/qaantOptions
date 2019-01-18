@@ -21,6 +21,13 @@ public class PJSOptions2019 {
     public static void main(String[] args) {
         // TODO code application logic here
         
+        /*
+        Alguna conclusiones:
+        American 
+        Futuro y Call conviene JR (itera mas rapido el calculo de IV) 
+        Futuro y Put idem
+        */
+        
         char   contrato     ='F';
         char   option       ='P';
         double undValue     =100;
@@ -29,20 +36,39 @@ public class PJSOptions2019 {
         double vh30Und      =0.30;
         double riskFreeRate =.10;
         double divYield     =0;
-        double mktValue     =12;
+        double mktValue     =11.1;
         int steps           =1000;
+        
+        
+        System.out.println("TEST EUROPEAN :\n");
         
         cUnderlying someStock   = new cUnderlying(contrato, undValue, vh30Und, divYield);
         BlackScholes2019 bs    = new BlackScholes2019(someStock, option, X,days,riskFreeRate,mktValue);
+        System.out.println("Balck Scholes bs  :" + Arrays.toString(bs.getDerivativesArray()[0]));
         
+        BinomialCRR2019 optCRR=new BinomialCRR2019('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial CRR      :" + Arrays.toString(optCRR.getDerivativesArray()[0]));
         
+        BinomialJarrowRudd optJR = new BinomialJarrowRudd('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial  JR      :" + Arrays.toString(optJR.getDerivativesArray()[0]));
+        
+        System.out.println("\nTEST AMERICAN :\n");
+        Whaley2019 opW= new Whaley2019(contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue);
+        System.out.println("Whaley            :" + Arrays.toString(opW.getDerivativesArray()[0]));
+        BinomialCRR2019 optCRRa=new BinomialCRR2019('A',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial CRR      :" + Arrays.toString(optCRRa.getDerivativesArray()[0]));
+        
+        BinomialJarrowRudd optJRa = new BinomialJarrowRudd('A',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial  JR      :" + Arrays.toString(optJRa.getDerivativesArray()[0]));
+        
+        /*
         double iv=bs.getImpliedVlt();
         BlackScholes2019 bs1   = new BlackScholes2019(contrato, undValue, iv,divYield,option, X,days,riskFreeRate,mktValue);
         
         
         
         System.out.println("Model Name:"+ bs.getModelName());
-        System.out.println("Prima bs  :" + Arrays.toString(bs.getDerivativesArray()[0]));
+        
         System.out.println("Prima bs  :"+bs.getPrima());
         System.out.println("Prima mkt  :"+bs.getOptionMktValue());
         System.out.println("Prima IV :" + bs.getImpliedVlt());
@@ -56,10 +82,10 @@ public class PJSOptions2019 {
         System.out.println("prima W "+opW.getPrima());
         System.out.println("Prima IV W: " + opW.getImpliedVlt());
         
-        BinomialCRR2019 optCRR=new BinomialCRR2019('E',contrato, undValue, vh30Und,divYield,'C', X,days,riskFreeRate,0,100);
+        BinomialCRR2019 optCRR1=new BinomialCRR2019('E',contrato, undValue, vh30Und,divYield,'C', X,days,riskFreeRate,mktValue,500);
         System.out.println("Tst CRR:" + Arrays.toString(optCRR.getDerivativesArray()[0]));
         
-        BinomialCRR2019 optCRR2=new BinomialCRR2019('E',contrato, undValue, vh30Und,divYield,'P', X,days,riskFreeRate,0,500);
+        BinomialCRR2019 optCRR2=new BinomialCRR2019('E',contrato, undValue, vh30Und,divYield,'P', X,days,riskFreeRate,mktValue,500);
         System.out.println("Tst CRR:" + Arrays.toString(optCRR2.getDerivativesArray()[0]));
         
         BinomialJarrowRudd optJR = new BinomialJarrowRudd('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue,steps);
