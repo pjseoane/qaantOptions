@@ -30,6 +30,7 @@ public class BlackScholesV2 extends QaantAbstractModel {
         System.out.println("xxBSxxxQAANT");
         prima=33.33;
         delta=44.44;
+        gamma=z;
     }
     
     @Override

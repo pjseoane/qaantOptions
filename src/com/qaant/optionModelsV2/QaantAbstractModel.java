@@ -62,7 +62,7 @@ public abstract class QaantAbstractModel extends cUnderlying implements QaantOpt
     
     private void build(){
         //Common vars for all models.
-        this.dayYear              =dayYear/365;
+        this.dayYear              =daysToExpiration/365;
         this.volatModel           =underlyingHistVolatility;
         this.cpFlag               =(callPut==CALL)?1:-1;
         this.opcionConVida        =daysToExpiration>0;
@@ -71,7 +71,7 @@ public abstract class QaantAbstractModel extends cUnderlying implements QaantOpt
         startTime=System.currentTimeMillis();
         
         if (opcionConVida){
-           // System.out.println("---BS---QAANT\n");
+           
             runModel(); // Abstract method, cada modelo implementa el suyo
             impliedVol=getImpliedVlt();
         }else{
