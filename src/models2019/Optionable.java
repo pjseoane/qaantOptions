@@ -7,9 +7,14 @@ package models2019;
 
 /**
  *
- * @author Paulino
+ * @author Paulino qOOnt
  */
 public interface Optionable {
+    public final static int PRIMA=0,DELTA=1,GAMMA=2,VEGA=3,THETA=4,RHO=5,IV=6;
+    public final static char CALL       ='C';
+    public final static char PUT        ='P';
+    public final static char EUROPEAN   ='E';
+    public final static char AMERICAN   ='A';
     
     
     void runModel();

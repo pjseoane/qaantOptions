@@ -29,7 +29,7 @@ public class PJSOptions2019 {
         double vh30Und      =0.30;
         double riskFreeRate =.10;
         double divYield     =0;
-        double mktValue     =0;
+        double mktValue     =12;
         int steps           =1000;
         
         cUnderlying someStock   = new cUnderlying(contrato, undValue, vh30Und, divYield);
@@ -56,11 +56,13 @@ public class PJSOptions2019 {
         System.out.println("prima W "+opW.getPrima());
         System.out.println("Prima IV W: " + opW.getImpliedVlt());
         
-        BinomialCRR2019 optCRR=new BinomialCRR2019('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,0,steps);
+        BinomialCRR2019 optCRR=new BinomialCRR2019('E',contrato, undValue, vh30Und,divYield,'C', X,days,riskFreeRate,0,100);
         System.out.println("Tst CRR:" + Arrays.toString(optCRR.getDerivativesArray()[0]));
         
+        BinomialCRR2019 optCRR2=new BinomialCRR2019('E',contrato, undValue, vh30Und,divYield,'P', X,days,riskFreeRate,0,500);
+        System.out.println("Tst CRR:" + Arrays.toString(optCRR2.getDerivativesArray()[0]));
         
-        BinomialJarrowRudd optJR = new BinomialJarrowRudd('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,0,steps);
+        BinomialJarrowRudd optJR = new BinomialJarrowRudd('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue,steps);
         System.out.println("Tst JR:" + Arrays.toString(optJR.getDerivativesArray()[0]));
         
        System.out.println("\nJR Put Call Parity European Futures:\n");

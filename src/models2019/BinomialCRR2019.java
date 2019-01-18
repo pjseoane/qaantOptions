@@ -31,27 +31,102 @@ public class BinomialCRR2019 extends BlackScholes2019 implements Optionable{
         this.optionMktValue       =optionMktValue;
         this.steps                = steps;
         
-        build();
+        buildCRR();
     }
+    
+    
+     private void buildCRR(){
+        pModelName="Binomial Cox-Ross-Rubinstein ver2019";
+        modelNumber=3;
+        cpFlag=cpFlag();        
+        build();  //definido en BS
+     }
+        
+    
     
     @Override
      public void runModel(){
-        System.out.println("Run Model CRR..."+tipoEjercicio);
-        pModelName="Binomial Cox-Ross-Rubinstein ver2019";
-        modelNumber=3;
+       // System.out.println("Run Model CRR..."+tipoEjercicio);
+       /**
+        *Nueva version 02/may/2014	
+        *tipoEjercicio: E: European, A:American
+        *tipoContrato: S:Acciones, F:Futuros
+        *Copiado de la version C++
+        *Conviene que _steps sea par para ver despues como chequear _steps=integer(x);
+        *double Btree(_steps+2);
+        *Trabajamos con un arbol 4dt mayor al numero de _steps para mejorar la precision de las Greeks
+        *tamaño razonable de _steps >=160
+        *Basado en el Modelo Binomial de Modelos 2008.xla
+        *Dividendos: Pasar un Stock Adjusted y procesar modelo normal.
+        */   
         
         //volatModel = underlyingHistVolatility;
+       // dayYear=daysToExpiration/365;
+        //int UpBound =steps+1;
+        double [] vPrices=new double[steps+1];
         dayYear=daysToExpiration/365;
-        double h=dayYear/steps;
         underlyingNPV=underlyingValue*Math.exp(-dividendRate*dayYear);
+        //q=(tipoContrato==STOCK) ? 0:rate;
         
-        double z=Math.exp(-rate*h);
+        double h = dayYear / steps;
+        double u = Math.exp(volatModel*Math.sqrt(h));
+        double d = Math.exp(-volatModel*Math.sqrt(h));
+        double z = Math.exp(-rate*h); 
+        double drift=(tipoContrato=='F')? 1: Math.exp(rate*h);
+        q=(drift-d)/(u-d);
+        double qx=1-q;
+	
+        double assetAtNode;
+        //Boundary Conditions
+	for (int i = 0; i <steps+1; i++){
+		assetAtNode = underlyingNPV*Math.pow(u, (steps - i))*Math.pow(d, i);
+		//vPrices[i] = Math.max((AssetAtNode-strike)*cpFlag, 0);
+                vPrices[i] = payoff(assetAtNode,strike,cpFlag);
+	}
+	//Fin Boundary Conditions 
         
+        //Resolving Tree Backward
+      
+
+        //Resolving Tree Backward
+	double a=0;
+        double b=0;
+        double c=0;
+        for (int i = 0; i <steps; i++){
+            if(i==steps-2){
+                a = vPrices[0];
+                b = vPrices[1];
+                c = vPrices[2];
+            }
+            for (int j=0;j<steps-i;j++){
+                double optionAtNode=(q*vPrices[j]+qx*vPrices[j+1])*z;
+                vPrices[j]=optionAtNode;
+                
+                if(tipoEjercicio=='A'){
+                    assetAtNode=underlyingNPV * Math.pow(u,steps-i-j-1)*Math.pow(d,j);
+                    vPrices[j]=Math.max(payoff(assetAtNode,strike,cpFlag), optionAtNode);
+                }
+            }
+        }
+        prima   =vPrices[0];
+        delta   =(a-c)/ (underlyingNPV*u*u - underlyingNPV * d * d);
+        double delta1=(a-b)/(underlyingNPV*u*u-underlyingNPV*u*d);
+        double delta2=(b-c)/(underlyingNPV*u*d-underlyingNPV*d*d);
+        gamma=(delta1-delta2)/((underlyingNPV*u*u-underlyingNPV*d*d)/2);
+        theta=(b-vPrices[0])/(2*h*365);
         
+        if(optionMktValue>-1){
+            BinomialCRR2019 optCRR=new BinomialCRR2019(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
+            //System.out.print("Volat ..."+(volatModel));
+            vega=optCRR.getPrima()-prima;
+            
+            optCRR=new BinomialCRR2019(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.01, -1, steps);
+            //System.out.print("Volat ..."+(volatModel));
+            rho=optCRR.getPrima()-prima;
+                    
+        }
         
-        prima=88.88;
-        delta=underlyingNPV*cpFlag;
-        //vega=;
+               
      }
     
    
@@ -76,8 +151,7 @@ public class BinomialCRR2019 extends BlackScholes2019 implements Optionable{
         DoubleUnaryOperator opt1 = x-> optionMktValue-new BinomialCRR2019(tipoEjercicio, tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
                
         impliedVol= ImpliedVolCalc.bisection(opt1, min, max, iter, precision);
-        //impliedVol=.4444;
-              
+                     
     }
     return impliedVol;
     }

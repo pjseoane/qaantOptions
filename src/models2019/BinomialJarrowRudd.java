@@ -21,6 +21,7 @@ public class BinomialJarrowRudd extends BinomialCRR2019 implements Optionable{
         pModelName="Binomial Jarrow-Rudd";
         modelNumber=4;
         
+        
         dayYear=daysToExpiration/365;
         double h=dayYear/steps;
         double z=Math.exp(-rate*h);

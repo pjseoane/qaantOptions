@@ -17,67 +17,73 @@ public class BlackScholes2019 extends cUnderlying implements Optionable{
     protected char callPut;
     protected double strike,daysToExpiration,rate,optionMktValue,dayYear,sqrDayYear,underlyingNPV,q,impliedVol;
     protected double prima, delta, gamma, vega, theta, rho;
-    //protected 
+   
     protected int  cpFlag;
-    protected boolean opcionConVida;
+   
     protected double elapsedTime;
     protected double volatModel;
     //Greeks
-    public final static int PRIMA=0,DELTA=1,GAMMA=2,VEGA=3,THETA=4,RHO=5,IV=6;
+    
     protected double[][] derivativesArray = new double[1][10];
     
-    //enum TipoOpcion {CALL,PUT};
-    public final static char CALL       ='C';
-    public final static char PUT        ='P';
-    public final static char EUROPEAN   ='E';
-    public final static char AMERICAN   ='A';
         
-    
-    protected String pModelName="Black-Scholes ver2019";
-    protected int modelNumber=1;
-    protected char tipoEjercicio =EUROPEAN;
-    
+    protected String pModelName;
+    protected int modelNumber;
+    protected char tipoEjercicio;
     
         
     public BlackScholes2019 (){}
     public BlackScholes2019 (cUnderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und);
-     
+        
+       this.underlyingHistVolatility=und.getUnderlyingHistVlt();
         this.callPut              =callPut;  
         this.strike               =strike;
         this.daysToExpiration     =daysToExpiration;
         this.rate                 =rate;
         this.optionMktValue       =optionMktValue;
-        build();
+        buildBS();
     }
     
     public BlackScholes2019 (char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate);
        
+        this.underlyingHistVolatility=underlyingHistVolatility;
         this.callPut              =callPut;  
         this.strike               =strike;
         this.daysToExpiration     =daysToExpiration;
         this.rate                 =rate;
         this.optionMktValue       =optionMktValue;
-        build();
+        buildBS();
     }
-    
-    protected void build(){
-        double startTime=System.currentTimeMillis();
-        cpFlag=(callPut==CALL)?1:-1;
+     private void buildBS(){
+       
         
-        opcionConVida=(daysToExpiration>0);
-        if (opcionConVida){
-              
-            runModel(); // cada modelo implementa su runModel
+        build(); 
+     }
+    
+    public void build(){
+       
+        double startTime=System.currentTimeMillis();
+        cpFlag=cpFlag();
+        
+         if (opcionConVida()){
+           
+            runModel(); 
+             impliedVol=getImpliedVlt();
+            
         }else{
             opcionSinVida();
-        } 
-        impliedVol=getImpliedVlt();
-        elapsedTime = System.currentTimeMillis() - startTime;
-        fillDerivativesArray();
-    
+        }
+         
+         elapsedTime = System.currentTimeMillis() - startTime;
+         fillDerivativesArray();
     }
+    
+      
+    
+    protected boolean opcionConVida(){return daysToExpiration>0;};
+    protected int cpFlag(){ return (callPut==CALL)?1:-1;}
     
     @Override
     public void runModel(){
@@ -95,9 +101,8 @@ public class BlackScholes2019 extends cUnderlying implements Optionable{
         
         
          
-       double z  = Math.exp(-rate*dayYear); // e^(-r*t);
-       //double ww = Math.exp(-dividendRate*dayYear); // e^(-dividendRate*t) //stocks
-       
+       double z  = z(); // e^(-r*t);
+              
        double d1 = (Math.log(underlyingValue / strike) + dayYear*(rate-q + volatModel*volatModel / 2)) / (volatModel*sqrDayYear);
        double d2 = d1 - volatModel*sqrDayYear;
        
@@ -156,12 +161,10 @@ public class BlackScholes2019 extends cUnderlying implements Optionable{
     public double payoff(double underlyingValue, double strike, int cpFlag){
         return Math.max((underlyingValue - strike) * cpFlag, 0);
         }
-    //getters
-
-    /**
-     *
-     * @return
-     */
+    
+    protected double z(){return Math.exp(-rate*dayYear);
+    }
+    
     @Override
     public String getModelName(){return pModelName;}
     @Override
