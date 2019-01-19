@@ -5,7 +5,6 @@
  */
 package com.qaant.optionModelsV2;
 
-import java.util.function.DoubleUnaryOperator;
 import underlying.cUnderlying;
 
 /**
@@ -56,33 +55,10 @@ public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
         }
         
     }    
-     @Override
-    public double getImpliedVlt(){
-        impliedVol=volatModel;
-        
-        if(optionMktValue>0 && daysToExpiration>0){
-            double min;
-            double max;
-            int iter=50;
-            double precision=0.00001;
     
-        if(prima<=optionMktValue){
-            min=volatModel;
-            max=min*3;
-            }else{
-                min=0;// impliedVol/3;
-                max=volatModel;
-            }
-        
-       // DoubleUnaryOperator opt1 = x-> optionMktValue-new QBinomialCRR(tipoEjercicio,tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
-        DoubleUnaryOperator opt1 = x-> funcTest(x);
-        
-        impliedVol= QImpliedVolCalc.bisection(opt1, min, max, iter, precision);
-              
-        }
-    return impliedVol;}
     
-    double funcTest(double x){
+    @Override
+    protected double funcTest(double x){
         return optionMktValue-new QBinomialCRR(tipoEjercicio,tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
     }
 

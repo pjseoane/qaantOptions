@@ -37,6 +37,7 @@ public class QImpliedVolCalc
     public static double bisection(DoubleUnaryOperator func, double a, double b,
                                int maxIterations, double tolerance)
         throws IllegalArgumentException, ArithmeticException
+            
       {
         if (b < a)
           {
@@ -81,26 +82,22 @@ public class QImpliedVolCalc
     *
     *
     */
-  public static double ivVega(DoubleUnaryOperator func, double vol, double vega,
-                               int maxIterations, double tolerance)
-        throws IllegalArgumentException, ArithmeticException{
+  public static double ivNewton(DoubleUnaryOperator func, double vol, double vega,
+                               int maxIterations, double tolerance){
+        //throws IllegalArgumentException, ArithmeticException{
       
     int c=0;
     double iv=vol;
     double dif=func.applyAsDouble(iv);
     
-    while (Math.abs(dif)> tolerance && c < maxIterations && iv >tolerance){
-            {  
+    while (Math.abs(dif)> tolerance && c < maxIterations ){  
             dif=func.applyAsDouble(iv);    
             iv +=(dif/vega/100);
             
             c++;
             
             }
-        return iv;
-    }
-      
-      
-      throw new ArithmeticException("IV Vega Algorithm failed to converge");          
-    }
+    return iv; 
+    //  throw new ArithmeticException("IV Vega Algorithm failed to converge");          
+  }
 }

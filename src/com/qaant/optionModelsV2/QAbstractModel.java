@@ -34,9 +34,12 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
     protected double[][] derivativesArray = new double[1][10];
     protected double startTime, elapsedTime;
     protected String pModelName;
+
+    //Para calculos de implied vol
+    protected int MAXITERATIONS =50;
+    protected double ACCURACY   =0.00001;
     
-    
-    public QAbstractModel(){build();}
+    public QAbstractModel (){build();}
     public QAbstractModel (cUnderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und);
         
@@ -118,8 +121,35 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
    
     @Override
     abstract public void runModel(); //Cada modelo implementa runModel()
-    @Override
-    abstract public double getImpliedVlt();
+   
+    public double getImpliedVlt(){
+     impliedVol=volatModel;
+        
+        if(optionMktValue>0 && opcionConVida){
+            double min;
+            double max;
+           
+    
+        if(prima<=optionMktValue){
+            min=volatModel;
+            max=min*3;
+            }else{
+                min=0;// impliedVol/3;
+                max=volatModel;
+            }
+        
+        DoubleUnaryOperator opt1 = x-> funcTest(x);
+        
+       // impliedVol= QImpliedVolCalc.bisection(opt1, min, max, MAXITERATIONS, ACCURACY);
+        impliedVol= QImpliedVolCalc.ivNewton(opt1, min, max, MAXITERATIONS, ACCURACY);
+              
+        }
+    return impliedVol;
+    
+    }
+    abstract protected double funcTest(double x);
+    
+    
     
     public void opcionSinVida(){
         delta=cpFlag;  

@@ -5,7 +5,7 @@
  */
 package com.qaant.optionModelsV2;
 
-import com.qaant.optionModels.*;
+
 
 /**
  *
@@ -29,6 +29,6 @@ public interface QOptionable {
     double getVega();
     double getTheta();
     double getRho();
-    double getImpliedVlt();
+   // double getImpliedVlt();
 
 }
