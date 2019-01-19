@@ -3,71 +3,68 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.qaant.optionModels;
-
-import com.qaant.optionModelsV2.QImpliedVolCalc;
+package com.qaant.optionModelsV2;
 import java.util.function.DoubleUnaryOperator;
-
+import underlying.cUnderlying;
 /**
  *
- * @author pseoane
+ * @author pauli
  */
-public class BinomialJarrowRudd extends BinomialCRR2019 implements Optionable{
-    protected double u,d,p,z;
-    protected double[][]undTree,optTree,underlyingTree;
+
+
+public class QBinomialJRudd extends QAbstractModel implements QOptionable{
+    protected double u,d,p,interv,drift;
+    protected double[][]undTree,optTree,underlyingTree;  
     
+    public QBinomialJRudd(){super();}
+    public QBinomialJRudd(char tipoEjercicio, cUnderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
+        super(tipoEjercicio,und, callPut, strike, daysToExpiration, rate, optionMktValue, steps);
+    }
+    public QBinomialJRudd(char tipoEjercicio, char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
+        super(tipoEjercicio,tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
+    }
     
-    
-    public BinomialJarrowRudd(){}
-    public BinomialJarrowRudd(char tipoEjercicio,char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
-        super(tipoEjercicio,tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut,  strike, daysToExpiration, rate, optionMktValue, steps);
-}
     @Override
-     public void runModel(){
-       // System.out.println("Run Model JR....");
-        pModelName="Binomial Jarrow-Rudd";
+    public void runModel(){
+        pModelName="Binomial Jarrow-Rudd QAANT";
         modelNumber=4;
         
+        interv=dayYear/steps;
         
-        dayYear=daysToExpiration/365;
-        double h=dayYear/steps;
-        z=Math.exp(-rate*h);
-        double drift=(tipoContrato=='F')? 1: Math.exp(rate*h);
+        drift=(tipoContrato=='F')? 1: Math.exp(rate*interv);
         
-        underlyingNPV=underlyingValue*Math.exp(-dividendRate*dayYear);
-        double firstTerm=(rate-0.5*Math.pow(volatModel,2))*h;
-        double secondTerm=volatModel*Math.sqrt(h);
+        double firstTerm=(rate-0.5*Math.pow(volatModel,2))*interv;
+        double secondTerm=volatModel*Math.sqrt(interv);
+        
         u= Math.exp(firstTerm+secondTerm);
         d= Math.exp(firstTerm-secondTerm);
-        
         p=(drift-d)/(u-d);
         
         undTree=buildUnderlyingTree();
         optTree=buildOptionTree();
-       
-       
+        
         prima=optTree[0][0];
         delta=(optTree[1][1] - optTree[1][0]) / (undTree[1][1] - undTree[1][0]);
         gamma=((optTree[2][0] - optTree[2][1]) / (undTree[2][0] - undTree[2][1]) - (
                     optTree[2][1] - optTree[2][2]) / (undTree[2][1] - undTree[2][2])) / (
                                  (undTree[2][0] - undTree[2][2]) / 2);
-        theta=(optTree[2][1] - optTree[0][0]) / (2 * 365 * h);
+        
+        theta=(optTree[2][1] - optTree[0][0]) / (2 * 365 * interv);
         
         vega=0;
         rho=0;
         
         if(optionMktValue>-1){
-            BinomialJarrowRudd optJR=new BinomialJarrowRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
-            //System.out.print("Volat ..."+(volatModel));
+            QBinomialJRudd optJR=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
             vega=optJR.getPrima()-prima;
             
-            optJR=new BinomialJarrowRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.01, -1, steps);
-            //System.out.print("Volat ..."+(volatModel));
+            optJR=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.01, -1, steps);
             rho=optJR.getPrima()-prima;
-                    
         }
-     }
-     protected double[][] buildUnderlyingTree(){
+
+
+    }  
+    protected double[][] buildUnderlyingTree(){
             undTree=new double[steps+1][steps+1];
             undTree[0][0]=underlyingNPV;
             
@@ -80,7 +77,7 @@ public class BinomialJarrowRudd extends BinomialCRR2019 implements Optionable{
             }
             return undTree;
      }
-     protected double[][] buildOptionTree(){
+    protected double[][] buildOptionTree(){
             double optionTree[][]=new double[steps+1][steps+1];
             double px=1-p;
             
@@ -101,12 +98,11 @@ public class BinomialJarrowRudd extends BinomialCRR2019 implements Optionable{
              
             }
         return optionTree;
-     }
-      
-   
+        
+        
+    }
     @Override
-    public double getImpliedVlt() {
-        impliedVol=volatModel;
+    public double getImpliedVlt(){impliedVol=volatModel;
         
         if(optionMktValue>0 && daysToExpiration>0){
             double min;
@@ -122,12 +118,10 @@ public class BinomialJarrowRudd extends BinomialCRR2019 implements Optionable{
                 max=volatModel;
             }
         
-        DoubleUnaryOperator opt1 = x-> optionMktValue-new BinomialJarrowRudd(tipoEjercicio, tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
+        DoubleUnaryOperator opt1 = x-> optionMktValue-new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
                
         impliedVol= QImpliedVolCalc.bisection(opt1, min, max, iter, precision);
-        //impliedVol=.4444;
               
-    }
-    return impliedVol;
-    }
+        }
+    return impliedVol;}
 }

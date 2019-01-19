@@ -20,19 +20,19 @@ binomial american+bseuropean-binomialeuropean.
 Hull pag 333 y 351
 */
 
-public class QBinomialControlVariate extends QAbstractModel implements QOptionable{
-    public QBinomialControlVariate(){super();}
-    public QBinomialControlVariate(cUnderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
+public class QBinomialCV extends QAbstractModel implements QOptionable{
+    public QBinomialCV(){super();}
+    public QBinomialCV(cUnderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super('A',und, callPut, strike, daysToExpiration, rate, optionMktValue, steps);
     }
-    public QBinomialControlVariate(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
+    public QBinomialCV(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super('A',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
     }
     
     @Override
     public void runModel(){
-    QBinomialJarrowRudd amerOpt = new QBinomialJarrowRudd('A',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
-    QBinomialJarrowRudd euroOpt = new QBinomialJarrowRudd('E',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
+    QBinomialJRudd amerOpt = new QBinomialJRudd('A',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
+    QBinomialJRudd euroOpt = new QBinomialJRudd('E',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
     QBlackScholes bsOpt             = new QBlackScholes(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue);
    
     prima=amerOpt.getPrima()+bsOpt.getPrima()-euroOpt.getPrima();
@@ -60,7 +60,7 @@ public class QBinomialControlVariate extends QAbstractModel implements QOptionab
                 max=volatModel;
             }
         
-        DoubleUnaryOperator opt1 = x-> optionMktValue-new QBinomialControlVariate(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
+        DoubleUnaryOperator opt1 = x-> optionMktValue-new QBinomialCV(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
                
         impliedVol= QImpliedVolCalc.bisection(opt1, min, max, iter, precision);
               

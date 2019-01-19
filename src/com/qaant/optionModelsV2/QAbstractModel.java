@@ -191,14 +191,11 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
     @Override
     public double getRho()  {return rho;}
     
-    
-    
     public double getOptionMktValue(){return optionMktValue;}
     public char getTipoEjercicio(){return tipoEjercicio;}
     public char getCallPut(){return callPut;}
     public double getStrike(){return strike;}
     public double getDaysToExpiration(){return daysToExpiration;}
-   
     public double getTasa(){return rate;}
     public double getValueToFind(int i){
      

@@ -5,10 +5,7 @@
  */
 package pjsoptions2019;
 
-import com.qaant.optionModels.Whaley2019;
-import com.qaant.optionModels.BlackScholes2019;
-import com.qaant.optionModels.BinomialJarrowRudd;
-import com.qaant.optionModels.BinomialCRR2019;
+
 import java.util.Arrays;
 import underlying.cUnderlying;
 import com.qaant.optionModelsV2.*;
@@ -47,43 +44,55 @@ public class PJSOptions2019 {
         System.out.println("TEST EUROPEAN :\n");
         
         cUnderlying someStock   = new cUnderlying(contrato, undValue, vh30Und, divYield);
-        BlackScholes2019 bs    = new BlackScholes2019(someStock, option, X,days,riskFreeRate,mktValue);
-        System.out.println("Balck Scholes bs  :" + Arrays.toString(bs.getDerivativesArray()[0]));
         
-        BinomialCRR2019 optCRR=new BinomialCRR2019('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue,steps);
-        System.out.println("Binomial CRR      :" + Arrays.toString(optCRR.getDerivativesArray()[0]));
-        
-        BinomialJarrowRudd optJR = new BinomialJarrowRudd('E',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue,steps);
-        System.out.println("Binomial  JR      :" + Arrays.toString(optJR.getDerivativesArray()[0]));
-        
-        System.out.println("\nTEST AMERICAN :\n");
-        Whaley2019 opW= new Whaley2019(contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue);
-        System.out.println("Whaley            :" + Arrays.toString(opW.getDerivativesArray()[0]));
-        BinomialCRR2019 optCRRa=new BinomialCRR2019('A',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue,steps);
-        System.out.println("Binomial CRR      :" + Arrays.toString(optCRRa.getDerivativesArray()[0]));
-        
-        BinomialJarrowRudd optJRa = new BinomialJarrowRudd('A',contrato, undValue, vh30Und,divYield,option, X,days,riskFreeRate,mktValue,steps);
-        System.out.println("Binomial  JR      :" + Arrays.toString(optJRa.getDerivativesArray()[0]));
-        
-        System.out.println("\nTEST QAANT Models :\n");
+       
         QBlackScholes op1=new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
         System.out.println("Balck Scholes -QAANT  :" + Arrays.toString(op1.getDerivativesArray()[0])+"Prima.."+op1.getPrima());
         
-        QBinomialJarrowRudd opEUR=new QBinomialJarrowRudd('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        System.out.println("Binomial EUR JR -QAANT:" + Arrays.toString(opEUR.getDerivativesArray()[0])+"Prima.."+opEUR.getPrima());
+        QBinomialJRudd opJReur=new QBinomialJRudd('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial EUR JR -QAANT:" + Arrays.toString(opJReur.getDerivativesArray()[0])+"Prima.."+opJReur.getPrima());
         
-        QBinomialJarrowRudd opAMER=new QBinomialJarrowRudd('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        System.out.println("Binomial AMER JR-QAANT:" + Arrays.toString(opAMER.getDerivativesArray()[0])+"Prima.."+opAMER.getPrima());
+        QBinomialCRR opCRReur= new QBinomialCRR('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial EUR CRR-QAANT:" + Arrays.toString(opCRReur.getDerivativesArray()[0])+"Prima.."+opCRReur.getPrima());
         
-        QBinomialCRR opCRR= new QBinomialCRR('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        System.out.println("Binomial AMER CRR-QAANT:" + Arrays.toString(opCRR.getDerivativesArray()[0])+"Prima.."+opCRR.getPrima());
+        System.out.println("\nTEST AMERICAN :\n");
+        QBinomialJRudd opJRamer=new QBinomialJRudd('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial AMER JR-QAANT:" + Arrays.toString(opJRamer.getDerivativesArray()[0])+"Prima.."+opJRamer.getPrima());
         
-        QBinomialControlVariate opAMER2=new QBinomialControlVariate(someStock,option, X,days,riskFreeRate,mktValue,steps);
-        System.out.println("Binomial AMER CV-QAANT:" + Arrays.toString(opAMER2.getDerivativesArray()[0])+"Prima.."+opAMER2.getPrima());
+        QBinomialCRR opCRRamer= new QBinomialCRR('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial AMER CRR-QAANT:" + Arrays.toString(opCRRamer.getDerivativesArray()[0])+"Prima.."+opCRRamer.getPrima());
+        
+        QBinomialCV opCVamer=new QBinomialCV(someStock,option, X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial AMER CV-QAANT:" + Arrays.toString(opCVamer.getDerivativesArray()[0])+"Prima.."+opCVamer.getPrima());
         
         QWhaley opW2=new QWhaley (someStock, option, X,days,riskFreeRate,mktValue);
         System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Prima.."+opW2.getPrima());
         
+        System.out.println("\nTEST Put/Call Parity :\n");
+        
+        opJRamer=new QBinomialJRudd('A',someStock,'C', X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial AMER JR-QAANT:" + Arrays.toString(opJRamer.getDerivativesArray()[0])+"Prima.."+opJRamer.getPrima());
+        opJRamer=new QBinomialJRudd('A',someStock,'P', X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial AMER JR-QAANT:" + Arrays.toString(opJRamer.getDerivativesArray()[0])+"Prima.."+opJRamer.getPrima());
+        
+        System.out.println("\n");
+        opCRRamer= new QBinomialCRR('A',someStock,'C', X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial AMER CRR-QAANT:" + Arrays.toString(opCRRamer.getDerivativesArray()[0])+"Prima.."+opCRRamer.getPrima());
+        opCRRamer= new QBinomialCRR('A',someStock,'P', X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial AMER CRR-QAANT:" + Arrays.toString(opCRRamer.getDerivativesArray()[0])+"Prima.."+opCRRamer.getPrima());
+        
+        System.out.println("\n");
+        opCVamer=new QBinomialCV(someStock,'C', X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial AMER CV-QAANT:" + Arrays.toString(opCVamer.getDerivativesArray()[0])+"Prima.."+opCVamer.getPrima());
+        opCVamer=new QBinomialCV(someStock,'P', X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial AMER CV-QAANT:" + Arrays.toString(opCVamer.getDerivativesArray()[0])+"Prima.."+opCVamer.getPrima());
+        
+        System.out.println("\n");
+        opW2=new QWhaley (someStock, 'C', X,days,riskFreeRate,mktValue);
+        System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Prima.."+opW2.getPrima());
+        opW2=new QWhaley (someStock, 'P', X,days,riskFreeRate,mktValue);
+        System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Prima.."+opW2.getPrima());
+       
         
         /*
         double iv=bs.getImpliedVlt();
