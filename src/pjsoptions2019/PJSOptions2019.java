@@ -75,11 +75,15 @@ public class PJSOptions2019 {
         QBinomialJarrowRudd opAMER=new QBinomialJarrowRudd('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
         System.out.println("Binomial AMER JR-QAANT:" + Arrays.toString(opAMER.getDerivativesArray()[0])+"Prima.."+opAMER.getPrima());
         
+        QBinomialCRR opCRR= new QBinomialCRR('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial AMER CRR-QAANT:" + Arrays.toString(opCRR.getDerivativesArray()[0])+"Prima.."+opCRR.getPrima());
+        
         QBinomialControlVariate opAMER2=new QBinomialControlVariate(someStock,option, X,days,riskFreeRate,mktValue,steps);
         System.out.println("Binomial AMER CV-QAANT:" + Arrays.toString(opAMER2.getDerivativesArray()[0])+"Prima.."+opAMER2.getPrima());
         
         QWhaley opW2=new QWhaley (someStock, option, X,days,riskFreeRate,mktValue);
         System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Prima.."+opW2.getPrima());
+        
         
         /*
         double iv=bs.getImpliedVlt();

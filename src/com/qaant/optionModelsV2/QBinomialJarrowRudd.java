@@ -13,7 +13,7 @@ import underlying.cUnderlying;
 
 
 public class QBinomialJarrowRudd extends QAbstractModel implements QOptionable{
-    protected double u,d,p;
+    protected double u,d,p,interv,drift;
     protected double[][]undTree,optTree,underlyingTree;  
     
     public QBinomialJarrowRudd(){super();}
@@ -29,13 +29,12 @@ public class QBinomialJarrowRudd extends QAbstractModel implements QOptionable{
         pModelName="Binomial Jarrow-Rudd QAANT";
         modelNumber=4;
         
-        double h=dayYear/steps;
-        //prima=steps;  
+        interv=dayYear/steps;
         
-        double drift=(tipoContrato=='F')? 1: Math.exp(rate*h);
+        drift=(tipoContrato=='F')? 1: Math.exp(rate*interv);
         
-        double firstTerm=(rate-0.5*Math.pow(volatModel,2))*h;
-        double secondTerm=volatModel*Math.sqrt(h);
+        double firstTerm=(rate-0.5*Math.pow(volatModel,2))*interv;
+        double secondTerm=volatModel*Math.sqrt(interv);
         
         u= Math.exp(firstTerm+secondTerm);
         d= Math.exp(firstTerm-secondTerm);
@@ -50,7 +49,7 @@ public class QBinomialJarrowRudd extends QAbstractModel implements QOptionable{
                     optTree[2][1] - optTree[2][2]) / (undTree[2][1] - undTree[2][2])) / (
                                  (undTree[2][0] - undTree[2][2]) / 2);
         
-        theta=(optTree[2][1] - optTree[0][0]) / (2 * 365 * h);
+        theta=(optTree[2][1] - optTree[0][0]) / (2 * 365 * interv);
         
         vega=0;
         rho=0;
