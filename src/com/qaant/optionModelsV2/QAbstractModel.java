@@ -11,7 +11,7 @@ import underlying.cUnderlying;
  *
  * @author pseoane
  */
-public abstract class QaantAbstractModel extends cUnderlying implements QaantOptionable{
+public abstract class QAbstractModel extends cUnderlying implements QOptionable{
     
     enum TipoOpcion {CALL,PUT}
     enum eDerivatives{PRIMA, DELTA, GAMMA, VEGA,THETA,RHO,IV}
@@ -25,18 +25,18 @@ public abstract class QaantAbstractModel extends cUnderlying implements QaantOpt
     
     protected char tipoEjercicio, callPut;
     protected int cpFlag,modelNumber;
-    protected double strike,daysToExpiration, rate;
-    protected double z,dayYear, volatModel,underlyingNPV;
-    protected double prima=-2,delta=-2,gamma=-2,vega=-2,theta=-2,rho=-2,optionMktValue=0,impliedVol=0; 
+    protected int steps=1; //steps es 1 para BS y Whaley para no alterar el calculo de z
+    protected double strike,daysToExpiration, rate,optionMktValue=0;
+    protected double z,dayYear, sqrDayYear,volatModel,underlyingNPV;
+    protected double prima=-2,delta=-2,gamma=-2,vega=-2,theta=-2,rho=-2,impliedVol=0; 
     protected boolean opcionConVida;
     protected double[][] derivativesArray = new double[1][10];
     protected double startTime, elapsedTime;
     protected String pModelName;
     
     
-    public QaantAbstractModel(){build();}
-    
-    public QaantAbstractModel (cUnderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
+    public QAbstractModel(){build();}
+    public QAbstractModel (cUnderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und);
         
         this.underlyingHistVolatility   =und.getUnderlyingHistVlt();
@@ -46,9 +46,8 @@ public abstract class QaantAbstractModel extends cUnderlying implements QaantOpt
         this.rate                       =rate;
         this.optionMktValue             =optionMktValue;
         build();
-        
     }
-    public QaantAbstractModel (char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
+    public QAbstractModel (char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate);
        
         this.underlyingHistVolatility   =underlyingHistVolatility;
@@ -60,13 +59,46 @@ public abstract class QaantAbstractModel extends cUnderlying implements QaantOpt
         build();
     }
     
+    //Constructores para modelos numericos
+    public QAbstractModel (char tipoEjercicio, char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
+        super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate);
+       
+        this.tipoEjercicio              =tipoEjercicio;
+        this.underlyingHistVolatility   =underlyingHistVolatility;
+        this.callPut                    =callPut;  
+        this.strike                     =strike;
+        this.daysToExpiration           =daysToExpiration;
+        this.rate                       =rate;
+        this.optionMktValue             =optionMktValue;
+        this.steps                      =steps;
+        build();
+    }
+    
+    public QAbstractModel (char tipoEjercicio,cUnderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
+        super(und);
+        
+        this.tipoEjercicio              =tipoEjercicio;
+        this.underlyingHistVolatility   =und.getUnderlyingHistVlt();
+        this.callPut                    =callPut;  
+        this.strike                     =strike;
+        this.daysToExpiration           =daysToExpiration;
+        this.rate                       =rate;
+        this.optionMktValue             =optionMktValue;
+        this.steps                      =steps;
+        build();
+    }
+    
     private void build(){
         //Common vars for all models.
         this.dayYear              =daysToExpiration/365;
+        this.sqrDayYear           =Math.sqrt(dayYear);
         this.volatModel           =underlyingHistVolatility;
         this.cpFlag               =(callPut==CALL)?1:-1;
         this.opcionConVida        =daysToExpiration>0;
-        this.z                    =Math.exp(-rate*dayYear);
+        this.z                    =Math.exp(-rate*dayYear/steps);
+        this.underlyingNPV        =underlyingValue*Math.exp(-dividendRate*dayYear);
+        
+        
         
         startTime=System.currentTimeMillis();
         

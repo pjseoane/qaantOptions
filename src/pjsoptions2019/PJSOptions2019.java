@@ -66,9 +66,11 @@ public class PJSOptions2019 {
         System.out.println("Binomial  JR      :" + Arrays.toString(optJRa.getDerivativesArray()[0]));
         
         System.out.println("\nTEST QAANT Models :\n");
-        BlackScholesV2 op1=new BlackScholesV2 (someStock, option, X,days,riskFreeRate,mktValue);
-        System.out.println("Balck Scholes bs-QAANT  :" + Arrays.toString(op1.getDerivativesArray()[0]));
+        QBlackScholes op1=new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
+        System.out.println("Balck Scholes -QAANT  :" + Arrays.toString(op1.getDerivativesArray()[0])+"Prima.."+op1.getPrima());
         
+        QBinomialJarrowRudd op2=new QBinomialJarrowRudd('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Binomial JR -QAANT    :" + Arrays.toString(op2.getDerivativesArray()[0])+"Prima.."+op2.getPrima());
         
         /*
         double iv=bs.getImpliedVlt();

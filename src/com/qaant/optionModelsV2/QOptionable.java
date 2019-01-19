@@ -11,7 +11,7 @@ import com.qaant.optionModels.*;
  *
  * @author Paulino qOOnt
  */
-public interface QaantOptionable {
+public interface QOptionable {
     /*
     public final static int PRIMA=0,DELTA=1,GAMMA=2,VEGA=3,THETA=4,RHO=5,IV=6;
     public final static char CALL       ='C';
