@@ -5,6 +5,7 @@
  */
 package com.qaant.optionModels;
 
+import com.qaant.optionModelsV2.QImpliedVolCalc;
 import java.util.function.DoubleUnaryOperator;
 import underlying.cUnderlying;
 import org.apache.commons.math3.distribution.NormalDistribution;
@@ -223,7 +224,7 @@ public class BlackScholes2019 extends cUnderlying implements Optionable{
         
         DoubleUnaryOperator opt1 = x-> optionMktValue-new BlackScholes2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
                
-        impliedVol= ImpliedVolCalc.bisection(opt1, min, max, iter, precision);
+        impliedVol= QImpliedVolCalc.bisection(opt1, min, max, iter, precision);
               
         }
     return impliedVol;
@@ -238,7 +239,7 @@ public class BlackScholes2019 extends cUnderlying implements Optionable{
         impliedVol=volatModel;
         if(optionMktValue>0 && daysToExpiration>0){
         DoubleUnaryOperator opt1 = x-> optionMktValue-new BlackScholes2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
-        impliedVol= ImpliedVolCalc.ivVega(opt1, volatModel, vega, 20, 0.00001);    
+        impliedVol= QImpliedVolCalc.ivVega(opt1, volatModel, vega, 20, 0.00001);    
         }
         return impliedVol;
     }

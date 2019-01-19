@@ -5,6 +5,7 @@
  */
 package com.qaant.optionModels;
 
+import com.qaant.optionModelsV2.QImpliedVolCalc;
 import java.util.function.DoubleUnaryOperator;
 
 /**
@@ -43,7 +44,8 @@ public class BinomialJarrowRudd extends BinomialCRR2019 implements Optionable{
         
         undTree=buildUnderlyingTree();
         optTree=buildOptionTree();
-        
+       
+       
         prima=optTree[0][0];
         delta=(optTree[1][1] - optTree[1][0]) / (undTree[1][1] - undTree[1][0]);
         gamma=((optTree[2][0] - optTree[2][1]) / (undTree[2][0] - undTree[2][1]) - (
@@ -122,7 +124,7 @@ public class BinomialJarrowRudd extends BinomialCRR2019 implements Optionable{
         
         DoubleUnaryOperator opt1 = x-> optionMktValue-new BinomialJarrowRudd(tipoEjercicio, tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
                
-        impliedVol= ImpliedVolCalc.bisection(opt1, min, max, iter, precision);
+        impliedVol= QImpliedVolCalc.bisection(opt1, min, max, iter, precision);
         //impliedVol=.4444;
               
     }

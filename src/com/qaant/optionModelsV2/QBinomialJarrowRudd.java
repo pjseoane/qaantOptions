@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package com.qaant.optionModelsV2;
-import com.qaant.optionModels.ImpliedVolCalc;
 import java.util.function.DoubleUnaryOperator;
 import underlying.cUnderlying;
 /**
@@ -13,7 +12,7 @@ import underlying.cUnderlying;
  */
 
 
-public class QBinomialJarrowRudd extends QAbstractModel{
+public class QBinomialJarrowRudd extends QAbstractModel implements QOptionable{
     protected double u,d,p;
     protected double[][]undTree,optTree,underlyingTree;  
     
@@ -22,7 +21,7 @@ public class QBinomialJarrowRudd extends QAbstractModel{
         super(tipoEjercicio,und, callPut, strike, daysToExpiration, rate, optionMktValue, steps);
     }
     public QBinomialJarrowRudd(char tipoEjercicio, char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
-        super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue);
+        super(tipoEjercicio,tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
     }
     
     @Override
@@ -31,8 +30,8 @@ public class QBinomialJarrowRudd extends QAbstractModel{
         modelNumber=4;
         
         double h=dayYear/steps;
-        prima=steps;
-        /*
+        //prima=steps;  
+        
         double drift=(tipoContrato=='F')? 1: Math.exp(rate*h);
         
         double firstTerm=(rate-0.5*Math.pow(volatModel,2))*h;
@@ -50,6 +49,7 @@ public class QBinomialJarrowRudd extends QAbstractModel{
         gamma=((optTree[2][0] - optTree[2][1]) / (undTree[2][0] - undTree[2][1]) - (
                     optTree[2][1] - optTree[2][2]) / (undTree[2][1] - undTree[2][2])) / (
                                  (undTree[2][0] - undTree[2][2]) / 2);
+        
         theta=(optTree[2][1] - optTree[0][0]) / (2 * 365 * h);
         
         vega=0;
@@ -62,9 +62,9 @@ public class QBinomialJarrowRudd extends QAbstractModel{
             optJR=new QBinomialJarrowRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.01, -1, steps);
             rho=optJR.getPrima()-prima;
         }
-*/
-    }  
 
+
+    }  
     protected double[][] buildUnderlyingTree(){
             undTree=new double[steps+1][steps+1];
             undTree[0][0]=underlyingNPV;
@@ -121,7 +121,7 @@ public class QBinomialJarrowRudd extends QAbstractModel{
         
         DoubleUnaryOperator opt1 = x-> optionMktValue-new QBinomialJarrowRudd(tipoEjercicio,tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
                
-        impliedVol= ImpliedVolCalc.bisection(opt1, min, max, iter, precision);
+        impliedVol= QImpliedVolCalc.bisection(opt1, min, max, iter, precision);
               
         }
     return impliedVol;}

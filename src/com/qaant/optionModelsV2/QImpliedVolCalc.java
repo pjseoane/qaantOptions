@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.qaant.optionModels;
+package com.qaant.optionModelsV2;
 import java.util.function.DoubleUnaryOperator;
 /**
  *
  * @author pauli
  */
-public class ImpliedVolCalc
+public class QImpliedVolCalc
   {
     /**
      * Apply the bisection algorithm to solve an equation of the form

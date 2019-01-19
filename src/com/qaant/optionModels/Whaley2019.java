@@ -5,6 +5,7 @@
  */
 package com.qaant.optionModels;
 
+import com.qaant.optionModelsV2.QImpliedVolCalc;
 import java.util.function.DoubleUnaryOperator;
 import static com.qaant.optionModels.BlackScholes2019.CALL;
 import static com.qaant.optionModels.BlackScholes2019.PUT;
@@ -155,7 +156,7 @@ public class Whaley2019 extends BlackScholes2019 implements Optionable{
         
         DoubleUnaryOperator opt1 = x-> optionMktValue-new Whaley2019(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
                
-        impliedVol= ImpliedVolCalc.bisection(opt1, min, max, iter, precision);
+        impliedVol= QImpliedVolCalc.bisection(opt1, min, max, iter, precision);
         //impliedVol=.4444;
               
     }

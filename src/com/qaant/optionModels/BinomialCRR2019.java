@@ -7,7 +7,7 @@ package com.qaant.optionModels;
 
 import java.util.function.DoubleUnaryOperator;
 import com.qaant.optionModels.BlackScholes2019;
-import com.qaant.optionModels.ImpliedVolCalc;
+import com.qaant.optionModelsV2.QImpliedVolCalc;
 import com.qaant.optionModels.Optionable;
 
 /**
@@ -153,7 +153,7 @@ public class BinomialCRR2019 extends BlackScholes2019 implements Optionable{
         
         DoubleUnaryOperator opt1 = x-> optionMktValue-new BinomialCRR2019(tipoEjercicio, tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
                
-        impliedVol= ImpliedVolCalc.bisection(opt1, min, max, iter, precision);
+        impliedVol= QImpliedVolCalc.bisection(opt1, min, max, iter, precision);
                      
     }
     return impliedVol;
