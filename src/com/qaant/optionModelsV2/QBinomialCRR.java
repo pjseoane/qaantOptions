@@ -29,7 +29,6 @@ public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
         drift=(tipoContrato=='F')? 1: Math.exp(rate*interv);
         u = Math.exp(volatModel*Math.sqrt(interv));
         d = Math.exp(-volatModel*Math.sqrt(interv));
-      
         p = (drift - d) / (u - d);
 	
         undTree=buildUnderlyingTree();

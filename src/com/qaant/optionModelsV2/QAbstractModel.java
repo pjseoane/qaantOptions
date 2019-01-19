@@ -77,7 +77,6 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
         this.steps                      =steps;
         build();
     }
-    
     public QAbstractModel (char tipoEjercicio,cUnderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super(und);
         
@@ -91,7 +90,6 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
         this.steps                      =steps;
         build();
     }
-    
     private void build(){
         //Common vars for all models.
         this.dayYear              =daysToExpiration/365;
@@ -128,8 +126,7 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
         if(optionMktValue>0 && opcionConVida){
             double min;
             double max;
-           
-    
+        
         if(prima<=optionMktValue){
             min=volatModel;
             max=min*3;
@@ -140,7 +137,7 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
         
         DoubleUnaryOperator opt1 = x-> funcTest(x);
         
-       // impliedVol= QImpliedVolCalc.bisection(opt1, min, max, MAXITERATIONS, ACCURACY);
+       //impliedVol= QImpliedVolCalc.bisection(opt1, min, max, MAXITERATIONS, ACCURACY);
         impliedVol= QImpliedVolCalc.ivNewton(opt1, min, max, MAXITERATIONS, ACCURACY);
               
         }
@@ -148,9 +145,7 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
     
     }
     abstract protected double funcTest(double x);
-    
-    
-    
+       
     public void opcionSinVida(){
         delta=cpFlag;  
         gamma=vega=theta=rho=0;
