@@ -57,7 +57,8 @@ public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
         
     }    
      @Override
-    public double getImpliedVlt(){impliedVol=volatModel;
+    public double getImpliedVlt(){
+        impliedVol=volatModel;
         
         if(optionMktValue>0 && daysToExpiration>0){
             double min;
@@ -73,12 +74,17 @@ public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
                 max=volatModel;
             }
         
-        DoubleUnaryOperator opt1 = x-> optionMktValue-new QBinomialCRR(tipoEjercicio,tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
-               
+       // DoubleUnaryOperator opt1 = x-> optionMktValue-new QBinomialCRR(tipoEjercicio,tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
+        DoubleUnaryOperator opt1 = x-> funcTest(x);
+        
         impliedVol= QImpliedVolCalc.bisection(opt1, min, max, iter, precision);
               
         }
     return impliedVol;}
+    
+    double funcTest(double x){
+        return optionMktValue-new QBinomialCRR(tipoEjercicio,tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
+    }
 
 }
 

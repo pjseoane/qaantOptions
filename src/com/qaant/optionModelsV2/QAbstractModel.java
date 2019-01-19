@@ -5,6 +5,7 @@
  */
 package com.qaant.optionModelsV2;
 
+import java.util.function.DoubleUnaryOperator;
 import underlying.cUnderlying;
 //import com.qaant.optionModels.Optionable
 /**
@@ -201,6 +202,8 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
      
         if (i>9){i=0;}
         return derivativesArray[0][i];
-    }    
+    }   
+    
+    
         
 }
