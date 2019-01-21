@@ -77,7 +77,7 @@ public class QBlackScholes extends QAbstractModel implements QOptionable{
     }
     
      @Override
-    protected double funcTest(double x){
-        return optionMktValue-new QBlackScholes(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
+    protected double modelGetPrima(double x){
+        return new QBlackScholes(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
     }
 }

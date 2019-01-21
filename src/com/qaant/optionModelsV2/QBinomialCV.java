@@ -45,7 +45,7 @@ public class QBinomialCV extends QAbstractModel implements QOptionable{
    
     
      @Override
-    protected double funcTest(double x){
-        return optionMktValue-new QBinomialCV(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
+    protected double modelGetPrima(double x){
+        return new QBinomialCV(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
     }
 }

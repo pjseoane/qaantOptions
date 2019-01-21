@@ -135,16 +135,18 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
                 max=volatModel;
             }
         
-        DoubleUnaryOperator opt1 = x-> funcTest(x);
+     
+        DoubleUnaryOperator opt1 = x-> optionMktValue - modelGetPrima(x);
         
-       //impliedVol= QImpliedVolCalc.bisection(opt1, min, max, MAXITERATIONS, ACCURACY);
+              
         impliedVol= QImpliedVolCalc.ivNewton(opt1, min, max, MAXITERATIONS, ACCURACY);
               
         }
     return impliedVol;
     
     }
-    abstract protected double funcTest(double x);
+   // abstract protected double funcTest(double x);
+    abstract protected double modelGetPrima(double vol);
        
     public void opcionSinVida(){
         delta=cpFlag;  
