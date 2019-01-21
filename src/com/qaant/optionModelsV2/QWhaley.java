@@ -126,8 +126,8 @@ public class QWhaley extends QAbstractModel implements QOptionable{
     
     
      @Override
-    protected double modelGetPrima(double x){
-        return new QWhaley(tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
+    protected double modelGetPrima(double volForLambda){
+        return new QWhaley(tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
     }
        
 }

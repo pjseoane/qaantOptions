@@ -102,7 +102,7 @@ public class QBinomialJRudd extends QAbstractModel implements QOptionable{
         
     }
      @Override
-    protected double modelGetPrima(double x){
-        return new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, x,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
+    protected double modelGetPrima(double volForLambda){
+        return new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
     }
 }

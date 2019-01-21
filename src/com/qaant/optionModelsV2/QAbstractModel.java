@@ -100,8 +100,6 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
         this.z                    =Math.exp(-rate*dayYear/steps);
         this.underlyingNPV        =underlyingValue*Math.exp(-dividendRate*dayYear);
         
-        
-        
         startTime=System.currentTimeMillis();
         
         if (opcionConVida){
@@ -135,7 +133,7 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
                 max=volatModel;
             }
              
-        DoubleUnaryOperator opt1 = x-> optionMktValue - modelGetPrima(x);
+        DoubleUnaryOperator opt1 = xVlt-> optionMktValue - modelGetPrima(xVlt);
         
         impliedVol= QImpliedVolCalc.ivNewton(opt1, min, max, MAXITERATIONS, ACCURACY);
               
@@ -144,7 +142,7 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
     
     }
    // abstract protected double funcTest(double x);
-    abstract protected double modelGetPrima(double vol);
+    abstract protected double modelGetPrima(double volForLambda);
        
     public void opcionSinVida(){
         delta=cpFlag;  
