@@ -143,6 +143,7 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
     }
    // abstract protected double funcTest(double x);
     abstract protected double modelGetPrima(double volForLambda);
+    
        
     public void opcionSinVida(){
         delta=cpFlag;  
