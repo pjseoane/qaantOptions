@@ -134,11 +134,9 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
                 min=0;// impliedVol/3;
                 max=volatModel;
             }
-        
-     
+             
         DoubleUnaryOperator opt1 = x-> optionMktValue - modelGetPrima(x);
         
-              
         impliedVol= QImpliedVolCalc.ivNewton(opt1, min, max, MAXITERATIONS, ACCURACY);
               
         }
