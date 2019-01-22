@@ -110,7 +110,7 @@ public class PJSOptions2019 {
         opJRamer.setDaysToExpiration(0);
         opJRamer.runModel();
         System.out.println ("Days to zero...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
-        
+         System.out.println (QAbstractModel.modelChooser());
         
     }
 }

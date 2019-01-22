@@ -109,6 +109,11 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
         this.z                    =Math.exp(-rate*dayYear/steps);
         this.underlyingNPV        =underlyingValue*Math.exp(-dividendRate*dayYear);
      }
+     
+     public static double modelChooser(){
+         QOptionable c = new QBlackScholes();
+         return 33.33;
+     }
    
     @Override
     abstract public void runModel(); //Cada modelo implementa runModel()
@@ -127,7 +132,8 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
                 min=0;// impliedVol/3;
                 max=volatModel;
             }
-             
+        
+        //definicion de funcion para mandar a algo de impVlt (la dif entre valor mercado y valor teorico, buscamos que sea cero)      
         DoubleUnaryOperator opt1 = xVlt-> optionMktValue - modelGetPrima(xVlt);
        
         impliedVol= QImpliedVolCalc.ivNewton(opt1, min, max, MAXITERATIONS, ACCURACY);
