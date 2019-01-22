@@ -50,6 +50,8 @@ public class QWhaley extends QAbstractModel implements QOptionable{
         modelNumber=2;
         tipoEjercicio =AMERICAN;
         
+        commonVarsSetup();
+        
         //     q=(tipoContrato==STOCK) ? dividendRate:rate; 
             //q: si es una accion q es el dividendo, si es un futuro q se toma la rate para descontar el valor futr a presente 
             //Se hace este reemplazo para poder usar la misma form en STOCK y FUTURO

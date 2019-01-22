@@ -28,6 +28,7 @@ public class QBinomialJRudd extends QAbstractModel implements QOptionable{
     public void runModel(){
         pModelName="Binomial Jarrow-Rudd QAANT";
         modelNumber=4;
+        commonVarsSetup();
         
         interv=dayYear/steps;
         

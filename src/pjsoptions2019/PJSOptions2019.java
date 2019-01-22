@@ -93,5 +93,18 @@ public class PJSOptions2019 {
         System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Prima.."+opW2.getImpliedVlt());
         opW2=new QWhaley (someStock, 'P', X,days,riskFreeRate,mktValue);
         System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Prima.."+opW2.getImpliedVlt());
+        
+        
+        //********************************************************************
+        opJRamer.setUnderlyingValue(undValue*.99);
+        opJRamer.runModel();
+        System.out.println ("CRR Caida 1%...:"+ opJRamer.getPrima());
+        
+        opJRamer.setUnderlyingValue(undValue*1.01);
+        opJRamer.runModel();
+        System.out.println ("CRR Suba 1%...:"+ opJRamer.getPrima());
+        System.out.println ("und value...:"+ opJRamer.getUnderlyingValue());
+        
+        
     }
 }

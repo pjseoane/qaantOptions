@@ -24,6 +24,9 @@ public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
     public void runModel(){
         pModelName="Binomial CRR- QAANT";
         modelNumber=3;
+        
+        commonVarsSetup();
+                
      
         interv=dayYear/steps;
         drift=(tipoContrato=='F')? 1: Math.exp(rate*interv);
@@ -58,16 +61,9 @@ public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
     @Override
     protected double modelGetPrima(double volForLambda){
         return new QBinomialCRR(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
+        
     }
     
-    
-   
-/*    
-    funcion objetivo a lograr:
-    .....xxxxxxxxxxxx ........ modelToUseforImplied(){
-        return (QBinomialCRR);
-    }
-    
-*/
+
 }
 

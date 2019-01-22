@@ -94,13 +94,7 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
     }
     private void build(){
         //Common vars for all models.
-        this.dayYear              =daysToExpiration/365;
-        this.sqrDayYear           =Math.sqrt(dayYear);
-        this.volatModel           =underlyingHistVolatility;
-        this.cpFlag               =(callPut==CALL)?1:-1;
-        this.opcionConVida        =daysToExpiration>0;
-        this.z                    =Math.exp(-rate*dayYear/steps);
-        this.underlyingNPV        =underlyingValue*Math.exp(-dividendRate*dayYear);
+        commonVarsSetup();
         
         startTime=System.currentTimeMillis();
         
@@ -115,7 +109,15 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
         fillDerivativesArray();
         
     }
-    
+     protected void commonVarsSetup(){
+        this.dayYear              =daysToExpiration/365;
+        this.sqrDayYear           =Math.sqrt(dayYear);
+        this.volatModel           =underlyingHistVolatility;
+        this.cpFlag               =(callPut==CALL)?1:-1;
+        this.opcionConVida        =daysToExpiration>0;
+        this.z                    =Math.exp(-rate*dayYear/steps);
+        this.underlyingNPV        =underlyingValue*Math.exp(-dividendRate*dayYear);
+     }
    
     @Override
     abstract public void runModel(); //Cada modelo implementa runModel()
