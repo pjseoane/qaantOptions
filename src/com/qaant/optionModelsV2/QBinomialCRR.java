@@ -60,6 +60,8 @@ public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
         return new QBinomialCRR(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
     }
     
+    
+   
 /*    
     funcion objetivo a lograr:
     .....xxxxxxxxxxxx ........ modelToUseforImplied(){

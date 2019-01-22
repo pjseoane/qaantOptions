@@ -9,7 +9,7 @@ package pjsoptions2019;
 import java.util.Arrays;
 import underlying.cUnderlying;
 import com.qaant.optionModelsV2.*;
-import java.util.function.Consumer;
+//import java.util.function.Consumer;
 
 /**
  *
@@ -93,18 +93,5 @@ public class PJSOptions2019 {
         System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Prima.."+opW2.getImpliedVlt());
         opW2=new QWhaley (someStock, 'P', X,days,riskFreeRate,mktValue);
         System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Prima.."+opW2.getImpliedVlt());
-       
-       
-        //double ivol=5;//testIvol(QOptionable z);
-        
-        //QOptionable x=opW2;
-        Consumer<QOptionable> myModel=  (y)->{System.out.println(y.getPrima());};
-        myModel.accept(opCVamer);
-        
-        
-        /*
-         xxxx <QOptionable, double> ImpliedVol 
-        */
     }
-    
 }

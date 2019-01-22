@@ -5,6 +5,8 @@
  */
 package com.qaant.optionModelsV2;
 
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.DoubleUnaryOperator;
 import underlying.cUnderlying;
 //import com.qaant.optionModels.Optionable
@@ -134,7 +136,7 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
             }
              
         DoubleUnaryOperator opt1 = xVlt-> optionMktValue - modelGetPrima(xVlt);
-        
+       
         impliedVol= QImpliedVolCalc.ivNewton(opt1, min, max, MAXITERATIONS, ACCURACY);
               
         }
@@ -228,6 +230,6 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
         return derivativesArray[0][i];
     }   
     
+   
     
-        
 }
