@@ -34,6 +34,16 @@ public class QBlackScholes extends QAbstractModel implements QOptionable{
         tipoEjercicio =EUROPEAN;
         
         commonVarsSetup();
+        //hay que checkear el tema de life aca, por si se cambia la variable de dias con un setter   
+        if (opcionConVida){
+           
+            runThisModel();
+            impliedVol=getImpliedVlt();
+        }else{
+            opcionSinVida();
+        }
+    }
+    private void runThisModel(){
         
         
         

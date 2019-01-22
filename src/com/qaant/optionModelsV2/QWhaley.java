@@ -51,6 +51,16 @@ public class QWhaley extends QAbstractModel implements QOptionable{
         tipoEjercicio =AMERICAN;
         
         commonVarsSetup();
+        //hay que checkear el tema de life aca, por si se cambia la variable de dias con un setter   
+        if (opcionConVida){
+           
+            runThisModel();
+            impliedVol=getImpliedVlt();
+        }else{
+            opcionSinVida();
+        }
+    }
+    private void runThisModel(){
         
         //     q=(tipoContrato==STOCK) ? dividendRate:rate; 
             //q: si es una accion q es el dividendo, si es un futuro q se toma la rate para descontar el valor futr a presente 

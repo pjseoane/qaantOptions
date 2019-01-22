@@ -93,18 +93,9 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
         build();
     }
     private void build(){
-        //Common vars for all models.
-        commonVarsSetup();
-        
+             
         startTime=System.currentTimeMillis();
-        
-        if (opcionConVida){
-           
-            runModel(); // Abstract method, cada modelo implementa el suyo
-            impliedVol=getImpliedVlt();
-        }else{
-            opcionSinVida();
-        }
+        runModel();
         elapsedTime = System.currentTimeMillis() - startTime;
         fillDerivativesArray();
         

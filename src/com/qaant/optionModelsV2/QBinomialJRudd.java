@@ -29,6 +29,16 @@ public class QBinomialJRudd extends QAbstractModel implements QOptionable{
         pModelName="Binomial Jarrow-Rudd QAANT";
         modelNumber=4;
         commonVarsSetup();
+        //hay que checkear el tema de life aca, por si se cambia la variable de dias con un setter   
+        if (opcionConVida){
+           
+            runThisModel();
+            impliedVol=getImpliedVlt();
+        }else{
+            opcionSinVida();
+        }
+    }
+    private void runThisModel(){
         
         interv=dayYear/steps;
         

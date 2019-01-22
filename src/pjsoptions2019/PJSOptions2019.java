@@ -96,18 +96,18 @@ public class PJSOptions2019 {
         
         
         //********************************************************************
-        opJRamer.setUnderlyingValue(undValue*.99);
-        opJRamer.runModel();
-        System.out.println ("CRR Caida 1%...:"+ opJRamer.getPrima());
+        opW2.setUnderlyingValue(undValue*.99);
+        opW2.runModel();
+        System.out.println ("CRR Caida 1%...:"+ opW2.getPrima());
         
-        opJRamer.setUnderlyingValue(undValue*1.01);
-        opJRamer.runModel();
-        System.out.println ("CRR Suba 1%...:"+ opJRamer.getPrima());
-        System.out.println ("und value...:"+ opJRamer.getUnderlyingValue());
+        opW2.setUnderlyingValue(undValue*1.01);
+        opW2.runModel();
+        System.out.println ("CRR Suba 1%...:"+ opW2.getPrima());
+        System.out.println ("und value...:"+ opW2.getUnderlyingValue());
         
-        opJRamer.setDaysToExpiration(0);
-        opJRamer.runModel();
-        System.out.println ("Days to zero...:"+ opJRamer.getPrima());
+        opW2.setDaysToExpiration(0);
+        opW2.runModel();
+        System.out.println ("Days to zero...:"+ opW2.getPrima());
         
         
     }

@@ -30,8 +30,20 @@ public class QBinomialCV extends QAbstractModel implements QOptionable{
     
     @Override
     public void runModel(){
+        pModelName="Binomial CRR- QAANT";
+        modelNumber=3;
+        
         commonVarsSetup();
-                
+        //hay que checkear el tema de life aca, por si se cambia la variable de dias con un setter   
+        if (opcionConVida){
+           
+            runThisModel();
+            impliedVol=getImpliedVlt();
+        }else{
+            opcionSinVida();
+        }
+    }
+    private void runThisModel(){
         
         
     QBinomialJRudd amerOpt = new QBinomialJRudd('A',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
