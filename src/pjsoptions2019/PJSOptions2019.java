@@ -105,6 +105,10 @@ public class PJSOptions2019 {
         System.out.println ("CRR Suba 1%...:"+ opJRamer.getPrima());
         System.out.println ("und value...:"+ opJRamer.getUnderlyingValue());
         
+        opJRamer.setDaysToExpiration(0);
+        opJRamer.runModel();
+        System.out.println ("Days to zero...:"+ opJRamer.getPrima());
+        
         
     }
 }

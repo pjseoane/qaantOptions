@@ -205,6 +205,10 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
         return builder.toString();
     }//end getString
     
+    public void setDaysToExpiration(double days){
+        this.daysToExpiration=days;
+    }
+    
     @Override
     public String getModelName(){return pModelName;}
     @Override

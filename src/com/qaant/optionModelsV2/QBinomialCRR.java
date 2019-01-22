@@ -26,7 +26,7 @@ public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
         modelNumber=3;
         
         commonVarsSetup();
-                
+        //hay que checkear el tema de life aca, por si se cambia la variable de dias con un setter        
      
         interv=dayYear/steps;
         drift=(tipoContrato=='F')? 1: Math.exp(rate*interv);
@@ -60,8 +60,8 @@ public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
     
     @Override
     protected double modelGetPrima(double volForLambda){
-        return new QBinomialCRR(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
-        
+       return new QBinomialCRR(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
+       
     }
     
 
