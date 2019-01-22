@@ -42,6 +42,7 @@ public class QBinomialCV extends QAbstractModel implements QOptionable{
         }else{
             opcionSinVida();
         }
+         fillDerivativesArray();
     }
     private void runThisModel(){
         

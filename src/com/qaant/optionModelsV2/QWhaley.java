@@ -59,6 +59,7 @@ public class QWhaley extends QAbstractModel implements QOptionable{
         }else{
             opcionSinVida();
         }
+         fillDerivativesArray();
     }
     private void runThisModel(){
         

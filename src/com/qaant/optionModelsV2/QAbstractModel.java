@@ -97,7 +97,7 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
         startTime=System.currentTimeMillis();
         runModel();
         elapsedTime = System.currentTimeMillis() - startTime;
-        fillDerivativesArray();
+       
         
     }
      protected void commonVarsSetup(){

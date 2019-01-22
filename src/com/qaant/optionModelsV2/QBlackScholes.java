@@ -42,6 +42,7 @@ public class QBlackScholes extends QAbstractModel implements QOptionable{
         }else{
             opcionSinVida();
         }
+         fillDerivativesArray();
     }
     private void runThisModel(){
         

@@ -34,6 +34,7 @@ public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
         }else{
             opcionSinVida();
         }
+         fillDerivativesArray();
     }   
      
     private void runThisModel(){      

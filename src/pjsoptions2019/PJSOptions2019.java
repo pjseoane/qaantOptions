@@ -90,26 +90,26 @@ public class PJSOptions2019 {
         
         System.out.println("\n");
         opW2=new QWhaley (someStock, 'C', X,days,riskFreeRate,mktValue);
-        System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Prima.."+opW2.getImpliedVlt());
+        System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Implied VLT.."+opW2.getImpliedVlt());
         opW2=new QWhaley (someStock, 'P', X,days,riskFreeRate,mktValue);
-        System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Prima.."+opW2.getImpliedVlt());
+        System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Implied VLT.."+opW2.getImpliedVlt());
         
         
         //********************************************************************
-        System.out.println ("CRR Prima...:"+ opJRamer.getPrima());
+        System.out.println ("\nCRR Prima...:"+ opJRamer.getPrima());
         
         opJRamer.setUnderlyingValue(undValue*.99);
         opJRamer.runModel();
-        System.out.println ("CRR Caida 1%...:"+ opJRamer.getPrima());
+        System.out.println ("CRR Caida 1%...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
         
         opJRamer.setUnderlyingValue(undValue*1.01);
         opJRamer.runModel();
-        System.out.println ("CRR Suba 1%...:"+ opJRamer.getPrima());
+        System.out.println ("CRR Suba 1%...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
         System.out.println ("und value...:"+ opJRamer.getUnderlyingValue());
         
         opJRamer.setDaysToExpiration(0);
         opJRamer.runModel();
-        System.out.println ("Days to zero...:"+ opJRamer.getPrima());
+        System.out.println ("Days to zero...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
         
         
     }
