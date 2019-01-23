@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.qaant.optionModelsV2;
+package com.qaant.optionModels;
 import java.util.function.DoubleUnaryOperator;
 /**
  *
@@ -93,11 +93,10 @@ public class QImpliedVolCalc
     while (Math.abs(dif)> tolerance && c < maxIterations ){  
             dif=func.applyAsDouble(iv);    
             iv +=(dif/vega/100);
-            
             c++;
-            
             }
     return iv; 
     //  throw new ArithmeticException("IV Vega Algorithm failed to converge");          
   }
+  
 }

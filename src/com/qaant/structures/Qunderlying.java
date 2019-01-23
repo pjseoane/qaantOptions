@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package underlying;
+package com.qaant.structures;
 
 /**
  *
  * @author Paulino
  */
-public class cUnderlying {
+public class Qunderlying {
    
     enum tipoContrato {STOCK,FUTURES};
     public final static char STOCK='S';
@@ -22,17 +22,17 @@ public class cUnderlying {
     protected double underlyingHistVolatility;
     protected double dividendRate;
     
-    public cUnderlying(){}
+    public Qunderlying(){}
     
    
-    public cUnderlying(cUnderlying und){
+    public Qunderlying(Qunderlying und){
         this.tipoContrato               =und.tipoContrato;
         this.underlyingValue            =und.underlyingValue;
         this.underlyingHistVolatility   =und.underlyingHistVolatility;
         this.dividendRate               =und.dividendRate;
         this.ticker                     =und.ticker;
     }
-    public cUnderlying(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate)
+    public Qunderlying(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate)
     {
         this.tipoContrato               =tipoContrato;
         this.underlyingValue            =underlyingValue;
@@ -41,7 +41,7 @@ public class cUnderlying {
         ticker                          ="TICKER";
     }
     
-    public cUnderlying(String ticker,char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate){
+    public Qunderlying(String ticker,char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate){
         this.ticker                     =ticker;
         this.tipoContrato               =tipoContrato;
         this.underlyingValue            =underlyingValue;

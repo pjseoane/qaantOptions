@@ -6,11 +6,16 @@
 package pjsoptions2019;
 
 
-import java.util.Arrays;
-import underlying.cUnderlying;
-import com.qaant.optionModelsV2.*;
-//import java.util.function.Consumer;
+import com.qaant.optionModels.QAbstractModel;
+import com.qaant.optionModels.QWhaley;
+import com.qaant.optionModels.QBinomialJRudd;
+import com.qaant.optionModels.QBinomialCV;
+import com.qaant.optionModels.QBlackScholes;
+import com.qaant.optionModels.QBinomialCRR;
 
+import java.util.Arrays;
+import com.qaant.structures.Qunderlying;
+//import java.util.function.Consumer;
 /**
  *
  * @author pseoane
@@ -44,7 +49,7 @@ public class PJSOptions2019 {
         
         System.out.println("TEST EUROPEAN :\n");
         
-        cUnderlying someStock   = new cUnderlying(contrato, undValue, vh30Und, divYield);
+        Qunderlying someStock   = new Qunderlying(contrato, undValue, vh30Und, divYield);
         
        
         QBlackScholes op1=new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
@@ -110,7 +115,8 @@ public class PJSOptions2019 {
         opJRamer.setDaysToExpiration(0);
         opJRamer.runModel();
         System.out.println ("Days to zero...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
-         System.out.println (QAbstractModel.modelChooser());
+        System.out.println (QAbstractModel.modelChooser());
         
+               
     }
 }

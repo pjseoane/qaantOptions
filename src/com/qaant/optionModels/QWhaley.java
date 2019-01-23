@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.qaant.optionModelsV2;
+package com.qaant.optionModels;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
-import underlying.cUnderlying;
+import com.qaant.structures.Qunderlying;
 
 /**
  *
@@ -17,7 +17,7 @@ public class QWhaley extends QAbstractModel implements QOptionable{
     protected double q,b;
     
     public QWhaley(){super();}
-    public QWhaley(cUnderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
+    public QWhaley(Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und, callPut, strike, daysToExpiration, rate, optionMktValue);
     }
     

@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.qaant.optionModelsV2;
+package com.qaant.optionModels;
 
-import underlying.cUnderlying;
+import com.qaant.structures.Qunderlying;
 /**
  *
  * @author pauli
@@ -17,7 +17,7 @@ public class QBinomialJRudd extends QAbstractModel implements QOptionable{
     protected double[][]undTree,optTree,underlyingTree;  
     
     public QBinomialJRudd(){super();}
-    public QBinomialJRudd(char tipoEjercicio, cUnderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
+    public QBinomialJRudd(char tipoEjercicio, Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super(tipoEjercicio,und, callPut, strike, daysToExpiration, rate, optionMktValue, steps);
     }
     public QBinomialJRudd(char tipoEjercicio, char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){

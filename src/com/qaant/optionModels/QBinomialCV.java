@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.qaant.optionModelsV2;
+package com.qaant.optionModels;
 
-import underlying.cUnderlying;
+import com.qaant.structures.Qunderlying;
 
 /**
  *
@@ -21,7 +21,7 @@ Hull pag 333 y 351
 
 public class QBinomialCV extends QAbstractModel implements QOptionable{
     public QBinomialCV(){super();}
-    public QBinomialCV(cUnderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
+    public QBinomialCV(Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super('A',und, callPut, strike, daysToExpiration, rate, optionMktValue, steps);
     }
     public QBinomialCV(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){

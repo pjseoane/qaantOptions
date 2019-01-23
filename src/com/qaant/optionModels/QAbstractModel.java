@@ -3,18 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.qaant.optionModelsV2;
+package com.qaant.optionModels;
 
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
+
 import java.util.function.DoubleUnaryOperator;
-import underlying.cUnderlying;
+import com.qaant.structures.Qunderlying;
 //import com.qaant.optionModels.Optionable
 /**
  *
  * @author pseoane
  */
-public abstract class QAbstractModel extends cUnderlying implements QOptionable{
+public abstract class QAbstractModel extends Qunderlying implements QOptionable{
     
     enum TipoOpcion {CALL,PUT}
     enum eDerivatives{PRIMA, DELTA, GAMMA, VEGA,THETA,RHO,IV}
@@ -33,7 +32,7 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
     protected double z,dayYear, sqrDayYear,volatModel,underlyingNPV;
     protected double prima=-2,delta=-2,gamma=-2,vega=-2,theta=-2,rho=-2,impliedVol=0; 
     protected boolean opcionConVida;
-    protected double[][] derivativesArray = new double[1][10];
+    protected double[][] derivativesArray = new double[1][20];
     protected double startTime, elapsedTime;
     protected String pModelName;
 
@@ -42,7 +41,7 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
     protected double ACCURACY   =0.00001;
     
     public QAbstractModel (){build();}
-    public QAbstractModel (cUnderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
+    public QAbstractModel (Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und);
         
         this.underlyingHistVolatility   =und.getUnderlyingHistVlt();
@@ -79,7 +78,7 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
         this.steps                      =steps;
         build();
     }
-    public QAbstractModel (char tipoEjercicio,cUnderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
+    public QAbstractModel (char tipoEjercicio,Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super(und);
         
         this.tipoEjercicio              =tipoEjercicio;
@@ -115,6 +114,7 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
          return 33.33;
      }
    
+  
     @Override
     abstract public void runModel(); //Cada modelo implementa runModel()
    
@@ -168,6 +168,7 @@ public abstract class QAbstractModel extends cUnderlying implements QOptionable{
         derivativesArray[0][7]=impliedVol;
         derivativesArray[0][8]=elapsedTime;
         derivativesArray[0][9]=modelNumber;
+        
       
     }
     public double[][] getDerivativesArray(){return derivativesArray;}
