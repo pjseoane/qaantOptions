@@ -32,7 +32,7 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
     protected double z,dayYear, sqrDayYear,volatModel,underlyingNPV;
     protected double prima=-2,delta=-2,gamma=-2,vega=-2,theta=-2,rho=-2,impliedVol=0; 
     protected boolean opcionConVida;
-    protected double[][] derivativesArray = new double[1][20];
+    protected double[][] derivativesArray = new double[1][10];
     protected double startTime, elapsedTime;
     protected String pModelName;
 

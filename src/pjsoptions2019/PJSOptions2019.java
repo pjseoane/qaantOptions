@@ -12,6 +12,7 @@ import com.qaant.optionModels.QBinomialJRudd;
 import com.qaant.optionModels.QBinomialCV;
 import com.qaant.optionModels.QBlackScholes;
 import com.qaant.optionModels.QBinomialCRR;
+import com.qaant.structures.Qoption;
 
 import java.util.Arrays;
 import com.qaant.structures.Qunderlying;
@@ -117,6 +118,7 @@ public class PJSOptions2019 {
         System.out.println ("Days to zero...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
         System.out.println (QAbstractModel.modelChooser());
         
-               
+   // Qoption op3 = new Qoption(someStock,tipoEjercicio, callPut, strike, daysToExpiration, rate, optionMktValue);  
+    //Qticket ticket =new ticket()      
     }
 }

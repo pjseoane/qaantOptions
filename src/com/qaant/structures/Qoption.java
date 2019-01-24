@@ -26,17 +26,7 @@ public class Qoption extends Qunderlying{
     protected boolean opcionConVida;
     
     public Qoption(){}
-    public Qoption(Qunderlying und, Qoption opt){
-        super (und);
-        this.tipoEjercicio      =opt.tipoEjercicio;
-        this.callPut            =opt.callPut;
-        this.strike             =opt.strike;
-        this.daysToExpiration   =opt.daysToExpiration;
-        this.rate               =opt.rate;
-        this.optionMktValue     =opt.optionMktValue;
-        build();
-        
-    }
+    
     public Qoption(Qunderlying und,char tipoEjercicio,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und);
         this.tipoEjercicio      =tipoEjercicio;
