@@ -18,6 +18,7 @@ public class Qticket extends Qoption {
      protected double[][] lot = new double[1][20];
     
     public Qticket(){}
+   /*
     public Qticket(Qunderlying und ,Qoption option, double lots, double precio){
         super(und,option);
         this.lots   =lots;
@@ -25,6 +26,7 @@ public class Qticket extends Qoption {
         buildLot();
         
     }
+*/
     private void buildLot(){
         lot[0][0] =0 ;
         lot[0][1] = this.tipoEjercicio;
