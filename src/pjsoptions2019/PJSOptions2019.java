@@ -12,6 +12,7 @@ import com.qaant.optionModels.QBinomialJRudd;
 import com.qaant.optionModels.QBinomialCV;
 import com.qaant.optionModels.QBlackScholes;
 import com.qaant.optionModels.QBinomialCRR;
+import com.qaant.optionModelsV2.QBlackScholesV2;
 import com.qaant.structures.Qoption;
 
 import java.util.Arrays;
@@ -51,7 +52,7 @@ public class PJSOptions2019 {
         System.out.println("TEST EUROPEAN :\n");
         
         Qunderlying someStock   = new Qunderlying(contrato, undValue, vh30Und, divYield);
-        
+        /*
        
         QBlackScholes op1=new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
         System.out.println("Balck Scholes -QAANT  :" + Arrays.toString(op1.getDerivativesArray()[0])+"Implied VLT.."+op1.getImpliedVlt());
@@ -117,8 +118,42 @@ public class PJSOptions2019 {
         opJRamer.runModel();
         System.out.println ("Days to zero...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
         System.out.println (QAbstractModel.modelChooser());
+        */
         
-   // Qoption op3 = new Qoption(someStock,tipoEjercicio, callPut, strike, daysToExpiration, rate, optionMktValue);  
-    //Qticket ticket =new ticket()      
+        option='P';
+        Qunderlying someStock1  = new Qunderlying(contrato,undValue, vh30Und, divYield);
+        Qoption     opt1        = new Qoption(someStock, option,X,days,riskFreeRate,mktValue);
+        Qoption     opt2        = new Qoption(contrato,undValue+1.3, vh30Und, divYield,option,X,days,riskFreeRate,mktValue);
+        
+        
+        System.out.println ("------------------------\n tipoContrato "+opt1.getTipoContrato());
+        System.out.println ("------------------------\nPayoff ..."+opt2.getPayoff());
+        QBlackScholesV2 opt3   =new QBlackScholesV2(someStock, option,X,days,riskFreeRate,mktValue);
+        QBlackScholesV2 opt4   =new QBlackScholesV2(opt1);
+        QBlackScholesV2 opt5   =new QBlackScholesV2(contrato,undValue, vh30Und, divYield,option,X,days,riskFreeRate,mktValue);
+          
+        System.out.println ("opt3 ...:"+ Arrays.toString(opt3.getDerivativesArray()[0]));
+        System.out.println ("opt4 ...:"+ Arrays.toString(opt4.getDerivativesArray()[0]));
+        System.out.println ("opt5 ...:"+ Arrays.toString(opt5.getDerivativesArray()[0]));
+        
+        opt3.setDaysToExpiration(0);
+        opt4.setOptionMktValue(12);
+        opt5.setRiskFreeRate(.30);
+        opt3.runModel();
+        opt4.runModel();
+        opt5.runModel();
+        
+        System.out.println ("opt3 ...:"+ Arrays.toString(opt3.getDerivativesArray()[0]));
+        System.out.println ("opt4 ...:"+ Arrays.toString(opt4.getDerivativesArray()[0]));
+        System.out.println ("opt5 ...:"+ Arrays.toString(opt5.getDerivativesArray()[0]));
+       
+        
+        
+        
+        
+        
+        
+        
+        
     }
 }

@@ -32,6 +32,7 @@ public class Qunderlying {
         this.dividendRate               =und.dividendRate;
         this.ticker                     =und.ticker;
     }
+    
     public Qunderlying(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate)
     {
         this.tipoContrato               =tipoContrato;

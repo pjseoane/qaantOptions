@@ -14,6 +14,7 @@ import com.qaant.structures.Qunderlying;
  * @author pauli
  */
 public class Qticket extends Qoption {
+/*
     protected double lots,precio;
      protected double[][] lot = new double[1][20];
     
@@ -26,7 +27,7 @@ public class Qticket extends Qoption {
         buildLot();
         
     }
-*/
+
     private void buildLot(){
         lot[0][0] =0 ;
         lot[0][1] = this.tipoEjercicio;
@@ -42,4 +43,5 @@ public class Qticket extends Qoption {
         
     }
     public double[][] getLotArray(){return lot;}
+*/
 }
