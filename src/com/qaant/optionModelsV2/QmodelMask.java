@@ -5,8 +5,6 @@
  */
 package com.qaant.optionModelsV2;
 
-import com.qaant.optionModels.QImpliedVolCalc;
-import com.qaant.optionModels.QOptionable;
 import com.qaant.structures.Qoption;
 import com.qaant.structures.Qunderlying;
 import java.util.function.DoubleUnaryOperator;
@@ -55,20 +53,16 @@ public abstract class QmodelMask extends Qoption implements QOptionable{
     }
     
     private void build(){
-        startTime=System.currentTimeMillis();
         runModel();
-        elapsedTime = System.currentTimeMillis() - startTime;
-        fillDerivativesArray();
-    }
+     }
     
     @Override
     abstract public void runModel(); //Cada modelo implementa runModel()
     protected void opcionSinVida(){
-        delta=cpFlag;  
+       // delta=cpFlag;  
         gamma=vega=theta=rho=0;
         prima = payoff;
-        impliedVol=0;
-        //delta=(prima==0)?0:cpFlag;
+        delta=(prima==0)?0:cpFlag;
     }
     @Override
      public void fillDerivativesArray(){

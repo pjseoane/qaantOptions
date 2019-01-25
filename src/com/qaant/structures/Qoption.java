@@ -16,8 +16,7 @@ public class Qoption extends Qunderlying{
     public final static char CALL='C';
     public final static char PUT='P';
              
-    //public final static char EUROPEAN='E';
-    //public final static char AMERICAN='A';
+    
     protected char callPut;
     
     protected double strike,daysToExpiration, rate,volatModel=0,optionMktValue=0;

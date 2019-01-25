@@ -6,7 +6,6 @@
 package com.qaant.optionModelsV2;
 
 
-import com.qaant.optionModels.QOptionable;
 import com.qaant.structures.Qoption;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import com.qaant.structures.Qunderlying;
@@ -18,14 +17,11 @@ import com.qaant.structures.Qunderlying;
 public class QBlackScholesV2 extends QmodelMask implements QOptionable{
     
     public QBlackScholesV2(){super();}
-    public QBlackScholesV2(Qoption opt){
-        super(opt, 'E');
-    }
+    public QBlackScholesV2(Qoption opt){super(opt, 'E');}
     public QBlackScholesV2(Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und,callPut, strike, daysToExpiration, rate, optionMktValue);
     }
-    
-    
+        
     public QBlackScholesV2(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue);
     }
@@ -33,7 +29,7 @@ public class QBlackScholesV2 extends QmodelMask implements QOptionable{
     
     @Override
     public void runModel(){
-               
+        startTime=System.currentTimeMillis();      
         pModelName="Black-Scholes QAANT";
         modelNumber=1;
         tipoEjercicio =EUROPEAN;
@@ -41,10 +37,12 @@ public class QBlackScholesV2 extends QmodelMask implements QOptionable{
         //hay que checkear el tema de life aca, por si se cambia la variable de dias con un setter   
         if (opcionConVida){
             runThisModel();
-            impliedVol=getImpliedVlt();
-        }else{
+            }else{
             opcionSinVida();
         }
+        
+        impliedVol=getImpliedVlt();
+        elapsedTime = System.currentTimeMillis() - startTime;
         fillDerivativesArray();
     }
     

@@ -5,6 +5,7 @@
  */
 package com.qaant.optionModels;
 
+import com.qaant.optionModelsV2.QOptionable;
 import com.qaant.structures.Qunderlying;
 /**
  *

@@ -3,35 +3,34 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.qaant.optionModels;
+package com.qaant.optionModelsV2;
 
-import com.qaant.optionModelsV2.QOptionable;
-import org.apache.commons.math3.distribution.NormalDistribution;
+import com.qaant.structures.Qoption;
 import com.qaant.structures.Qunderlying;
+import org.apache.commons.math3.distribution.NormalDistribution;
 
 /**
  *
  * @author pauli
  */
-public class QWhaley extends QAbstractModel implements QOptionable{
-    
+public class QWhaleyV2 extends QmodelMask implements QOptionable{
     protected double q,b;
     
-    public QWhaley(){super();}
-    public QWhaley(Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
-        super(und, callPut, strike, daysToExpiration, rate, optionMktValue);
+    public QWhaleyV2(){super();}
+    public QWhaleyV2(Qoption opt){super(opt, 'E');}
+    public QWhaleyV2(Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
+        super(und,callPut, strike, daysToExpiration, rate, optionMktValue);
     }
-    
-    public QWhaley(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
+        
+    public QWhaleyV2(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue);
     }
-    
     
     @Override
     public void runModel(){
     //recalcula un modelo BS para obtener las greeks por BS
    
-    QBlackScholes optW= new QBlackScholes(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike, daysToExpiration, rate, 0);
+    QBlackScholesV2 optW= new QBlackScholesV2(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike, daysToExpiration, rate, 0);
         
     prima=optW.getPrima();
     delta=optW.getDelta();
@@ -44,22 +43,21 @@ public class QWhaley extends QAbstractModel implements QOptionable{
          wWhaley();
         }
     }
-    
-     private void wWhaley(){
+    private void wWhaley(){
         pModelName="Whaley QAANT";
         modelNumber=2;
         tipoEjercicio =AMERICAN;
         
-        commonVarsSetup();
         //hay que checkear el tema de life aca, por si se cambia la variable de dias con un setter   
         if (opcionConVida){
-           
             runThisModel();
-            impliedVol=getImpliedVlt();
-        }else{
+            }else{
             opcionSinVida();
         }
-         fillDerivativesArray();
+        
+        impliedVol=getImpliedVlt();
+        elapsedTime = System.currentTimeMillis() - startTime;
+        fillDerivativesArray();
     }
     private void runThisModel(){
         
@@ -101,7 +99,7 @@ public class QWhaley extends QAbstractModel implements QOptionable{
                 
 		double corr = s1 / lambda*xx;
 
-                QBlackScholes option=new QBlackScholes (tipoContrato,s1,volatModel,dividendRate, callPut,strike, daysToExpiration,rate,0);
+                QBlackScholesV2 option=new QBlackScholesV2 (tipoContrato,s1,volatModel,dividendRate, callPut,strike, daysToExpiration,rate,0);
                                                                 
                 double mBlackScholes = option.getPrima();
                 double rhs = mBlackScholes + cpFlag*corr;
@@ -140,7 +138,6 @@ public class QWhaley extends QAbstractModel implements QOptionable{
     
      @Override
     protected double modelGetPrima(double volForLambda){
-        return new QWhaley(tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
+        return new QWhaleyV2(tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
     }
-       
 }

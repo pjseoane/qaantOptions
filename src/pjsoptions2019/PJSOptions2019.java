@@ -13,6 +13,7 @@ import com.qaant.optionModels.QBinomialCV;
 import com.qaant.optionModels.QBlackScholes;
 import com.qaant.optionModels.QBinomialCRR;
 import com.qaant.optionModelsV2.QBlackScholesV2;
+import com.qaant.optionModelsV2.QWhaleyV2;
 import com.qaant.structures.Qoption;
 
 import java.util.Arrays;
@@ -147,13 +148,9 @@ public class PJSOptions2019 {
         System.out.println ("opt4 ...:"+ Arrays.toString(opt4.getDerivativesArray()[0]));
         System.out.println ("opt5 ...:"+ Arrays.toString(opt5.getDerivativesArray()[0]));
        
-        
-        
-        
-        
-        
-        
-        
-        
+        Qoption     optW1        = new Qoption(someStock, option,X,days,riskFreeRate,mktValue);
+        QWhaleyV2   optW3   =new  QWhaleyV2(someStock, option,X,days,riskFreeRate,mktValue);
+         QWhaleyV2 optW4   =new  QWhaleyV2(optW1);
+         QWhaleyV2 optW5   =new  QWhaleyV2(contrato,undValue, vh30Und, divYield,option,X,days,riskFreeRate,mktValue);
     }
 }
