@@ -148,9 +148,13 @@ public class PJSOptions2019 {
         System.out.println ("opt4 ...:"+ Arrays.toString(opt4.getDerivativesArray()[0]));
         System.out.println ("opt5 ...:"+ Arrays.toString(opt5.getDerivativesArray()[0]));
        
-        Qoption     optW1       =new Qoption(someStock, option,X,days,riskFreeRate,mktValue);
+        Qoption     optW1       =new  Qoption(someStock, option,X,days,riskFreeRate,mktValue);
         QWhaleyV2   optW3       =new  QWhaleyV2(someStock, option,X,days,riskFreeRate,mktValue);
         QWhaleyV2   optW4       =new  QWhaleyV2(optW1);
         QWhaleyV2   optW5       =new  QWhaleyV2(contrato,undValue, vh30Und, divYield,option,X,days,riskFreeRate,mktValue);
+   
+        System.out.println ("optW3 ...:"+ Arrays.toString(optW3.getDerivativesArray()[0]));
+        System.out.println ("optW4 ...:"+ Arrays.toString(optW4.getDerivativesArray()[0])); 
+        System.out.println ("optW5 ...:"+ Arrays.toString(optW5.getDerivativesArray()[0])); 
     }
 }
