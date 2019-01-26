@@ -61,23 +61,23 @@ public class Qoption extends Qunderlying{
         build();
     }
     
-    
     private void build(){
         this.dayYear              =daysToExpiration/365;
         this.sqrDayYear           =Math.sqrt(dayYear);
         this.cpFlag               =(callPut==CALL)?1:-1;
         this.opcionConVida        =daysToExpiration>0;
-       // this.volatModel           =underlyingHistVolatility;
+      
         this.z                    =Math.exp(-rate*dayYear/steps);
         this.underlyingNPV        =underlyingValue*Math.exp(-dividendRate*dayYear);
-        
     }
+    
     public void setRiskFreeRate(double rate){
         this.rate=rate;
         build();
         
     }
-     public void setOptionMktValue(double mktValue){
+    
+    public void setOptionMktValue(double mktValue){
         this.optionMktValue=mktValue;
         //build();
     }

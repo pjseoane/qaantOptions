@@ -6,8 +6,6 @@
 package com.qaant.optionModels;
 
 
-import com.qaant.optionModelsV2.QOptionable;
-import com.qaant.optionModelsV2.QImpliedVolCalc;
 import java.util.function.DoubleUnaryOperator;
 import com.qaant.structures.Qunderlying;
 //import com.qaant.optionModels.Optionable
@@ -46,7 +44,8 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
     public QAbstractModel (Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und);
         
-        this.underlyingHistVolatility   =und.getUnderlyingHistVlt();
+        //this.underlyingHistVolatility   =und.getUnderlyingHistVlt();
+        this.volatModel                 =und.getUnderlyingHistVlt();
         this.callPut                    =callPut;  
         this.strike                     =strike;
         this.daysToExpiration           =daysToExpiration;
@@ -57,7 +56,8 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
     public QAbstractModel (char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate);
        
-        this.underlyingHistVolatility   =underlyingHistVolatility;
+        //this.underlyingHistVolatility   =underlyingHistVolatility;
+        this.volatModel                 =underlyingHistVolatility;
         this.callPut                    =callPut;  
         this.strike                     =strike;
         this.daysToExpiration           =daysToExpiration;
@@ -71,7 +71,8 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate);
        
         this.tipoEjercicio              =tipoEjercicio;
-        this.underlyingHistVolatility   =underlyingHistVolatility;
+       // this.underlyingHistVolatility   =underlyingHistVolatility;
+        this.volatModel                 =underlyingHistVolatility;
         this.callPut                    =callPut;  
         this.strike                     =strike;
         this.daysToExpiration           =daysToExpiration;
@@ -84,7 +85,8 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         super(und);
         
         this.tipoEjercicio              =tipoEjercicio;
-        this.underlyingHistVolatility   =und.getUnderlyingHistVlt();
+       // this.underlyingHistVolatility   =und.getUnderlyingHistVlt();
+        this.volatModel                 =und.getUnderlyingHistVlt();
         this.callPut                    =callPut;  
         this.strike                     =strike;
         this.daysToExpiration           =daysToExpiration;
@@ -94,17 +96,15 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         build();
     }
     private void build(){
-             
-        startTime=System.currentTimeMillis();
+            
+        commonVarsSetup();
         runModel();
-        elapsedTime = System.currentTimeMillis() - startTime;
-       
         
     }
      protected void commonVarsSetup(){
         this.dayYear              =daysToExpiration/365;
         this.sqrDayYear           =Math.sqrt(dayYear);
-        this.volatModel           =underlyingHistVolatility;
+       // this.volatModel           =underlyingHistVolatility;
         this.cpFlag               =(callPut==CALL)?1:-1;
         this.opcionConVida        =daysToExpiration>0;
         this.z                    =Math.exp(-rate*dayYear/steps);
@@ -115,8 +115,18 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
          QOptionable c = new QBlackScholes();
          return 33.33;
      }
-   
-  
+    public void setVolatModel(double vlt){
+        this.volatModel=vlt;
+        build();
+    }
+    public void setDaysToExpiration(double days){
+        this.daysToExpiration=days;
+        build();
+    }
+    public void setOptionUndValue(double optUndValue){
+        this.underlyingValue=optUndValue;
+        build();
+    }
     @Override
     abstract public void runModel(); //Cada modelo implementa runModel()
    
@@ -205,9 +215,7 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         return builder.toString();
     }//end getString
     
-    public void setDaysToExpiration(double days){
-        this.daysToExpiration=days;
-    }
+    
     
     @Override
     public String getModelName(){return pModelName;}

@@ -5,7 +5,6 @@
  */
 package com.qaant.optionModels;
 
-import com.qaant.optionModelsV2.QOptionable;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import com.qaant.structures.Qunderlying;
 
@@ -46,21 +45,24 @@ public class QWhaley extends QAbstractModel implements QOptionable{
     }
     
      private void wWhaley(){
+         
+        startTime=System.currentTimeMillis();      
         pModelName="Whaley QAANT";
         modelNumber=2;
         tipoEjercicio =AMERICAN;
         
-        commonVarsSetup();
         //hay que checkear el tema de life aca, por si se cambia la variable de dias con un setter   
         if (opcionConVida){
-           
             runThisModel();
-            impliedVol=getImpliedVlt();
-        }else{
+            }else{
             opcionSinVida();
         }
-         fillDerivativesArray();
-    }
+        
+        impliedVol=getImpliedVlt();
+        elapsedTime = System.currentTimeMillis() - startTime;
+        fillDerivativesArray();
+               
+}
     private void runThisModel(){
         
         //     q=(tipoContrato==STOCK) ? dividendRate:rate; 

@@ -5,7 +5,6 @@
  */
 package com.qaant.optionModels;
 
-import com.qaant.optionModelsV2.QOptionable;
 import com.qaant.structures.Qunderlying;
 
 /**
@@ -23,24 +22,26 @@ public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
 
     @Override
     public void runModel(){
+        
+        startTime=System.currentTimeMillis();      
         pModelName="Binomial CRR- QAANT";
         modelNumber=3;
         
-        commonVarsSetup();
+        
         //hay que checkear el tema de life aca, por si se cambia la variable de dias con un setter   
         if (opcionConVida){
-           
             runThisModel();
-            impliedVol=getImpliedVlt();
-        }else{
+            }else{
             opcionSinVida();
         }
-         fillDerivativesArray();
+        
+        impliedVol=getImpliedVlt();
+        elapsedTime = System.currentTimeMillis() - startTime;
+        fillDerivativesArray();
     }   
      
     private void runThisModel(){      
-        
-        
+              
      
         interv=dayYear/steps;
         drift=(tipoContrato=='F')? 1: Math.exp(rate*interv);

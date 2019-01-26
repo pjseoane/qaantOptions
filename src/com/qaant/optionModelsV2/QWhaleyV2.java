@@ -5,6 +5,7 @@
  */
 package com.qaant.optionModelsV2;
 
+import com.qaant.optionModels.QOptionable;
 import com.qaant.structures.Qoption;
 import com.qaant.structures.Qunderlying;
 import org.apache.commons.math3.distribution.NormalDistribution;
@@ -44,6 +45,7 @@ public class QWhaleyV2 extends QmodelMask implements QOptionable{
         }
     }
     private void wWhaley(){
+        startTime=System.currentTimeMillis();
         pModelName="Whaley QAANT";
         modelNumber=2;
         tipoEjercicio =AMERICAN;

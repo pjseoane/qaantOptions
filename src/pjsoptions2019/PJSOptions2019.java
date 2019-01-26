@@ -53,15 +53,15 @@ public class PJSOptions2019 {
         System.out.println("TEST EUROPEAN :\n");
         
         Qunderlying someStock   = new Qunderlying(contrato, undValue, vh30Und, divYield);
-        /*
+        
        
-        QBlackScholes op1=new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
-        System.out.println("Balck Scholes -QAANT  :" + Arrays.toString(op1.getDerivativesArray()[0])+"Implied VLT.."+op1.getImpliedVlt());
+        QBlackScholes       op1 =new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
+        QBinomialJRudd  opJReur =new QBinomialJRudd('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        QBinomialCRR    opCRReur=new QBinomialCRR('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
+       
         
-        QBinomialJRudd opJReur=new QBinomialJRudd('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        System.out.println("Black Scholes -QAANT  :" + Arrays.toString(op1.getDerivativesArray()[0])+"Implied VLT.."+op1.getImpliedVlt());
         System.out.println("Binomial EUR JR -QAANT:" + Arrays.toString(opJReur.getDerivativesArray()[0])+"Implied VLT.."+opJReur.getImpliedVlt());
-        
-        QBinomialCRR opCRReur= new QBinomialCRR('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
         System.out.println("Binomial EUR CRR-QAANT:" + Arrays.toString(opCRReur.getDerivativesArray()[0])+"Implied VLT.."+opCRReur.getImpliedVlt());
         
         System.out.println("\nTEST AMERICAN :\n");
@@ -106,21 +106,25 @@ public class PJSOptions2019 {
         //********************************************************************
         System.out.println ("\nCRR Prima...:"+ opJRamer.getPrima());
         
-        opJRamer.setUnderlyingValue(undValue*.99);
-        opJRamer.runModel();
+        opJRamer.setOptionUndValue(undValue*.99);
+       
         System.out.println ("CRR Caida 1%...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
         
-        opJRamer.setUnderlyingValue(undValue*1.01);
-        opJRamer.runModel();
+        opJRamer.setOptionUndValue(undValue*1.01);
         System.out.println ("CRR Suba 1%...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
         System.out.println ("und value...:"+ opJRamer.getUnderlyingValue());
         
         opJRamer.setDaysToExpiration(0);
-        opJRamer.runModel();
-        System.out.println ("Days to zero...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
+       
+        System.out.println ("Days to zero JR...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
         System.out.println (QAbstractModel.modelChooser());
-        */
         
+        opJRamer.setDaysToExpiration(365);
+        opJRamer.setVolatModel(0.31180124331295156);
+        System.out.println ("Chg Volat...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
+        
+        /*
+        System.out.println ("**************************************************************************************");
         option='P';
         Qunderlying someStock1  = new Qunderlying(contrato,undValue, vh30Und, divYield);
         Qoption     opt1        = new Qoption(someStock, option,X,days,riskFreeRate,mktValue);
@@ -156,5 +160,17 @@ public class PJSOptions2019 {
         System.out.println ("optW3 ...:"+ Arrays.toString(optW3.getDerivativesArray()[0]));
         System.out.println ("optW4 ...:"+ Arrays.toString(optW4.getDerivativesArray()[0])); 
         System.out.println ("optW5 ...:"+ Arrays.toString(optW5.getDerivativesArray()[0])); 
+        
+        optW3.setDaysToExpiration(0);
+        optW4.setOptionMktValue(12);
+        optW5.setRiskFreeRate(.30);
+        optW3.runModel();
+        optW4.runModel();
+        optW5.runModel();
+        
+        System.out.println ("optW3 ...:"+ Arrays.toString(optW3.getDerivativesArray()[0]));
+        System.out.println ("optW4 ...:"+ Arrays.toString(optW4.getDerivativesArray()[0])); 
+        System.out.println ("optW5 ...:"+ Arrays.toString(optW5.getDerivativesArray()[0])); 
+        */
     }
 }

@@ -6,7 +6,6 @@
 package com.qaant.optionModels;
 
 
-import com.qaant.optionModelsV2.QOptionable;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import com.qaant.structures.Qunderlying;
 
@@ -20,7 +19,6 @@ public class QBlackScholes extends QAbstractModel implements QOptionable{
     public QBlackScholes(Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und, callPut, strike, daysToExpiration, rate, optionMktValue);
     }
-    
     public QBlackScholes(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue);
     }
@@ -28,29 +26,24 @@ public class QBlackScholes extends QAbstractModel implements QOptionable{
     
     @Override
     public void runModel(){
-       
-        
+        startTime=System.currentTimeMillis();      
         pModelName="Black-Scholes QAANT";
         modelNumber=1;
         tipoEjercicio =EUROPEAN;
         
-        commonVarsSetup();
         //hay que checkear el tema de life aca, por si se cambia la variable de dias con un setter   
         if (opcionConVida){
-           
             runThisModel();
-            impliedVol=getImpliedVlt();
-        }else{
+            }else{
             opcionSinVida();
         }
-         fillDerivativesArray();
+        
+        impliedVol=getImpliedVlt();
+        elapsedTime = System.currentTimeMillis() - startTime;
+        fillDerivativesArray();
+       
     }
     private void runThisModel(){
-        
-        
-        
-        
-        
         double q=(tipoContrato==STOCK) ? dividendRate:rate; 
             //q: si es una accion q es el dividendo, si es un futuro q se toma la rate para descontar el valor futr a presente 
             //Se hace este reemplazo para poder usar la misma form en STOCK y FUTURO

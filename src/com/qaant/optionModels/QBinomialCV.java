@@ -5,7 +5,6 @@
  */
 package com.qaant.optionModels;
 
-import com.qaant.optionModelsV2.QOptionable;
 import com.qaant.structures.Qunderlying;
 
 /**
@@ -31,19 +30,21 @@ public class QBinomialCV extends QAbstractModel implements QOptionable{
     
     @Override
     public void runModel(){
-        pModelName="Binomial CRR- QAANT";
+        startTime=System.currentTimeMillis();      
+        pModelName="Binomial CV- QAANT";
         modelNumber=3;
         
-        commonVarsSetup();
+        
         //hay que checkear el tema de life aca, por si se cambia la variable de dias con un setter   
         if (opcionConVida){
-           
             runThisModel();
-            impliedVol=getImpliedVlt();
-        }else{
+            }else{
             opcionSinVida();
         }
-         fillDerivativesArray();
+        
+        impliedVol=getImpliedVlt();
+        elapsedTime = System.currentTimeMillis() - startTime;
+        fillDerivativesArray();
     }
     private void runThisModel(){
         
