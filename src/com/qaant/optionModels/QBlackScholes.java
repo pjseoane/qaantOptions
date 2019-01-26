@@ -15,6 +15,8 @@ import com.qaant.structures.Qunderlying;
  */
 public class QBlackScholes extends QAbstractModel implements QOptionable{
     
+    static {modelMap.put(1,"Black Scholes -QAANT");}
+    
     public QBlackScholes(){super();}
     public QBlackScholes(Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und, callPut, strike, daysToExpiration, rate, optionMktValue);

@@ -14,6 +14,8 @@ import com.qaant.structures.Qunderlying;
  */
 public class QWhaley extends QAbstractModel implements QOptionable{
     
+    static {modelMap.put(2,"Whaley Barone Adesi- QAANT");}
+    
     protected double q,b;
     
     public QWhaley(){super();}

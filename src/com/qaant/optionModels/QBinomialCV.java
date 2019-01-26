@@ -20,6 +20,9 @@ Hull pag 333 y 351
 */
 
 public class QBinomialCV extends QAbstractModel implements QOptionable{
+    static {modelMap.put(5,"Binomial CV- QAANT");}
+    
+    
     public QBinomialCV(){super();}
     public QBinomialCV(Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super('A',und, callPut, strike, daysToExpiration, rate, optionMktValue, steps);

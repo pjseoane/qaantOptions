@@ -124,6 +124,9 @@ public class PJSOptions2019 {
         opJRamer.setUnderlyingValue(98.40);
         System.out.println ("Intrinsic Value...:"+ opJRamer.getIntrinsicValue());
         System.out.println ("Time      Value...:"+ opJRamer.getTimeValue());
+        System.out.println ("Hash Map Models...:"+ QAbstractModel.modelMap);
+        System.out.println ("Hash Map Get (4)...:"+ QAbstractModel.modelMap.get(4));
+        
         /*
         System.out.println ("**************************************************************************************");
         option='P';

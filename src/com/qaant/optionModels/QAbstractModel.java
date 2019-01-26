@@ -44,13 +44,10 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
     protected int MAXITERATIONS =50;
     protected double ACCURACY   =0.00001;
     
-    enum model{ a,b,c};
-    private Map<model, Supplier<List<String>>> typeMap =new HashMap<model, Supplier<List<String>>>(){
-        {
-            
-        }
-    };
-  
+    public static final HashMap<Integer, String> modelMap =new HashMap<>();
+    //public static final HashMap<Integer, Supplier<QOptionable>> modelFunctionMap =new HashMap<>();
+    
+   // Consumer <QOptionable> ModelSetUnd= (double undValue) -> 
     
     public QAbstractModel (){build();}
     public QAbstractModel (Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
@@ -181,6 +178,8 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
     
        
     public void opcionSinVida(){
+        
+        
         delta=cpFlag;  
         gamma=vega=theta=rho=0;
         prima = payoff(underlyingValue,strike,cpFlag);

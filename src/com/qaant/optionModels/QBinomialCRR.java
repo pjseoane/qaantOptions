@@ -6,22 +6,32 @@
 package com.qaant.optionModels;
 
 import com.qaant.structures.Qunderlying;
+import java.util.function.Consumer;
+
+
 
 /**
  *
  * @author pauli
  */
 public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
+    static {modelMap.put(3,"Binomial CRR- QAANT");}
+   // binom =() -> new QBinomialCRR();
+    
+    
     public QBinomialCRR(){super();}
     public QBinomialCRR(char tipoEjercicio, Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super(tipoEjercicio,und, callPut, strike, daysToExpiration, rate, optionMktValue, steps);
+        
     }
     public QBinomialCRR(char tipoEjercicio, char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super(tipoEjercicio,tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
+       
     }
 
     @Override
     public void runModel(){
+       
         pModelName="Binomial CRR- QAANT";
         modelNumber=3;
        

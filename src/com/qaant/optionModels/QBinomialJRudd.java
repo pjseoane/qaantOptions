@@ -13,6 +13,8 @@ import com.qaant.structures.Qunderlying;
 
 
 public class QBinomialJRudd extends QAbstractModel implements QOptionable{
+    static {modelMap.put(4,"Binomial JR- QAANT");}
+    
     protected double u,d,p,interv,drift;
     protected double[][]undTree,optTree,underlyingTree;  
     
