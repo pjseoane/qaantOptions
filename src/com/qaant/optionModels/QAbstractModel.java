@@ -8,6 +8,10 @@ package com.qaant.optionModels;
 
 import java.util.function.DoubleUnaryOperator;
 import com.qaant.structures.Qunderlying;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 //import com.qaant.optionModels.Optionable
 /**
  *
@@ -39,6 +43,14 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
     //Para calculos de implied vol
     protected int MAXITERATIONS =50;
     protected double ACCURACY   =0.00001;
+    
+    enum model{ a,b,c};
+    private Map<model, Supplier<List<String>>> typeMap =new HashMap<model, Supplier<List<String>>>(){
+        {
+            
+        }
+    };
+  
     
     public QAbstractModel (){build();}
     public QAbstractModel (Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
@@ -91,6 +103,7 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         this.steps                      =steps;
         build();
     }
+    
     private void build(){
         startTime=System.currentTimeMillis();  
         this.dayYear              =daysToExpiration/365;
@@ -189,7 +202,6 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         derivativesArray[0][7]=impliedVol;
         derivativesArray[0][8]=System.currentTimeMillis() - startTime;
         derivativesArray[0][9]=modelNumber;
-        
       
     }
     public double[][] getDerivativesArray(){return derivativesArray;}
