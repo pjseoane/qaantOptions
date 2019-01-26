@@ -24,13 +24,7 @@ public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
     public void runModel(){
         pModelName="Binomial CRR- QAANT";
         modelNumber=3;
-        runThisModel();
-        
-    }   
-     
-    private void runThisModel(){      
-              
-     
+       
         interv=dayYear/steps;
         drift=(tipoContrato=='F')? 1: Math.exp(rate*interv);
         u = Math.exp(volatModel*Math.sqrt(interv));

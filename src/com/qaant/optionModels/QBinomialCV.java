@@ -33,22 +33,18 @@ public class QBinomialCV extends QAbstractModel implements QOptionable{
         
         pModelName="Binomial CV- QAANT";
         modelNumber=5;
-        runThisModel();
+       
         
-    }
-    private void runThisModel(){
-        
-        
-    QBinomialJRudd amerOpt = new QBinomialJRudd('A',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
-    QBinomialJRudd euroOpt = new QBinomialJRudd('E',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
-    QBlackScholes bsOpt             = new QBlackScholes(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue);
+        QBinomialJRudd amerOpt = new QBinomialJRudd('A',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
+        QBinomialJRudd euroOpt = new QBinomialJRudd('E',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
+        QBlackScholes bsOpt             = new QBlackScholes(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue);
    
-    prima=amerOpt.getPrima()+bsOpt.getPrima()-euroOpt.getPrima();
-    delta=amerOpt.getDelta()+bsOpt.getDelta()-euroOpt.getDelta();
-    gamma=amerOpt.getGamma()+bsOpt.getGamma()-euroOpt.getGamma();
-    vega =amerOpt.getVega()+bsOpt.getVega()-euroOpt.getVega();
-    theta=amerOpt.getTheta()+bsOpt.getTheta()-euroOpt.getTheta();
-    rho  =amerOpt.getRho()+bsOpt.getRho()-euroOpt.getRho();
+        prima=amerOpt.getPrima()+bsOpt.getPrima()-euroOpt.getPrima();
+        delta=amerOpt.getDelta()+bsOpt.getDelta()-euroOpt.getDelta();
+        gamma=amerOpt.getGamma()+bsOpt.getGamma()-euroOpt.getGamma();
+        vega =amerOpt.getVega()+bsOpt.getVega()-euroOpt.getVega();
+        theta=amerOpt.getTheta()+bsOpt.getTheta()-euroOpt.getTheta();
+        rho  =amerOpt.getRho()+bsOpt.getRho()-euroOpt.getRho();
            
     }
    
