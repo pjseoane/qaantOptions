@@ -36,8 +36,7 @@ public class QBinomialCV extends QAbstractModel implements QOptionable{
         
         pModelName="Binomial CV- QAANT";
         modelNumber=5;
-       
-        
+               
         QBinomialJRudd amerOpt = new QBinomialJRudd('A',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
         QBinomialJRudd euroOpt = new QBinomialJRudd('E',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
         QBlackScholes bsOpt             = new QBlackScholes(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue);
@@ -51,8 +50,7 @@ public class QBinomialCV extends QAbstractModel implements QOptionable{
            
     }
    
-    
-     @Override
+    @Override
     protected double modelGetPrima(double volForLambda){
         return new QBinomialCV(tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
     }
