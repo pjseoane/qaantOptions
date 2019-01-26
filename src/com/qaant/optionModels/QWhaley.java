@@ -42,25 +42,17 @@ public class QWhaley extends QAbstractModel implements QOptionable{
     if(tipoContrato=='F' || callPut=='P') {
          wWhaley();
         }
+      
     }
+   
     
      private void wWhaley(){
          
-        startTime=System.currentTimeMillis();      
         pModelName="Whaley QAANT";
         modelNumber=2;
         tipoEjercicio =AMERICAN;
         
-        //hay que checkear el tema de life aca, por si se cambia la variable de dias con un setter   
-        if (opcionConVida){
-            runThisModel();
-            }else{
-            opcionSinVida();
-        }
-        
-        impliedVol=getImpliedVlt();
-        elapsedTime = System.currentTimeMillis() - startTime;
-        fillDerivativesArray();
+        runThisModel();
                
 }
     private void runThisModel(){

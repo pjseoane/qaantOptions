@@ -44,7 +44,6 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
     public QAbstractModel (Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und);
         
-        //this.underlyingHistVolatility   =und.getUnderlyingHistVlt();
         this.volatModel                 =und.getUnderlyingHistVlt();
         this.callPut                    =callPut;  
         this.strike                     =strike;
@@ -56,7 +55,6 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
     public QAbstractModel (char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate);
        
-        //this.underlyingHistVolatility   =underlyingHistVolatility;
         this.volatModel                 =underlyingHistVolatility;
         this.callPut                    =callPut;  
         this.strike                     =strike;
@@ -71,7 +69,6 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate);
        
         this.tipoEjercicio              =tipoEjercicio;
-       // this.underlyingHistVolatility   =underlyingHistVolatility;
         this.volatModel                 =underlyingHistVolatility;
         this.callPut                    =callPut;  
         this.strike                     =strike;
@@ -85,7 +82,6 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         super(und);
         
         this.tipoEjercicio              =tipoEjercicio;
-       // this.underlyingHistVolatility   =und.getUnderlyingHistVlt();
         this.volatModel                 =und.getUnderlyingHistVlt();
         this.callPut                    =callPut;  
         this.strike                     =strike;
@@ -96,20 +92,25 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         build();
     }
     private void build(){
-            
-        commonVarsSetup();
-        runModel();
-        
-    }
-     protected void commonVarsSetup(){
+        startTime=System.currentTimeMillis();  
         this.dayYear              =daysToExpiration/365;
         this.sqrDayYear           =Math.sqrt(dayYear);
-       // this.volatModel           =underlyingHistVolatility;
         this.cpFlag               =(callPut==CALL)?1:-1;
         this.opcionConVida        =daysToExpiration>0;
         this.z                    =Math.exp(-rate*dayYear/steps);
-        this.underlyingNPV        =underlyingValue*Math.exp(-dividendRate*dayYear);
-     }
+        this.underlyingNPV        =underlyingValue*Math.exp(-dividendRate*dayYear);   
+        
+         if (opcionConVida){
+            runModel();
+            }else{
+            opcionSinVida();
+        }
+        impliedVol=calcImpliedVlt();
+        fillDerivativesArray();
+       
+    }
+     @Override
+    abstract public void runModel(); //Cada modelo implementa runModel()
      
      public static double modelChooser(){
          QOptionable c = new QBlackScholes();
@@ -127,13 +128,16 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         this.underlyingValue=optUndValue;
         build();
     }
-    @Override
-    abstract public void runModel(); //Cada modelo implementa runModel()
+   
    
     public double getImpliedVlt(){
-     impliedVol=volatModel;
+        return derivativesArray[0][7];
+    }
+    private double calcImpliedVlt(){
+    impliedVol=volatModel;
         
         if(optionMktValue>0 && opcionConVida){
+           
             double min;
             double max;
         
@@ -178,7 +182,7 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         derivativesArray[0][5]=rho;
         derivativesArray[0][6]=optionMktValue;
         derivativesArray[0][7]=impliedVol;
-        derivativesArray[0][8]=elapsedTime;
+        derivativesArray[0][8]=System.currentTimeMillis() - startTime;
         derivativesArray[0][9]=modelNumber;
         
       

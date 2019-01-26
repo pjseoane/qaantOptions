@@ -26,21 +26,13 @@ public class QBlackScholes extends QAbstractModel implements QOptionable{
     
     @Override
     public void runModel(){
-        startTime=System.currentTimeMillis();      
+       
         pModelName="Black-Scholes QAANT";
         modelNumber=1;
         tipoEjercicio =EUROPEAN;
         
-        //hay que checkear el tema de life aca, por si se cambia la variable de dias con un setter   
-        if (opcionConVida){
-            runThisModel();
-            }else{
-            opcionSinVida();
-        }
-        
-        impliedVol=getImpliedVlt();
-        elapsedTime = System.currentTimeMillis() - startTime;
-        fillDerivativesArray();
+        runThisModel();
+       
        
     }
     private void runThisModel(){

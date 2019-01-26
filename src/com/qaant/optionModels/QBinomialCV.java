@@ -30,21 +30,11 @@ public class QBinomialCV extends QAbstractModel implements QOptionable{
     
     @Override
     public void runModel(){
-        startTime=System.currentTimeMillis();      
+        
         pModelName="Binomial CV- QAANT";
-        modelNumber=3;
+        modelNumber=5;
+        runThisModel();
         
-        
-        //hay que checkear el tema de life aca, por si se cambia la variable de dias con un setter   
-        if (opcionConVida){
-            runThisModel();
-            }else{
-            opcionSinVida();
-        }
-        
-        impliedVol=getImpliedVlt();
-        elapsedTime = System.currentTimeMillis() - startTime;
-        fillDerivativesArray();
     }
     private void runThisModel(){
         
