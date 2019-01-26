@@ -12,9 +12,7 @@ import com.qaant.optionModels.QBinomialJRudd;
 import com.qaant.optionModels.QBinomialCV;
 import com.qaant.optionModels.QBlackScholes;
 import com.qaant.optionModels.QBinomialCRR;
-import com.qaant.optionModelsV2.QBlackScholesV2;
-import com.qaant.optionModelsV2.QWhaleyV2;
-import com.qaant.structures.Qoption;
+
 
 import java.util.Arrays;
 import com.qaant.structures.Qunderlying;
@@ -123,6 +121,9 @@ public class PJSOptions2019 {
         opJRamer.setVolatModel(0.31180124331295156);
         System.out.println ("Chg Volat...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
         
+        opJRamer.setUnderlyingValue(98.40);
+        System.out.println ("Intrinsic Value...:"+ opJRamer.getIntrinsicValue());
+        System.out.println ("Time      Value...:"+ opJRamer.getTimeValue());
         /*
         System.out.println ("**************************************************************************************");
         option='P';

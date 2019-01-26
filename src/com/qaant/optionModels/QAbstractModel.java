@@ -128,8 +128,13 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         this.underlyingValue=optUndValue;
         build();
     }
-   
-   
+    public double getIntrinsicValue(){
+        return Math.max((underlyingValue - strike)*cpFlag,0);
+    }
+    public double getTimeValue(){
+        return optionMktValue-getIntrinsicValue();
+    } 
+  
     public double getImpliedVlt(){
         return derivativesArray[0][7];
     }
