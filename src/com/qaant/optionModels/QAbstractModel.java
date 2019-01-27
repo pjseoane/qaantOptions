@@ -9,9 +9,7 @@ package com.qaant.optionModels;
 import java.util.function.DoubleUnaryOperator;
 import com.qaant.structures.Qunderlying;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
+
 //import com.qaant.optionModels.Optionable
 /**
  *
@@ -122,7 +120,7 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
      @Override
     abstract public void runModel(); //Cada modelo implementa runModel()
      
-     public static double modelChooser(){
+    public static double modelChooser(){
          QOptionable c = new QBlackScholes();
          return 33.33;
      }
@@ -166,20 +164,17 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         
         //definicion de funcion para mandar a algo de impVlt (la dif entre valor mercado y valor teorico, buscamos que sea cero)      
         DoubleUnaryOperator opt1 = xVlt-> optionMktValue - modelGetPrima(xVlt);
-       
         impliedVol= QImpliedVolCalc.ivNewton(opt1, min, max, MAXITERATIONS, ACCURACY);
               
         }
     return impliedVol;
     
     }
-   // abstract protected double funcTest(double x);
+   
     abstract protected double modelGetPrima(double volForLambda);
     
        
     public void opcionSinVida(){
-        
-        
         delta=cpFlag;  
         gamma=vega=theta=rho=0;
         prima = payoff(underlyingValue,strike,cpFlag);

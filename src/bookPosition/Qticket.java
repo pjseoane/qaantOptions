@@ -6,42 +6,21 @@
 package bookPosition;
 
 import com.qaant.optionModels.QAbstractModel;
-import com.qaant.structures.Qoption;
-import com.qaant.structures.Qunderlying;
+
 
 /**
  *
  * @author pauli
  */
-public class Qticket extends Qoption {
-/*
-    protected double lots,precio;
-     protected double[][] lot = new double[1][20];
-    
-    public Qticket(){}
-   /*
-    public Qticket(Qunderlying und ,Qoption option, double lots, double precio){
-        super(und,option);
+public class Qticket {
+    protected QAbstractModel option;
+    protected double lots;
+    protected double price;
+    public Qticket(QAbstractModel option,double lots, double price){
+        this.option =option;
         this.lots   =lots;
-        this.precio =precio;
-        buildLot();
-        
+        this.price  =price;
+     
+    
     }
-
-    private void buildLot(){
-        lot[0][0] =0 ;
-        lot[0][1] = this.tipoEjercicio;
-        lot[0][2] = this.tipoContrato;
-        lot[0][3] = this.cpFlag;
-        lot[0][4] = this.underlyingValue;
-        lot[0][5] = this.dividendRate;
-        lot[0][6] = this.strike;
-        lot[0][7] = this.daysToExpiration;
-        lot[0][8] = this.underlyingHistVolatility;
-        lot[0][9] = this.rate;
-        lot[0][10] = this.optionMktValue;
-        
-    }
-    public double[][] getLotArray(){return lot;}
-*/
 }
