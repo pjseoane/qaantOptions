@@ -129,7 +129,9 @@ public class PJSOptions2019 {
         System.out.println ("Hash Map Get (4)...:"+ QAbstractModel.modelMap.get(4));
         
          System.out.println ("******************************* TICKETS:\n");
-         Qticket ticket = new Qticket();
+         Qticket ticket = new Qticket(op1,10,1100,1);
+         System.out.println ("PLOutput op1...:"+ Arrays.toString(ticket.getPLOutput()[0]));
+         
         
         /*
         System.out.println ("**************************************************************************************");
