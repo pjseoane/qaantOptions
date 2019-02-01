@@ -33,16 +33,18 @@ public abstract class QmodelMask extends Qoption implements QOptionable{
     
    
     public QmodelMask(){}
+    /*
     public QmodelMask(Qoption opt, char tipoEjercicio){
         super (opt);
         this.tipoEjercicio  =tipoEjercicio;
         build();
     }
+    */
     public QmodelMask(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue);
         build();
     }
-    public QmodelMask(Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,char tipoEjercicio,char steps){
+    public QmodelMask(Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,char tipoEjercicio,int steps){
         super(und,callPut, strike, daysToExpiration, rate, optionMktValue);
         this.tipoEjercicio  =tipoEjercicio;
         this.steps          =steps;
@@ -56,7 +58,7 @@ public abstract class QmodelMask extends Qoption implements QOptionable{
     
     private void build(){
         runModel();
-     }
+    }
     
     @Override
     abstract public void runModel(); //Cada modelo implementa runModel()

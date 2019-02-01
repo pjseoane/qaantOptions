@@ -16,6 +16,8 @@ public class Qticket {
     protected QAbstractModel option;
     protected double lots;
     protected double price;
+    
+    public Qticket(){};
     public Qticket(QAbstractModel option,double lots, double price){
         this.option =option;
         this.lots   =lots;

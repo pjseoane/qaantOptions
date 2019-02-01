@@ -18,7 +18,7 @@ public class QWhaleyV2 extends QmodelMask implements QOptionable{
     protected double q,b;
     
     public QWhaleyV2(){super();}
-    public QWhaleyV2(Qoption opt){super(opt, 'E');}
+ //   public QWhaleyV2(Qoption opt){super(opt, 'E');}
     public QWhaleyV2(Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und,callPut, strike, daysToExpiration, rate, optionMktValue);
     }

@@ -18,7 +18,7 @@ import com.qaant.structures.Qunderlying;
 public class QBlackScholesV2 extends QmodelMask implements QOptionable{
     
     public QBlackScholesV2(){super();}
-    public QBlackScholesV2(Qoption opt){super(opt, 'E');}
+  // public QBlackScholesV2(Qoption opt){super(opt, 'E');}
     public QBlackScholesV2(Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und,callPut, strike, daysToExpiration, rate, optionMktValue);
     }

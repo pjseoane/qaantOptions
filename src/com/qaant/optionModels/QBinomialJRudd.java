@@ -53,13 +53,16 @@ public class QBinomialJRudd extends QAbstractModel implements QOptionable{
                     optTree[2][1] - optTree[2][2]) / (undTree[2][1] - undTree[2][2])) / (
                                  (undTree[2][0] - undTree[2][2]) / 2);
         
-        theta=(optTree[2][1] - optTree[0][0]) / (2 * 365 * interv);
-        
+       // theta=(optTree[2][1] - optTree[0][0]) / (2 * 365 * interv);
+        theta=0;
         vega=0;
         rho=0;
         
         if(optionMktValue>-1){
-            QBinomialJRudd optJR=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
+            QBinomialJRudd optJR=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration-1, rate, -1, steps);
+            theta=optJR.getPrima()-prima;
+            
+            optJR=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
             vega=optJR.getPrima()-prima;
             
             optJR=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.01, -1, steps);

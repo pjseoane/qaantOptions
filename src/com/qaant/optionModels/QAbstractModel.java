@@ -164,7 +164,7 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         
         //definicion de funcion para mandar a algo de impVlt (la dif entre valor mercado y valor teorico, buscamos que sea cero)      
         DoubleUnaryOperator opt1 = xVlt-> optionMktValue - modelGetPrima(xVlt);
-        impliedVol= QImpliedVolCalc.ivNewton(opt1, min, max, MAXITERATIONS, ACCURACY);
+        impliedVol= QImpliedVolCalc.bisection(opt1, min, max, MAXITERATIONS, ACCURACY);
               
         }
     return impliedVol;

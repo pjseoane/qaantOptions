@@ -26,7 +26,7 @@ public class Qoption extends Qunderlying{
     
     public Qoption(){}
     
-    
+/*    
     public Qoption(Qoption op){
         super(op.tipoContrato,op.underlyingValue,op.underlyingHistVolatility,op.dividendRate);
         this.callPut            =op.callPut;
@@ -38,7 +38,7 @@ public class Qoption extends Qunderlying{
         
         build();
     }
-    
+  */  
     public Qoption(Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super (und);      
         this.callPut            =callPut;

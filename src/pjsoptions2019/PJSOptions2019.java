@@ -6,6 +6,7 @@
 package pjsoptions2019;
 
 
+import bookPosition.Qticket;
 import com.qaant.optionModels.QAbstractModel;
 import com.qaant.optionModels.QWhaley;
 import com.qaant.optionModels.QBinomialJRudd;
@@ -37,14 +38,14 @@ public class PJSOptions2019 {
         */
         
         char   contrato     ='F';
-        char   option       ='P';
-        double undValue     =100;
-        double X            =100;
-        double days         =365;
-        double vh30Und      =0.30;
-        double riskFreeRate =.10;
+        char   option       ='C';
+        double undValue     =45800;
+        double X            =48000;
+        double days         =58;
+        double vh30Und      =0.28;
+        double riskFreeRate =.39;
         double divYield     =0;
-        double mktValue     =11.1;
+        double mktValue     =1120;
         int steps           =1000;
         
         
@@ -126,6 +127,9 @@ public class PJSOptions2019 {
         System.out.println ("Time      Value...:"+ opJRamer.getTimeValue());
         System.out.println ("Hash Map Models...:"+ QAbstractModel.modelMap);
         System.out.println ("Hash Map Get (4)...:"+ QAbstractModel.modelMap.get(4));
+        
+         System.out.println ("******************************* TICKETS:\n");
+         Qticket ticket = new Qticket();
         
         /*
         System.out.println ("**************************************************************************************");
