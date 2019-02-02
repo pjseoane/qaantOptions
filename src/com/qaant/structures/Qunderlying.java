@@ -22,6 +22,11 @@ public class Qunderlying {
     protected double underlyingHistVolatility;
     protected double dividendRate;
     
+    protected int step;
+    protected double[][] undPriceRange;//   = new double [1][step+1];
+    protected double ratioLog,max, min,coeficiente, center;
+    
+    
     public Qunderlying(){}
     
    
@@ -50,6 +55,21 @@ public class Qunderlying {
         this.dividendRate               =dividendRate;
         
     }
+    
+    public double[][] getUnderlyingPriceRange(double daysToProyect,int step,double Dstd){
+        undPriceRange   = new double [1][step+1];
+        
+        center       = this.underlyingValue;
+        coeficiente  = Math.sqrt(daysToProyect/365.0)*this.underlyingHistVolatility;
+        min          = center*Math.exp(coeficiente *-Dstd);
+        max          = center*Math.exp(coeficiente *Dstd);
+        ratioLog     = Math.exp(Math.log(max/min)/step);
+        for (int i=0;i<step+1;i++){undPriceRange[0][i]=min*Math.pow(ratioLog,i);}
+        return undPriceRange;
+    }
+    
+    
+    //getters
     public char getTipoContrato(){return tipoContrato;}
     public double getUnderlyingValue(){return underlyingValue;}
     public double getUnderlyingHistVlt(){return underlyingHistVolatility;}
@@ -63,7 +83,7 @@ public class Qunderlying {
     public void setDividendRate(double DividendRate){this.dividendRate=DividendRate;}
     public void setTicker(String ticker){this.ticker =ticker;}
     
-//getters
+
     
     public String getUnderlyingString(){
     StringBuilder builder =new StringBuilder();

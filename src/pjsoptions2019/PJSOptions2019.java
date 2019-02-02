@@ -134,7 +134,9 @@ public class PJSOptions2019 {
          QWhaley opW4=new QWhaley (someStock,'C',46000,days,riskFreeRate,0);
          Qticket ticket1 = new Qticket(opW3,-6,700,1);
          Qticket ticket2 = new Qticket(opW4,5,1000,1);
-         System.out.println ("Price Range op1...:"+ Arrays.toString(ticket1.getPriceRange()[0]));
+         
+         
+         System.out.println ("Price Range op1...:"+ Arrays.toString(someStock.getUnderlyingPriceRange(30, 60,6)[0]));
          System.out.println ("PLOutput op1......:"+ Arrays.toString(ticket1.getPLOutput()[0]));
          System.out.println ("PLOutput op2......:"+ Arrays.toString(ticket2.getPLOutput()[0]));
         
