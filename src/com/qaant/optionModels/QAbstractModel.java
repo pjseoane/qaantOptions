@@ -34,6 +34,12 @@ public abstract class QAbstractModel extends Qoption implements QOptionable{
     protected int MAXITERATIONS =50;
     protected double ACCURACY   =0.00001;
     
+    //Variables para lots
+    protected double lots;
+    protected double price;
+    protected double multiplier;
+    
+    
     public static final HashMap<Integer, String> modelMap =new HashMap<>();
        
     public QAbstractModel (){build();}
@@ -47,11 +53,13 @@ public abstract class QAbstractModel extends Qoption implements QOptionable{
     }
     
     //Constructores para modelos numericos
+    
     public QAbstractModel (char tipoEjercicio, char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike,daysToExpiration,rate, optionMktValue,steps);
         this.tipoEjercicio              =tipoEjercicio;
         build();
     }
+
     public QAbstractModel (char tipoEjercicio,Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super(und, callPut, strike,daysToExpiration,rate, optionMktValue,steps);
         this.tipoEjercicio              =tipoEjercicio;
@@ -84,21 +92,22 @@ public abstract class QAbstractModel extends Qoption implements QOptionable{
          QOptionable c = new QBlackScholes();
          return 33.33;
      }
+    
+    
+    //Setters
     public void setDaysToExpiration(double days){
         this.daysToExpiration=days;
         build();
     }
-     public void setRiskFreeRate(double rate){
+    public void setRiskFreeRate(double rate){
         this.rate=rate;
         build();
         
     }
-    
     public void setOptionMktValue(double mktValue){
         this.optionMktValue=mktValue;
         //build();
     }
-    
     public void setOptionType(char opt){
         this.callPut=opt;
         build();
@@ -107,26 +116,90 @@ public abstract class QAbstractModel extends Qoption implements QOptionable{
         this.volatModel=vlt;
         build();
     }
-    
-    
     public void setOptionUndValue(double optUndValue){
         this.underlyingValue=optUndValue;
         build();
     }
+    
+    
+    //Getters
+    public int getModelSteps(){
+        return steps;
+    }
     public double getIntrinsicValue(){
+        System.out.println("und...."+underlyingValue + strike);
         return Math.max((underlyingValue - strike)*cpFlag,0);
     }
     public double getTimeValue(){
         return optionMktValue-getIntrinsicValue();
     } 
-  
     public double getImpliedVlt(){
         return derivativesArray[0][7];
     }
+    public double[][] getDerivativesArray(){return derivativesArray;}
+    public String getOptionString(){
+        StringBuilder builder =new StringBuilder();
+        // builder.append("Ticker-");
+        //builder.append(anUnderlying.getTicker());
+        builder.append(modelNumber);
+        builder.append("-");
+        builder.append(pModelName);
+        builder.append("/Option->");
+        builder.append(callPut);
+        builder.append("/strike->");
+        builder.append(strike);
+        builder.append("/prima->");
+        builder.append(prima);
+        builder.append("/delta->");
+        builder.append(delta);
+        builder.append("/gamma->");
+        builder.append(gamma);
+        builder.append("/vega->");
+        builder.append(vega);
+        builder.append("/theta->");
+        builder.append(theta);
+        builder.append("/rho->");
+        builder.append(rho);
+        builder.append("/optionMktValue->");
+        builder.append(optionMktValue);
+        builder.append("/impVlt->");
+        builder.append(volatModel);
+        builder.append("z");
+        return builder.toString();
+    }//end getString
+    @Override
+    public String getModelName(){return pModelName;}
+    @Override
+    public double getPrima(){return prima;}
+    @Override
+    public double getDelta(){return delta;}
+    @Override
+    public double getGamma(){return gamma;}
+    @Override
+    public double getVega() {return vega;}
+    @Override
+    public double getTheta(){return theta;}
+    @Override
+    public double getRho()  {return rho;}
+    
+    public double getOptionMktValue(){return optionMktValue;}
+    public char getTipoEjercicio(){return tipoEjercicio;}
+    public char getCallPut(){return callPut;}
+    public double getStrike(){return strike;}
+  //  public double getDaysToExpiration(){return daysToExpiration;}
+    public double getTasa(){return rate;}
+    public double getValueToFind(int i){
+     
+        if (i>9){i=0;}
+        return derivativesArray[0][i];
+    }   
+    public double getPayoff(){
+        return Math.max((underlyingValue - strike) * cpFlag, 0);
+        }
+    
     private double calcImpliedVlt(){
     impliedVol=volatModel;
-    //double error=1;
-        
+            
         if(optionMktValue>0 && opcionConVida){
             double volMin;
             double volMax;
@@ -173,66 +246,10 @@ public abstract class QAbstractModel extends Qoption implements QOptionable{
         derivativesArray[0][9]=modelNumber;
       
     }
-    public double[][] getDerivativesArray(){return derivativesArray;}
-    public String getOptionString(){
-        StringBuilder builder =new StringBuilder();
-        // builder.append("Ticker-");
-        //builder.append(anUnderlying.getTicker());
-        builder.append(modelNumber);
-        builder.append("-");
-        builder.append(pModelName);
-        builder.append("/Option->");
-        builder.append(callPut);
-        builder.append("/strike->");
-        builder.append(strike);
-        builder.append("/prima->");
-        builder.append(prima);
-        builder.append("/delta->");
-        builder.append(delta);
-        builder.append("/gamma->");
-        builder.append(gamma);
-        builder.append("/vega->");
-        builder.append(vega);
-        builder.append("/theta->");
-        builder.append(theta);
-        builder.append("/rho->");
-        builder.append(rho);
-        builder.append("/optionMktValue->");
-        builder.append(optionMktValue);
-        builder.append("/impVlt->");
-        builder.append(volatModel);
-        builder.append("z");
-        return builder.toString();
-    }//end getString
     
     
     
-    @Override
-    public String getModelName(){return pModelName;}
-    @Override
-    public double getPrima(){return prima;}
-    @Override
-    public double getDelta(){return delta;}
-    @Override
-    public double getGamma(){return gamma;}
-    @Override
-    public double getVega() {return vega;}
-    @Override
-    public double getTheta(){return theta;}
-    @Override
-    public double getRho()  {return rho;}
     
-    public double getOptionMktValue(){return optionMktValue;}
-    public char getTipoEjercicio(){return tipoEjercicio;}
-    public char getCallPut(){return callPut;}
-    public double getStrike(){return strike;}
-  //  public double getDaysToExpiration(){return daysToExpiration;}
-    public double getTasa(){return rate;}
-    public double getValueToFind(int i){
-     
-        if (i>9){i=0;}
-        return derivativesArray[0][i];
-    }   
     
    
     

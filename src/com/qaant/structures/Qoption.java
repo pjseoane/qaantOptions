@@ -14,7 +14,6 @@ public class Qoption extends Qunderlying{
        
     public final static char CALL='C';
     public final static char PUT='P';
-             
     
     protected char callPut;
     
@@ -67,12 +66,21 @@ public class Qoption extends Qunderlying{
         this.volatModel         =underlyingHistVolatility;
         this.steps              =steps;
     }
-    
+
+     public Qoption(char tipoContrato,double undValue,double underlyingHistVolatility,double undDivRate ,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps,int nodes){
+        super (tipoContrato,undValue,underlyingHistVolatility,undDivRate,nodes);      
+        this.callPut            =callPut;
+        this.strike             =strike;
+        this.daysToExpiration   =daysToExpiration;
+        this.rate               =rate;
+        this.optionMktValue     =optionMktValue;
+        this.volatModel         =underlyingHistVolatility;
+        this.steps              =steps;
+     
+    }
+        
     public double getDaysToExpiration(){
         return daysToExpiration;
     }
-   
-    public double getPayoff(){
-        return Math.max((underlyingValue - strike) * cpFlag, 0);
-        }
+      
    }

@@ -22,7 +22,7 @@ public class Qunderlying {
     protected double underlyingHistVolatility;
     protected double dividendRate;
     
-    protected int step=10;
+    protected int nodes=1;
     protected double[][] undPriceRange;//   = new double [1][step+1];
     protected double ratioLog,max, min,coeficiente, center,Dstd=3;
     protected double daysToProject=30;
@@ -46,7 +46,19 @@ public class Qunderlying {
         ticker                          ="TICKER";
         buildPriceRange();
     }
+    public Qunderlying(char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate, int nodes)
+    {
+        this.tipoContrato               =tipoContrato;
+        this.underlyingValue            =underlyingValue;
+        this.underlyingHistVolatility   =underlyingHistVolatility;
+        this.dividendRate               =dividendRate;
+        this.nodes                      =nodes;
+        ticker                          ="TICKER";
+        
+        buildPriceRange();
+    }
     
+        
     public Qunderlying(String ticker,char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate){
         this.ticker                     =ticker;
         this.tipoContrato               =tipoContrato;
@@ -56,22 +68,17 @@ public class Qunderlying {
         buildPriceRange();
     }
     private void buildPriceRange(){
-        undPriceRange   = new double [1][step+1];
+        undPriceRange   = new double [1][nodes+1];
         
         center       = this.underlyingValue;
         coeficiente  = Math.sqrt(daysToProject/365.0)*this.underlyingHistVolatility;
         min          = center*Math.exp(coeficiente *-Dstd);
         max          = center*Math.exp(coeficiente *Dstd);
-        ratioLog     = Math.exp(Math.log(max/min)/step);
-        for (int i=0;i<step+1;i++){undPriceRange[0][i]=min*Math.pow(ratioLog,i);}
-    
+        ratioLog     = Math.exp(Math.log(max/min)/nodes);
+        for (int i=0;i<nodes+1;i++){undPriceRange[0][i]=min*Math.pow(ratioLog,i);}
     }
     
     public double[][] getUnderlyingPriceRange(){
-       // this.step=step;
-       // this.Dstd=Dstd;
-        
-        
         return undPriceRange;
     }
     
@@ -89,8 +96,14 @@ public class Qunderlying {
     public void setUnderlyingHistVlt(double Volatility){underlyingHistVolatility=Volatility;}
     public void setDividendRate(double DividendRate){this.dividendRate=DividendRate;}
     public void setTicker(String ticker){this.ticker =ticker;}
-    public void setDstd(double x){this.Dstd=x; }
-
+    public void setDstd(double x){
+        this.Dstd=x;
+        buildPriceRange();
+    }
+    public void setNumberOfNodes(int nodes){
+        this.nodes=nodes;
+        buildPriceRange();
+    }
     
     public String getUnderlyingString(){
     StringBuilder builder =new StringBuilder();

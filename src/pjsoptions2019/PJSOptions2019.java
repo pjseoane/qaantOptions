@@ -130,7 +130,32 @@ public class PJSOptions2019 {
         System.out.println ("Hash Map Models...:"+ QAbstractModel.modelMap);
         System.out.println ("Hash Map Get (4)...:"+ QAbstractModel.modelMap.get(4));
         
-         System.out.println ("******************************* TICKETS:\n");
+        System.out.println ("******************************* TICKETS:\n");
+        //System.out.println ("Price Range....:"+Arrays.toString(opW2.getUnderlyingPriceRange()[0]));
+        //opW2.setNumberOfNodes(6);
+        //System.out.println ("Price Range....:"+Arrays.toString(opW2.getUnderlyingPriceRange()[0]));
+        
+        contrato     ='F';
+        option       ='C';
+        undValue     =45400;
+        X            =46000;
+        days         =56;
+        vh30Und      =0.30;
+        riskFreeRate =.39;
+        divYield     =0;
+        mktValue     =1800;
+        steps        =1000;
+        
+        Qunderlying RFX20Mar    = new Qunderlying(contrato, undValue, vh30Und, divYield);
+        QWhaley       opw       = new QWhaley (RFX20Mar, option, X,days,riskFreeRate,mktValue);
+        
+        Qticket     ticket1     = new Qticket (opw,5,1000,1,60);
+        
+        System.out.println ("Price Range....:"+Arrays.toString(ticket1.getUnderlyingPriceRange()[0]));
+        
+      //  ticket1.setNumberOfNodes(60);
+      //  ticket1.reBuild();
+        System.out.println ("PL Output.....:"+Arrays.toString(ticket1.getPLOutput()[0]));
         
     }
 }
