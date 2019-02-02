@@ -39,10 +39,10 @@ public class PJSOptions2019 {
         
         char   contrato     ='F';
         char   option       ='C';
-        double undValue     =45800;
+        double undValue     =45400;
         double X            =48000;
-        double days         =58;
-        double vh30Und      =0.28;
+        double days         =57;
+        double vh30Und      =0.30;
         double riskFreeRate =.39;
         double divYield     =0;
         double mktValue     =1120;
@@ -129,9 +129,14 @@ public class PJSOptions2019 {
         System.out.println ("Hash Map Get (4)...:"+ QAbstractModel.modelMap.get(4));
         
          System.out.println ("******************************* TICKETS:\n");
-         Qticket ticket = new Qticket(op1,10,1100,1);
-         System.out.println ("PLOutput op1...:"+ Arrays.toString(ticket.getPLOutput()[0]));
          
+         QWhaley opW3=new QWhaley (someStock, 'C', X,days,riskFreeRate,mktValue);
+         QWhaley opW4=new QWhaley (someStock,'C',46000,days,riskFreeRate,0);
+         Qticket ticket1 = new Qticket(opW3,-6,700,1);
+         Qticket ticket2 = new Qticket(opW4,5,1000,1);
+         System.out.println ("Price Range op1...:"+ Arrays.toString(ticket1.getPriceRange()[0]));
+         System.out.println ("PLOutput op1......:"+ Arrays.toString(ticket1.getPLOutput()[0]));
+         System.out.println ("PLOutput op2......:"+ Arrays.toString(ticket2.getPLOutput()[0]));
         
         /*
         System.out.println ("**************************************************************************************");
