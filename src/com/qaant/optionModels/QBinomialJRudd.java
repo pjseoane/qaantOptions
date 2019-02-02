@@ -22,6 +22,7 @@ public class QBinomialJRudd extends QAbstractModel implements QOptionable{
     public QBinomialJRudd(char tipoEjercicio, Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super(tipoEjercicio,und, callPut, strike, daysToExpiration, rate, optionMktValue, steps);
     }
+    
     public QBinomialJRudd(char tipoEjercicio, char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super(tipoEjercicio,tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
     }
@@ -59,14 +60,14 @@ public class QBinomialJRudd extends QAbstractModel implements QOptionable{
         rho=0;
         
         if(optionMktValue>-1){
-            QBinomialJRudd optJR=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration-1, rate, -1, steps);
-            theta=optJR.getPrima()-prima;
+            QBinomialJRudd optJR2=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration-1, rate, -1, steps);
+            theta=optJR2.getPrima()-prima;
             
-            optJR=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
-            vega=optJR.getPrima()-prima;
+            optJR2=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
+            vega=optJR2.getPrima()-prima;
             
-            optJR=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.01, -1, steps);
-            rho=optJR.getPrima()-prima;
+            optJR2=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.01, -1, steps);
+            rho=optJR2.getPrima()-prima;
         }
 
 
@@ -110,6 +111,7 @@ public class QBinomialJRudd extends QAbstractModel implements QOptionable{
     }
      @Override
     protected double modelGetPrima(double volForLambda){
-        return new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
+        //System.out.println("Vol for Lambda....:"+volForLambda);
+        return new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,-1,steps).getPrima();
     }
 }

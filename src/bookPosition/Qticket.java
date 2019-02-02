@@ -18,22 +18,23 @@ public class Qticket extends Qoption{
     protected double lots;
     protected double price;
     protected double multiplier;
-    protected int step=60;
-    protected double[][] PriceRange   = new double [1][step+1];
-    protected double[][] PLOutput = new double [1][step+1];
-    protected double ratioLog,max, min,coeficiente, center, Dstd=3;
+  //  protected int step=60;
+  //  protected double[][] PriceRange   = new double [1][step+1];
+    protected double[][] PLOutput;// = new double [1][step+1];
+  //  protected double ratioLog,max, min,coeficiente, center, Dstd=3;
     
     
     public Qticket(){};
     public Qticket(QAbstractModel option,double lots, double price, double multiplier){
-       // super (option.tipoContrato,undValue,underlyingHistVolatility,undDivRate);
+      // super (option.getTipoContrato(),option.getUnderlyingValue(),option.getUnderlyingHistVlt(),option.getDividendRate());
         this.option =option;
         this.lots   =lots;
         this.price  =price;
         this.multiplier=multiplier;
-        build();
+     //   build();
     
     }
+    /*
     private void build(){
         center       = option.getUnderlyingValue();
         coeficiente  = Math.sqrt(30.0/365.0)*option.getUnderlyingHistVlt();
@@ -43,16 +44,19 @@ public class Qticket extends Qoption{
         
         for (int i=0;i<step+1;i++){PriceRange[0][i]=min*Math.pow(ratioLog,i);}
     }
+*/
     
-    public void setDstd(double x){Dstd=x; }
-    public double[][] getPriceRange(){return PriceRange;}
+  //  public void setDstd(double x){Dstd=x; }
+  //  public double[][] getPriceRange(){return PriceRange;}
     
     public double[][] getPLOutput(){
-               
-       // double check=0;
+        PLOutput = new double [1][step+1];
+        
+       
         for (int i=0;i<step+1;i++){
-            option.setOptionUndValue(PriceRange[0][i]);
-            PLOutput[0][i]=(option.getPrima()-price)*lots*multiplier;
+            option.setOptionUndValue(undPriceRange[0][i]);
+           // PLOutput[0][i]=(option.getPrima()-price)*lots*multiplier;
+        PLOutput[0][i]=undPriceRange[0][i];
         }
        
     return PLOutput;

@@ -6,34 +6,26 @@
 package com.qaant.optionModels;
 
 
+import com.qaant.structures.Qoption;
 import java.util.function.DoubleUnaryOperator;
 import com.qaant.structures.Qunderlying;
 import java.util.HashMap;
 
-//import com.qaant.optionModels.Optionable
 /**
  *
  * @author pseoane
  */
-public abstract class QAbstractModel extends Qunderlying implements QOptionable{
+public abstract class QAbstractModel extends Qoption implements QOptionable{
     
-    enum TipoOpcion {CALL,PUT}
     enum eDerivatives{PRIMA, DELTA, GAMMA, VEGA,THETA,RHO,IV}
     enum TipoEjercicio {AMERICAN,EUROPEAN}
-    
-    public final static char CALL='C';
-    public final static char PUT='P';
-             
+            
     public final static char EUROPEAN='E';
     public final static char AMERICAN='A';
     
-    protected char tipoEjercicio, callPut;
-    protected int cpFlag,modelNumber;
-    protected int steps=1; //steps es 1 para BS y Whaley para no alterar el calculo de z
-    protected double strike,daysToExpiration, rate,optionMktValue=0;
-    protected double z,dayYear, sqrDayYear,volatModel,underlyingNPV;
+    protected char tipoEjercicio;
+    protected int modelNumber;
     protected double prima=-2,delta=-2,gamma=-2,vega=-2,theta=-2,rho=-2,impliedVol=0; 
-    protected boolean opcionConVida;
     protected double[][] derivativesArray = new double[1][10];
     protected double startTime, elapsedTime;
     protected String pModelName;
@@ -43,64 +35,32 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
     protected double ACCURACY   =0.00001;
     
     public static final HashMap<Integer, String> modelMap =new HashMap<>();
-    //public static final HashMap<Integer, Supplier<QOptionable>> modelFunctionMap =new HashMap<>();
-    
-   // Consumer <QOptionable> ModelSetUnd= (double undValue) -> 
-    
+       
     public QAbstractModel (){build();}
     public QAbstractModel (Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
-        super(und);
-        
-        this.volatModel                 =und.getUnderlyingHistVlt();
-        this.callPut                    =callPut;  
-        this.strike                     =strike;
-        this.daysToExpiration           =daysToExpiration;
-        this.rate                       =rate;
-        this.optionMktValue             =optionMktValue;
+        super(und, callPut, strike,daysToExpiration,rate, optionMktValue);
         build();
     }
     public QAbstractModel (char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
-        super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate);
-       
-        this.volatModel                 =underlyingHistVolatility;
-        this.callPut                    =callPut;  
-        this.strike                     =strike;
-        this.daysToExpiration           =daysToExpiration;
-        this.rate                       =rate;
-        this.optionMktValue             =optionMktValue;
+        super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike,daysToExpiration,rate, optionMktValue);
         build();
     }
     
     //Constructores para modelos numericos
     public QAbstractModel (char tipoEjercicio, char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
-        super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate);
-       
+        super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike,daysToExpiration,rate, optionMktValue,steps);
         this.tipoEjercicio              =tipoEjercicio;
-        this.volatModel                 =underlyingHistVolatility;
-        this.callPut                    =callPut;  
-        this.strike                     =strike;
-        this.daysToExpiration           =daysToExpiration;
-        this.rate                       =rate;
-        this.optionMktValue             =optionMktValue;
-        this.steps                      =steps;
         build();
     }
     public QAbstractModel (char tipoEjercicio,Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
-        super(und);
-        
+        super(und, callPut, strike,daysToExpiration,rate, optionMktValue,steps);
         this.tipoEjercicio              =tipoEjercicio;
-        this.volatModel                 =und.getUnderlyingHistVlt();
-        this.callPut                    =callPut;  
-        this.strike                     =strike;
-        this.daysToExpiration           =daysToExpiration;
-        this.rate                       =rate;
-        this.optionMktValue             =optionMktValue;
-        this.steps                      =steps;
         build();
     }
     
     private void build(){
         startTime=System.currentTimeMillis();  
+        
         this.dayYear              =daysToExpiration/365;
         this.sqrDayYear           =Math.sqrt(dayYear);
         this.cpFlag               =(callPut==CALL)?1:-1;
@@ -108,7 +68,7 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         this.z                    =Math.exp(-rate*dayYear/steps);
         this.underlyingNPV        =underlyingValue*Math.exp(-dividendRate*dayYear);   
         
-         if (opcionConVida){
+        if (opcionConVida){
             runModel();
             }else{
             opcionSinVida();
@@ -117,21 +77,38 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
         fillDerivativesArray();
        
     }
-     @Override
+    @Override
     abstract public void runModel(); //Cada modelo implementa runModel()
      
     public static double modelChooser(){
          QOptionable c = new QBlackScholes();
          return 33.33;
      }
-    public void setVolatModel(double vlt){
-        this.volatModel=vlt;
-        build();
-    }
     public void setDaysToExpiration(double days){
         this.daysToExpiration=days;
         build();
     }
+     public void setRiskFreeRate(double rate){
+        this.rate=rate;
+        build();
+        
+    }
+    
+    public void setOptionMktValue(double mktValue){
+        this.optionMktValue=mktValue;
+        //build();
+    }
+    
+    public void setOptionType(char opt){
+        this.callPut=opt;
+        build();
+    }
+    public void setVolatModel(double vlt){
+        this.volatModel=vlt;
+        build();
+    }
+    
+    
     public void setOptionUndValue(double optUndValue){
         this.underlyingValue=optUndValue;
         build();
@@ -148,30 +125,28 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
     }
     private double calcImpliedVlt(){
     impliedVol=volatModel;
+    //double error=1;
         
         if(optionMktValue>0 && opcionConVida){
-           
-            double min;
-            double max;
+            double volMin;
+            double volMax;
         
         if(prima<=optionMktValue){
-            min=volatModel;
-            max=min*3;
+           volMin=volatModel;
+           volMax=volMin*3;
             }else{
-                min=0;// impliedVol/3;
-                max=volatModel;
+                volMin=volatModel/3;
+                volMax=volatModel;
             }
-        
         //definicion de funcion para mandar a algo de impVlt (la dif entre valor mercado y valor teorico, buscamos que sea cero)      
         DoubleUnaryOperator opt1 = xVlt-> optionMktValue - modelGetPrima(xVlt);
-        impliedVol= QImpliedVolCalc.bisection(opt1, min, max, MAXITERATIONS, ACCURACY);
+        impliedVol= QImpliedVolCalc.bisection(opt1, volMin, volMax, MAXITERATIONS, ACCURACY);
               
         }
     return impliedVol;
-    
     }
    
-    abstract protected double modelGetPrima(double volForLambda);
+   abstract protected double modelGetPrima(double volForLambda); // cada modelo da su funcion
     
        
     public void opcionSinVida(){
@@ -251,7 +226,7 @@ public abstract class QAbstractModel extends Qunderlying implements QOptionable{
     public char getTipoEjercicio(){return tipoEjercicio;}
     public char getCallPut(){return callPut;}
     public double getStrike(){return strike;}
-    public double getDaysToExpiration(){return daysToExpiration;}
+  //  public double getDaysToExpiration(){return daysToExpiration;}
     public double getTasa(){return rate;}
     public double getValueToFind(int i){
      

@@ -52,6 +52,6 @@ public class QBinomialCV extends QAbstractModel implements QOptionable{
    
     @Override
     protected double modelGetPrima(double volForLambda){
-        return new QBinomialCV(tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
+        return new QBinomialCV(tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,-1,steps).getPrima();
     }
 }

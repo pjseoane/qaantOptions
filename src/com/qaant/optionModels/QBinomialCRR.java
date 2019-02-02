@@ -65,7 +65,7 @@ public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
     
     @Override
     protected double modelGetPrima(double volForLambda){
-       return new QBinomialCRR(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,0,steps).getPrima();
+       return new QBinomialCRR(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,-1,steps).getPrima();
      }
     /*
     protected double modelSetUnd(double undValue){

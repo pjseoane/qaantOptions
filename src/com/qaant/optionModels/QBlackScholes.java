@@ -55,7 +55,7 @@ public class QBlackScholes extends QAbstractModel implements QOptionable{
             case CALL: 
                 prima = underlyingValue*Math.exp(-q*dayYear) * CNDFd1 - z * strike*CNDFd2;
 		delta = Math.exp(-q*dayYear)*CNDFd1;
-                theta   = (-(underlyingNPV*volatModel*PDFd1 / (2 * sqrDayYear)) - strike*rate*z*CNDFd2+dividendRate*underlyingNPV*CNDFd1) / 365;
+                theta   = (-(underlyingNPV*volatModel*Math.exp(-q*dayYear) / (2 * sqrDayYear)*1/Math.sqrt(2*Math.PI)*Math.exp(Math.pow(-d1, 2)/2)) - strike*rate*z*CNDFd2+dividendRate*underlyingNPV*CNDFd1)/365;
 		rho =   strike*dayYear*Math.exp(-(rate-q)*dayYear)*CNDFd2 / 100;
                 break;
 
@@ -65,7 +65,7 @@ public class QBlackScholes extends QAbstractModel implements QOptionable{
                 
 		prima = -underlyingValue*Math.exp(-q*dayYear) * CNDF_d1 + z * strike*CNDF_d2;
 		delta = Math.exp(-q*dayYear)*(CNDFd1 - 1);
-		theta = (-(underlyingNPV*volatModel*PDFd1 / (2 * sqrDayYear)) + strike*rate*z*CNDF_d2-dividendRate*underlyingNPV*CNDF_d1) / 365;
+		theta =  (-(underlyingNPV*volatModel*Math.exp(-q*dayYear) / (2 * sqrDayYear)*1/Math.sqrt(2*Math.PI)*Math.exp(Math.pow(-d1, 2)/2)) + strike*rate*z*CNDF_d2-dividendRate*underlyingNPV*CNDF_d1)/365;
                 rho = -strike*dayYear*Math.exp(-(rate-q)*dayYear)*CNDF_d2 / 100;
                 break;
             
@@ -79,6 +79,6 @@ public class QBlackScholes extends QAbstractModel implements QOptionable{
     
      @Override
     protected double modelGetPrima(double volForLambda){
-        return new QBlackScholes(tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,0).getPrima();
+        return new QBlackScholes(tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,-1).getPrima();
     }
 }
