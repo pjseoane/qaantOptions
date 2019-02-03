@@ -29,20 +29,19 @@ public class Qticket extends Qoption{
         this.lots   =lots;
         this.price  =price;
         this.multiplier=multiplier;
-        build();
+       // build();
     
     }
    
-    private void build(){
+    private void build(){}
+    
+    public double[][] getPLOutput(){
         PLOutput = new double [1][nodes+1];
-        
         for (int i=0;i<nodes+1;i++){
             option.setOptionUndValue(undPriceRange[0][i]);
             PLOutput[0][i]=(option.getPrima()-price)*lots*multiplier;
+        
         }
-    }
-    
-    public double[][] getPLOutput(){
         return PLOutput;
     }
 }

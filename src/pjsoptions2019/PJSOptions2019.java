@@ -149,12 +149,9 @@ public class PJSOptions2019 {
         Qunderlying RFX20Mar    = new Qunderlying(contrato, undValue, vh30Und, divYield);
         QWhaley       opw       = new QWhaley (RFX20Mar, option, X,days,riskFreeRate,mktValue);
         
-        Qticket     ticket1     = new Qticket (opw,5,1000,1,60);
+        Qticket     ticket1     = new Qticket (opw,5,1000,1,10);// +/-lots,price,multiplier,nodes
         
         System.out.println ("Price Range....:"+Arrays.toString(ticket1.getUnderlyingPriceRange()[0]));
-        
-      //  ticket1.setNumberOfNodes(60);
-      //  ticket1.reBuild();
         System.out.println ("PL Output.....:"+Arrays.toString(ticket1.getPLOutput()[0]));
         
     }

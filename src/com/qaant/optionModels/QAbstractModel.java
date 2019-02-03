@@ -226,12 +226,15 @@ public abstract class QAbstractModel extends Qoption implements QOptionable{
         delta=cpFlag;  
         gamma=vega=theta=rho=0;
         prima = payoff(underlyingValue,strike,cpFlag);
+      
         //delta=(prima==0)?0:cpFlag;
        
     }
-    public double payoff(double underlyingValue, double strike, int cpFlag){
+    
+    protected double payoff(double underlyingValue, double strike, int cpFlag){
         return Math.max((underlyingValue - strike) * cpFlag, 0);
         }
+    
     @Override
     public void fillDerivativesArray(){
         derivativesArray[0][0]=prima;
