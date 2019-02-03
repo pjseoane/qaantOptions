@@ -91,7 +91,7 @@ public abstract class QAbstractModel extends Qoption implements QOptionable{
     public static double modelChooser(){
          QOptionable c = new QBlackScholes();
          return 33.33;
-     }
+    }
     
     
     //Setters
@@ -127,7 +127,7 @@ public abstract class QAbstractModel extends Qoption implements QOptionable{
         return steps;
     }
     public double getIntrinsicValue(){
-        System.out.println("und...."+underlyingValue + strike);
+        
         return Math.max((underlyingValue - strike)*cpFlag,0);
     }
     public double getTimeValue(){
@@ -186,7 +186,7 @@ public abstract class QAbstractModel extends Qoption implements QOptionable{
     public char getTipoEjercicio(){return tipoEjercicio;}
     public char getCallPut(){return callPut;}
     public double getStrike(){return strike;}
-  //  public double getDaysToExpiration(){return daysToExpiration;}
+  
     public double getTasa(){return rate;}
     public double getValueToFind(int i){
      
@@ -246,11 +246,5 @@ public abstract class QAbstractModel extends Qoption implements QOptionable{
         derivativesArray[0][9]=modelNumber;
       
     }
-    
-    
-    
-    
-    
-   
     
 }
