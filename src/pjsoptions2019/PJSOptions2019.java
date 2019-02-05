@@ -41,7 +41,7 @@ public class PJSOptions2019 {
         char   contrato     ='S';
         char   option       ='P';
         double undValue     =100;
-        double X            =100;
+        double X            =0;
         double days         =365;
         double vh30Und      =0.30;
         double riskFreeRate =.10;
@@ -141,18 +141,18 @@ public class PJSOptions2019 {
         contrato     ='F';
         option       ='C';
         undValue     =45400;
-        X            =46000;
+        X            =0;
         days         =56;
         vh30Und      =0.30;
         riskFreeRate =.39;
         divYield     =0;
-        mktValue     =1800;
-        steps        =1000;
+        mktValue     =41000;
+     //   steps        =1000;
         
         Qunderlying RFX20Mar    = new Qunderlying(contrato, undValue, vh30Und, divYield);
         QWhaley       opw       = new QWhaley (RFX20Mar, option, X,days,riskFreeRate,mktValue);
         
-        Qticket     ticket1     = new Qticket (opw,5,1000,1,10);// +/-lots,price,multiplier,nodes
+        Qticket     ticket1     = new Qticket (opw,1,mktValue,1,10);// +/-lots,price,multiplier,nodes
         
         System.out.println ("Price Range....:"+Arrays.toString(ticket1.getUnderlyingPriceRange()[0]));
         System.out.println ("PL Output.....:"+Arrays.toString(ticket1.getPLOutput()[0]));

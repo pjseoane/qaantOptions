@@ -29,6 +29,8 @@ public abstract class QAbstractModel extends Qoption implements QOptionable{
     protected double[][] derivativesArray = new double[1][10];
     protected double startTime, elapsedTime;
     protected String pModelName;
+    protected double dayYear, sqrDayYear,payoff,z,underlyingNPV;
+    protected int cpFlag;
 
     //Para calculos de implied vol
     protected int MAXITERATIONS =50;
@@ -38,6 +40,7 @@ public abstract class QAbstractModel extends Qoption implements QOptionable{
     protected double lots;
     protected double price;
     protected double multiplier;
+    protected boolean opcionConVida;
     
     
     public static final HashMap<Integer, String> modelMap =new HashMap<>();
@@ -76,7 +79,7 @@ public abstract class QAbstractModel extends Qoption implements QOptionable{
         this.z                    =Math.exp(-rate*dayYear/steps);
         this.underlyingNPV        =underlyingValue*Math.exp(-dividendRate*dayYear);   
         
-        if (opcionConVida){
+        if (opcionConVida && strike !=0){
             runModel();
             }else{
             opcionSinVida();

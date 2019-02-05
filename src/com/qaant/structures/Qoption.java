@@ -18,9 +18,10 @@ public class Qoption extends Qunderlying{
     protected char callPut;
     
     protected double strike,daysToExpiration, rate,volatModel=0,optionMktValue=0;
-    protected double dayYear, sqrDayYear,payoff,z,underlyingNPV;
-    protected int cpFlag,steps=1;
-    protected boolean opcionConVida;
+    protected int steps=1;
+   // 
+  //  
+  //  
     
     public Qoption(){}
     
