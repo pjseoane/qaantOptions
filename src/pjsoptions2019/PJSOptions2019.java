@@ -39,7 +39,7 @@ public class PJSOptions2019 {
         */
         
         char   contrato     ='S';
-        char   option       ='C';
+        char   option       ='P';
         double undValue     =100;
         double X            =100;
         double days         =365;
