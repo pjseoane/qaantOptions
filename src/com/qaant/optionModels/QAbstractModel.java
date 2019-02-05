@@ -192,9 +192,10 @@ public abstract class QAbstractModel extends Qoption implements QOptionable{
      
         if (i>9){i=0;}
         return derivativesArray[0][i];
-    }   
+    }  
+    
     public double getPayoff(){
-        return Math.max((underlyingValue - strike) * cpFlag, 0);
+        return payoff(underlyingValue,strike,cpFlag);
         }
     
     private double calcImpliedVlt(){

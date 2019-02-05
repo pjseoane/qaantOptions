@@ -13,6 +13,7 @@ import com.qaant.optionModels.QBinomialJRudd;
 import com.qaant.optionModels.QBinomialCV;
 import com.qaant.optionModels.QBlackScholes;
 import com.qaant.optionModels.QBinomialCRR;
+import com.qaant.optionModels.QEFHull;
 
 
 import java.util.Arrays;
@@ -37,8 +38,8 @@ public class PJSOptions2019 {
         Futuro y Put idem
         */
         
-        char   contrato     ='F';
-        char   option       ='P';
+        char   contrato     ='S';
+        char   option       ='C';
         double undValue     =100;
         double X            =100;
         double days         =365;
@@ -57,11 +58,13 @@ public class PJSOptions2019 {
         QBlackScholes       op1 =new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
         QBinomialJRudd  opJReur =new QBinomialJRudd('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
         QBinomialCRR    opCRReur=new QBinomialCRR('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
-       
+        QEFHull         opEFHeur=new QEFHull ('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
         
         System.out.println("Black Scholes -QAANT  :" + Arrays.toString(op1.getDerivativesArray()[0])+"Implied VLT.."+op1.getImpliedVlt());
         System.out.println("Binomial EUR JR -QAANT:" + Arrays.toString(opJReur.getDerivativesArray()[0])+"Implied VLT.."+opJReur.getImpliedVlt());
         System.out.println("Binomial EUR CRR-QAANT:" + Arrays.toString(opCRReur.getDerivativesArray()[0])+"Implied VLT.."+opCRReur.getImpliedVlt());
+        System.out.println("EF Hulll EUR CRR-QAANT:" + Arrays.toString(opEFHeur.getDerivativesArray()[0])+"Implied VLT.."+opEFHeur.getImpliedVlt());
+        
         
         System.out.println("\nTEST AMERICAN :\n");
         QBinomialJRudd opJRamer=new QBinomialJRudd('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
