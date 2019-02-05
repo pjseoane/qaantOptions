@@ -37,7 +37,7 @@ public class PJSOptions2019 {
         Futuro y Put idem
         */
         
-        char   contrato     ='F';
+        char   contrato     ='S';
         char   option       ='P';
         double undValue     =100;
         double X            =100;
