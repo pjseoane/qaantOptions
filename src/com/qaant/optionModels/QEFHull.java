@@ -39,7 +39,11 @@ public class QEFHull extends QBinomialJRudd implements QOptionable{
 
     @Override
     public void runModel(){
-        ds=strike*2/steps;
+      
+        double q=(tipoContrato==STOCK) ? 0:rate;
+        underlyingNPV=underlyingNPV*Math.exp(-q*dayYear);
+        
+        ds      =strike*2/steps;
         vOld    = new double[steps+1];
         vNew    = new double[steps+1];
         vPayoff = new double[steps+1];
@@ -47,8 +51,7 @@ public class QEFHull extends QBinomialJRudd implements QOptionable{
         bHull   = new double[steps+1];
         cHull   = new double[steps+1];
     
-
-        timeStep = ds *ds/ (impliedVol *impliedVol * 4 * strike *strike);
+        timeStep = ds *ds/ (volatModel * volatModel * 4 * strike *strike);
         noTimeSteps = (int)(dayYear / timeStep) + 1;
     
         timeStep = dayYear / noTimeSteps;
@@ -60,9 +63,9 @@ public class QEFHull extends QBinomialJRudd implements QOptionable{
         double primeAtNode;
        
         for (int j = 0; j <= steps; j++){
-            aHull[j]=coef*(-0.5*tasaTimeStep *j + 0.5*impliedVol*impliedVol*timeStep*j*j);
-            bHull[j]=coef*(1-impliedVol*impliedVol*timeStep*j*j);
-            cHull[j]=coef*(0.5*tasaTimeStep *j  + 0.5*impliedVol*impliedVol*timeStep*j*j);
+            aHull[j]=coef*(-0.5*tasaTimeStep *j + 0.5*volatModel*volatModel*timeStep*j*j);
+            bHull[j]=coef*(1-volatModel*volatModel*timeStep*j*j);
+            cHull[j]=coef*(0.5*tasaTimeStep *j  + 0.5*volatModel*volatModel*timeStep*j*j);
             vPayoff[j]=payoff(UndStep*j,strike,cpFlag);
             vOld[j]=vPayoff[j];    
         }
@@ -100,10 +103,22 @@ public class QEFHull extends QBinomialJRudd implements QOptionable{
 
         gamma   =((vOld[gridPoint-2]-prima)/(UndStep*(gridPoint-2)-UndStep*(gridPoint))-delta)/(UndStep*(gridPoint-1)-UndStep*(gridPoint));
         theta   =(prePrime-prima)/(daysToExpiration/noTimeSteps);
-   
+        vega    =0;
+        rho     =0;
+        
+        
+         if(optionMktValue>-1){
+            
+           QEFHull optEFH =new QEFHull(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
+            vega=optEFH.getPrima()-prima;
+            
+            optEFH=new QEFHull(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.0001, -1, steps);
+            rho=(optEFH.getPrima()-prima)*100;
+        }
+        
         /*
         BlackScholesModel BSoption;
-        BSoption =new BlackScholesModel(anUnderlying, callPut, strike, daysToExpiration, tasa,impliedVol,0);
+        BSoption =new BlackScholesModel(anUnderlying, callPut, strike, daysToExpiration, tasa,volatModel,0);
          vega= BSoption.getVega();
          rho = BSoption.getRho();
         */ 

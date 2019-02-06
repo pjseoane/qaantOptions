@@ -17,12 +17,9 @@ public class Qoption extends Qunderlying{
     
     protected char callPut;
     
-    protected double strike,daysToExpiration, rate,volatModel=0,optionMktValue=0;
+    protected double strike,daysToExpiration, rate,optionMktValue=0,volatModel;
     protected int steps=1;
-   // 
-  //  
-  //  
-    
+   
     public Qoption(){}
     
     public Qoption(Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
