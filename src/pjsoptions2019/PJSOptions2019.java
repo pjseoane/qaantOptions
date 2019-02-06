@@ -38,15 +38,15 @@ public class PJSOptions2019 {
         Futuro y Put idem
         */
         
-        char   contrato     ='S';
+        char   contrato     ='F';
         char   option       ='P';
         double undValue     =100;
-        double X            =0;
-        double days         =365;
+        double X            =100;
+        double days         =30;
         double vh30Und      =0.30;
-        double riskFreeRate =.10;
+        double riskFreeRate =.11;
         double divYield     =0;
-        double mktValue     =10;
+        double mktValue     =16;
         int steps           =1000;
         
         

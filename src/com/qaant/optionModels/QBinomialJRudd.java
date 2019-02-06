@@ -66,8 +66,8 @@ public class QBinomialJRudd extends QAbstractModel implements QOptionable{
             optJR2=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
             vega=optJR2.getPrima()-prima;
             
-            optJR2=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.01, -1, steps);
-            rho=optJR2.getPrima()-prima;
+            optJR2=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.0001, -1, steps);
+            rho=(optJR2.getPrima()-prima)*100;
         }
 
 

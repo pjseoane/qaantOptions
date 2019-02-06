@@ -57,8 +57,8 @@ public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
             QBinomialCRR optCRR=new QBinomialCRR(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
             vega=optCRR.getPrima()-prima;
             
-            optCRR=new QBinomialCRR(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.01, -1, steps);
-            rho=optCRR.getPrima()-prima;
+            optCRR=new QBinomialCRR(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.0001, -1, steps);
+            rho=(optCRR.getPrima()-prima)*100;
         }
         
     }    
