@@ -23,7 +23,7 @@ public class QEFHull extends QBinomialJRudd implements QOptionable{
     private double[] aHull;
     private double[] bHull;
     private double[] cHull;
-    
+    protected double q;
     
     
     
@@ -40,7 +40,7 @@ public class QEFHull extends QBinomialJRudd implements QOptionable{
     @Override
     public void runModel(){
       
-        double q=(tipoContrato==STOCK) ? 0:rate;
+        q=(tipoContrato==STOCK) ? 0:rate;
         underlyingNPV=underlyingNPV*Math.exp(-q*dayYear);
         
         ds      =strike*2/steps;
@@ -116,12 +116,10 @@ public class QEFHull extends QBinomialJRudd implements QOptionable{
             rho=(optEFH.getPrima()-prima)*100;
         }
         
-        /*
-        BlackScholesModel BSoption;
-        BSoption =new BlackScholesModel(anUnderlying, callPut, strike, daysToExpiration, tasa,volatModel,0);
-         vega= BSoption.getVega();
-         rho = BSoption.getRho();
-        */ 
     }
+    @Override
+    protected double modelGetPrima(double volForLambda){
+       return new QEFHull(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,-1,steps).getPrima();
+     }
     
 }
