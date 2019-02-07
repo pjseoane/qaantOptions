@@ -9,7 +9,7 @@ import com.qaant.structures.Qunderlying;
 
 /**
  * call american futures da el european ????
- * @author paulino.seoane
+ * @author paulino.seoane ****NO ANDA BIEN EN FUTURES PUT; PUT CALL PARITY NO DA
  */
 public class QEFWilmott extends QEFHull implements QOptionable {
     static {modelMap.put(6,"Explicit Finite Wilmott");}
@@ -40,6 +40,7 @@ public class QEFWilmott extends QEFHull implements QOptionable {
     
     @Override
     public void runModel(){
+        ds = strike * 2 / steps;
         q=(tipoContrato==STOCK) ? 0:rate;
         underlyingNPV=underlyingNPV*Math.exp(-q*dayYear);
         
@@ -152,6 +153,9 @@ public class QEFWilmott extends QEFHull implements QOptionable {
        */
                
 		
-}//end ClassEFmodel
-     
-}//end ExplicitFiniteModel Class
+}
+     @Override
+    protected double modelGetPrima(double volForLambda){
+       return new QEFWilmott(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,-1,steps).getPrima();
+     }
+}

@@ -9,7 +9,7 @@ import com.qaant.structures.Qunderlying;
 
 /**
  *
- * @author pauli
+ * @author pauli  ****NO ANDA BIEN EN FUTURES PUT; PUT CALL PARITY NO DA
  */
 public class QEFHull extends QBinomialJRudd implements QOptionable{
     static {modelMap.put(5,"Explicit Finite Hull");}

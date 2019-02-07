@@ -32,15 +32,12 @@ public class PJSOptions2019 {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        /*
-        
-        */
-        
-        char   contrato     ='F';
+       
+        char   contrato     ='S';
         char   option       ='P';
         double undValue     =100;
         double X            =100;
-        double days         =365;
+        double days         =30;
         double vh30Und      =0.30;
         double riskFreeRate =.10;
         double divYield     =0;
@@ -57,22 +54,23 @@ public class PJSOptions2019 {
         QBinomialJRudd  opJReur =new QBinomialJRudd('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
         QBinomialCRR    opCRReur=new QBinomialCRR('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
         QEFHull         opEFHeur=new QEFHull ('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
-     //   QEFWilmott      opEFWeur=new QEFWilmott ('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        QEFWilmott      opEFWeur=new QEFWilmott ('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
         
         System.out.println("Black Scholes -QAANT  :" + Arrays.toString(op1.getDerivativesArray()[0])+"Implied VLT.."+op1.getImpliedVlt());
         System.out.println("Binomial EUR JR -QAANT:" + Arrays.toString(opJReur.getDerivativesArray()[0])+"Implied VLT.."+opJReur.getImpliedVlt());
         System.out.println("Binomial EUR CRR-QAANT:" + Arrays.toString(opCRReur.getDerivativesArray()[0])+"Implied VLT.."+opCRReur.getImpliedVlt());
         System.out.println("EF Hulll EUR CRR-QAANT:" + Arrays.toString(opEFHeur.getDerivativesArray()[0])+"Implied VLT.."+opEFHeur.getImpliedVlt());
-      //  System.out.println("EF Wilmott EUR CRR-QAANT:" + Arrays.toString(opEFWeur.getDerivativesArray()[0])+"Implied VLT.."+opEFWeur.getImpliedVlt());
+        System.out.println("EF Wilmott EUR CRR-QAANT:" + Arrays.toString(opEFWeur.getDerivativesArray()[0])+"Implied VLT.."+opEFWeur.getImpliedVlt());
         
         
         System.out.println("\nTEST AMERICAN :\n");
         
-        QBinomialJRudd opJRamer=new QBinomialJRudd('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        QBinomialCRR opCRRamer= new QBinomialCRR('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        QBinomialCV opCVamer=new QBinomialCV(someStock,option, X,days,riskFreeRate,mktValue,steps);
-        QWhaley opW2=new QWhaley (someStock, option, X,days,riskFreeRate,mktValue);
-        QEFHull         opEFHamer=new QEFHull ('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        QBinomialJRudd opJRamer     =new QBinomialJRudd('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        QBinomialCRR opCRRamer      =new QBinomialCRR('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        QBinomialCV opCVamer        =new QBinomialCV(someStock,option, X,days,riskFreeRate,mktValue,steps);
+        QWhaley opW2                =new QWhaley (someStock, option, X,days,riskFreeRate,mktValue);
+        QEFHull         opEFHamer   =new QEFHull ('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        QEFWilmott      opEFWamer   =new QEFWilmott ('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
         
         
         System.out.println("Binomial AMER JR-QAANT:" + Arrays.toString(opJRamer.getDerivativesArray()[0])+"Implied VLT.."+opJRamer.getImpliedVlt());
@@ -80,6 +78,7 @@ public class PJSOptions2019 {
         System.out.println("Binomial AMER CV-QAANT:" + Arrays.toString(opCVamer.getDerivativesArray()[0])+"Implied VLT.."+opCVamer.getImpliedVlt());
         System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Implied VLT.."+opW2.getImpliedVlt());
         System.out.println("EF Hull -QAANT  :" + Arrays.toString(opEFHamer.getDerivativesArray()[0])+"Implied VLT.."+opW2.getImpliedVlt());
+        System.out.println("EF Wilmott -QAANT  :" + Arrays.toString(opEFWamer.getDerivativesArray()[0])+"Implied VLT.."+opW2.getImpliedVlt());
         
         
         System.out.println("\nTEST Put/Call Parity :\n");
@@ -113,6 +112,15 @@ public class PJSOptions2019 {
         
         opEFHamer=new QEFHull ('A',someStock,'P', X,days,riskFreeRate,mktValue,steps);
         System.out.println("EF Hull -QAANT  :" + Arrays.toString(opEFHamer.getDerivativesArray()[0])+"Implied VLT.."+opEFHamer.getImpliedVlt());
+        
+        
+        opEFWamer=new QEFWilmott ('A',someStock,'C', X,days,riskFreeRate,mktValue,steps);
+        System.out.println("EF Wilmott -QAANT  :" + Arrays.toString(opEFWamer.getDerivativesArray()[0])+"Implied VLT.."+opEFWamer.getImpliedVlt());
+        
+        opEFWamer=new QEFWilmott ('A',someStock,'P', X,days,riskFreeRate,mktValue,steps);
+        System.out.println("EF Wilmott -QAANT  :" + Arrays.toString(opEFWamer.getDerivativesArray()[0])+"Implied VLT.."+opEFWamer.getImpliedVlt());
+        
+        
         
         //********************************************************************
         System.out.println ("\nCRR Prima...:"+ opJRamer.getPrima());
