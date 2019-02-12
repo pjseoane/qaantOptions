@@ -22,7 +22,7 @@ public class QEFWilmott extends QEFHull implements QOptionable {
     private double dssqd;
 
     private double thetaUp, thetaDn;
-    private double d;
+   // private double d;
     private int k;
     private double primaUp, primaDn;
     private double deltaUp, deltaDn;

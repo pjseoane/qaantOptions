@@ -37,7 +37,7 @@ public class PJSOptions2019 {
         char   option       ='P';
         double undValue     =100;
         double X            =100;
-        double days         =30;
+        double days         =10;
         double vh30Und      =0.30;
         double riskFreeRate =.10;
         double divYield     =0;
@@ -50,7 +50,8 @@ public class PJSOptions2019 {
         Qunderlying someStock   = new Qunderlying(contrato, undValue, vh30Und, divYield);
         
        
-        QBlackScholes       op1 =new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
+       //QBlackScholes       op1 =new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
+        QAbstractModel       op1 =new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
         QBinomialJRudd  opJReur =new QBinomialJRudd('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
         QBinomialCRR    opCRReur=new QBinomialCRR('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
         QEFHull         opEFHeur=new QEFHull ('E',someStock,option, X,days,riskFreeRate,mktValue,steps);

@@ -84,7 +84,7 @@ public class QBinomialJRudd extends QAbstractModel implements QOptionable{
                 }
             }
             return undTree;
-     }
+    }
     protected double[][] buildOptionTree(){
             double optionTree[][]=new double[steps+1][steps+1];
             double px=1-p;
@@ -103,7 +103,6 @@ public class QBinomialJRudd extends QAbstractModel implements QOptionable{
                         
                     }
                 }
-             
             }
         return optionTree;
         

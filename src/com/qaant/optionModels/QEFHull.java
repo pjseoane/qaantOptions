@@ -54,7 +54,7 @@ public class QEFHull extends QBinomialJRudd implements QOptionable{
         timeStep = ds *ds/ (volatModel * volatModel * 4 * strike *strike);
         noTimeSteps = (int)(dayYear / timeStep) + 1;
     
-        timeStep = dayYear / noTimeSteps;
+        //timeStep = dayYear / noTimeSteps;
   
         tasaTimeStep = rate * timeStep;
         coef = 1 / (1 + tasaTimeStep);
