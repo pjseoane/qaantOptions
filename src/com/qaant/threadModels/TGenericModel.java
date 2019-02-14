@@ -15,7 +15,7 @@ import java.util.function.DoubleUnaryOperator;
  *
  * @author pauli
  */
-public class TGenericModel extends Qoption implements QOptionable{
+public abstract class TGenericModel extends Qoption implements QOptionable{
     
     protected char tipoEjercicio;
     enum TipoEjercicio {AMERICAN,EUROPEAN}
