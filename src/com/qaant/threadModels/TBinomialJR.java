@@ -14,7 +14,7 @@ import com.qaant.structures.Qunderlying;
  */
 public class TBinomialJR extends TGenericModel implements Runnable{
     
-    protected double u,d,p,interv,drift,firstTerm,secondTerm;
+    protected double u,d,p,drift,firstTerm,secondTerm;
     protected double[][]undTree,optTree,underlyingTree;
     
     
@@ -27,17 +27,10 @@ public class TBinomialJR extends TGenericModel implements Runnable{
     
     @Override
         public void run() {
-         
-    //    pModelName="Binomial J-Rudd QAANT";
-    //    modelNumber=4;
-        dayYear             =daysToExpiration/365;
-        interv              =dayYear/steps;
-        z                   =Math.exp(-rate*dayYear/steps);
+    
         drift               =(tipoContrato=='F')? 1: Math.exp(rate*interv);
-        underlyingNPV       =underlyingValue*Math.exp(-dividendRate*dayYear);
         firstTerm           =(rate-0.5*Math.pow(volatModel,2))*interv;
         secondTerm          =volatModel*Math.sqrt(interv);
-        cpFlag              =(callPut==CALL)?1:-1;
         
         u= Math.exp(firstTerm+secondTerm);
         d= Math.exp(firstTerm-secondTerm);
@@ -106,5 +99,10 @@ public class TBinomialJR extends TGenericModel implements Runnable{
             }
         return optionTree;
  }
-    
+    @Override
+    protected double modelGetPrima(double volForLambda){
+        //System.out.println("Vol for Lambda....:"+volForLambda);
+       // return new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,-1,steps).getPrima();
+       return 1.0;
+    }
 }

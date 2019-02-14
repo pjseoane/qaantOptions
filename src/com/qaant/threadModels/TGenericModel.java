@@ -22,13 +22,12 @@ public abstract class TGenericModel extends Qoption implements QOptionable{
             
     public final static char EUROPEAN='E';
     public final static char AMERICAN='A';
-    protected double startTime, elapsedTime;
+    protected double startTime, elapsedTime, interv;
     protected double dayYear, sqrDayYear,payoff,z,underlyingNPV;
     protected double prima=-2,delta=-2,gamma=-2,vega=-2,theta=-2,rho=-2,impliedVol=0;
-    protected int cpFlag;
+    protected int cpFlag, modelNumber;
     protected boolean opcionConVida;
     protected String pModelName;
-    protected int modelNumber;
     protected double[][] derivativesArray = new double[1][10];
     
      //Para calculos de implied vol
@@ -53,9 +52,11 @@ public abstract class TGenericModel extends Qoption implements QOptionable{
         this.dayYear              =daysToExpiration/365;
         this.sqrDayYear           =Math.sqrt(dayYear);
         this.cpFlag               =(callPut==CALL)?1:-1;
+        this.interv               =dayYear/steps;
         this.opcionConVida        =daysToExpiration>0;
         this.z                    =Math.exp(-rate*dayYear/steps);
-        this.underlyingNPV        =underlyingValue*Math.exp(-dividendRate*dayYear);   
+        this.underlyingNPV        =underlyingValue*Math.exp(-dividendRate*dayYear); 
+        this.cpFlag              =(callPut==CALL)?1:-1;
         
         /*
         if (!opcionConVida && strike ==0){
