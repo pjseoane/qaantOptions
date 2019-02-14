@@ -29,7 +29,8 @@ public class QBlackScholes extends QAbstractModel implements QOptionable{
     
     
     @Override
-    public void runModel(){
+    //public void runModel(){
+            public void run() {
        
         pModelName="Black-Scholes QAANT";
         modelNumber=1;

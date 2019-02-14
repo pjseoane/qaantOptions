@@ -19,6 +19,7 @@ import com.qaant.optionModels.QEFWilmott;
 
 import java.util.Arrays;
 import com.qaant.structures.Qunderlying;
+import com.qaant.threadModels.TBinomialJR;
 //import java.util.function.Consumer;
 /**
  *
@@ -52,10 +53,14 @@ public class PJSOptions2019 {
        
        //QBlackScholes       op1 =new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
         QAbstractModel       op1 =new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
-        QBinomialJRudd  opJReur =new QBinomialJRudd('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        QBinomialCRR    opCRReur=new QBinomialCRR('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        QEFHull         opEFHeur=new QEFHull ('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        QEFWilmott      opEFWeur=new QEFWilmott ('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        QAbstractModel   opJReur =new QBinomialJRudd('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        QAbstractModel   opCRReur=new QBinomialCRR('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        QAbstractModel   opEFHeur=new QEFHull ('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        QAbstractModel   opEFWeur=new QEFWilmott ('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        
+        Thread t1   =new Thread(op1);
+        //t1.start();
+        
         
         System.out.println("Black Scholes -QAANT  :" + Arrays.toString(op1.getDerivativesArray()[0])+"Implied VLT.."+op1.getImpliedVlt());
         System.out.println("Binomial EUR JR -QAANT:" + Arrays.toString(opJReur.getDerivativesArray()[0])+"Implied VLT.."+opJReur.getImpliedVlt());
@@ -135,7 +140,8 @@ public class PJSOptions2019 {
         System.out.println ("und value...:"+ opJRamer.getUnderlyingValue());
         
         opJRamer.setDaysToExpiration(0);
-        opJRamer.runModel();
+       // 
+       opJRamer.run();
         
         System.out.println ("Days to zero JR...:"+opJRamer.getDaysToExpiration()+" "+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
         System.out.println (QAbstractModel.modelChooser());
@@ -173,6 +179,12 @@ public class PJSOptions2019 {
         
         System.out.println ("Price Range....:"+Arrays.toString(ticket1.getUnderlyingPriceRange()[0]));
         System.out.println ("PL Output.....:"+Arrays.toString(ticket1.getPLOutput()[0]));
+        
+        //********* Estudio Threads
+        
+        TBinomialJR tOpt =new TBinomialJR('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
+        Thread optionThread= new Thread(tOpt);
+        optionThread.start();
         
     }
 }

@@ -39,7 +39,8 @@ public class QEFWilmott extends QEFHull implements QOptionable {
     }
     
     @Override
-    public void runModel(){
+    //public void runModel(){
+    public void run(){
         ds = strike * 2 / steps;
         q=(tipoContrato==STOCK) ? 0:rate;
         underlyingNPV=underlyingNPV*Math.exp(-q*dayYear);

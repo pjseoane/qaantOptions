@@ -28,8 +28,8 @@ public class QBinomialCRR extends QBinomialJRudd implements QOptionable{
     }
 
     @Override
-    public void runModel(){
-       
+    //public void runModel(){
+      public void run() {
         pModelName="Binomial CRR- QAANT";
         modelNumber=3;
        

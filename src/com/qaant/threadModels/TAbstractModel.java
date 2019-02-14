@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.qaant.optionModels;
+package com.qaant.threadModels;
 
 
+import com.qaant.optionModels.*;
 import com.qaant.structures.Qoption;
 import java.util.function.DoubleUnaryOperator;
 import com.qaant.structures.Qunderlying;
@@ -15,7 +16,7 @@ import java.util.HashMap;
  *
  * @author pseoane
  */
-public abstract class QAbstractModel extends Qoption implements QOptionable, Runnable{
+public abstract class TAbstractModel extends Qoption implements QOptionable{
     
     enum eDerivatives{PRIMA, DELTA, GAMMA, VEGA,THETA,RHO,IV}
     enum TipoEjercicio {AMERICAN,EUROPEAN}
@@ -45,25 +46,25 @@ public abstract class QAbstractModel extends Qoption implements QOptionable, Run
     
     public static final HashMap<Integer, String> modelMap =new HashMap<>();
        
-    public QAbstractModel (){build();}
-    public QAbstractModel (Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
+    public TAbstractModel (){build();}
+    public TAbstractModel (Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(und, callPut, strike,daysToExpiration,rate, optionMktValue);
         build();
     }
-    public QAbstractModel (char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
+    public TAbstractModel (char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
         super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike,daysToExpiration,rate, optionMktValue);
         build();
     }
     
     //Constructores para modelos numericos
     
-    public QAbstractModel (char tipoEjercicio, char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
+    public TAbstractModel (char tipoEjercicio, char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike,daysToExpiration,rate, optionMktValue,steps);
         this.tipoEjercicio              =tipoEjercicio;
         build();
     }
 
-    public QAbstractModel (char tipoEjercicio,Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
+    public TAbstractModel (char tipoEjercicio,Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super(und, callPut, strike,daysToExpiration,rate, optionMktValue,steps);
         this.tipoEjercicio              =tipoEjercicio;
         build();
@@ -80,7 +81,8 @@ public abstract class QAbstractModel extends Qoption implements QOptionable, Run
         this.underlyingNPV        =underlyingValue*Math.exp(-dividendRate*dayYear);   
         
         if (opcionConVida && strike !=0){
-            run();
+            ;
+            //run();
             }else{
             opcionSinVida();
         }

@@ -32,7 +32,8 @@ public class QBinomialCV extends QAbstractModel implements QOptionable{
     }
     
     @Override
-    public void runModel(){
+    //public void runModel(){
+             public void run() {
         
         pModelName="Binomial CV- QAANT";
         modelNumber=5;

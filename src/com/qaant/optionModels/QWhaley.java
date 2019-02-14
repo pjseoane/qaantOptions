@@ -29,7 +29,8 @@ public class QWhaley extends QAbstractModel implements QOptionable{
     
     
     @Override
-    public void runModel(){
+    //public void runModel(){
+            public void run() {
     //recalcula un modelo BS para obtener las greeks por BS
    
     QBlackScholes optW= new QBlackScholes(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate, callPut, strike, daysToExpiration, rate, 0);

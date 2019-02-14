@@ -20,7 +20,8 @@ public interface QOptionable {
     public final static char AMERICAN   ='A';
     */
     
-    void runModel();
+    //void runModel();
+    void run() ;
     void fillDerivativesArray();
     String getModelName();
     double getPrima();

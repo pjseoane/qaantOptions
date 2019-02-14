@@ -3,71 +3,49 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.qaant.optionModels;
+package com.qaant.threadModels;
 
-
+import com.qaant.optionModels.QImpliedVolCalc;
+import com.qaant.optionModels.QOptionable;
 import com.qaant.structures.Qoption;
-import java.util.function.DoubleUnaryOperator;
 import com.qaant.structures.Qunderlying;
-import java.util.HashMap;
+import java.util.function.DoubleUnaryOperator;
 
 /**
  *
- * @author pseoane
+ * @author pauli
  */
-public abstract class QAbstractModel extends Qoption implements QOptionable, Runnable{
+public class TGenericModel extends Qoption implements QOptionable{
     
-    enum eDerivatives{PRIMA, DELTA, GAMMA, VEGA,THETA,RHO,IV}
+    protected char tipoEjercicio;
     enum TipoEjercicio {AMERICAN,EUROPEAN}
             
     public final static char EUROPEAN='E';
     public final static char AMERICAN='A';
-    
-    protected char tipoEjercicio;
-    protected int modelNumber;
-    protected double prima=-2,delta=-2,gamma=-2,vega=-2,theta=-2,rho=-2,impliedVol=0; 
-    protected double[][] derivativesArray = new double[1][10];
     protected double startTime, elapsedTime;
-    protected String pModelName;
     protected double dayYear, sqrDayYear,payoff,z,underlyingNPV;
+    protected double prima=-2,delta=-2,gamma=-2,vega=-2,theta=-2,rho=-2,impliedVol=0;
     protected int cpFlag;
-
-    //Para calculos de implied vol
+    protected boolean opcionConVida;
+    protected String pModelName;
+    protected int modelNumber;
+    protected double[][] derivativesArray = new double[1][10];
+    
+     //Para calculos de implied vol
     protected int MAXITERATIONS =50;
     protected double ACCURACY   =0.00001;
     
-    //Variables para lots
-    protected double lots;
-    protected double price;
-    protected double multiplier;
-    protected boolean opcionConVida;
+        
+    //Constructor 0:
+    public TGenericModel() {build();}
     
-    
-    public static final HashMap<Integer, String> modelMap =new HashMap<>();
-       
-    public QAbstractModel (){build();}
-    public QAbstractModel (Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
-        super(und, callPut, strike,daysToExpiration,rate, optionMktValue);
-        build();
-    }
-    public QAbstractModel (char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
-        super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike,daysToExpiration,rate, optionMktValue);
-        build();
-    }
-    
-    //Constructores para modelos numericos
-    
-    public QAbstractModel (char tipoEjercicio, char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
-        super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike,daysToExpiration,rate, optionMktValue,steps);
-        this.tipoEjercicio              =tipoEjercicio;
-        build();
-    }
-
-    public QAbstractModel (char tipoEjercicio,Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
+    //Constructor 4:
+    public TGenericModel (char tipoEjercicio,Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super(und, callPut, strike,daysToExpiration,rate, optionMktValue,steps);
         this.tipoEjercicio              =tipoEjercicio;
         build();
     }
+    
     
     private void build(){
         startTime=System.currentTimeMillis();  
@@ -79,25 +57,19 @@ public abstract class QAbstractModel extends Qoption implements QOptionable, Run
         this.z                    =Math.exp(-rate*dayYear/steps);
         this.underlyingNPV        =underlyingValue*Math.exp(-dividendRate*dayYear);   
         
-        if (opcionConVida && strike !=0){
-            run();
-            }else{
-            opcionSinVida();
+        /*
+        if (!opcionConVida && strike ==0){
+             opcionSinVida();
+            
         }
-        impliedVol=calcImpliedVlt();
-        fillDerivativesArray();
-       
-    }
+        */
+    }// end of build()
     @Override
     abstract public void run(); //Cada modelo implementa runModel()
-     
-    public static double modelChooser(){
-         QOptionable c = new QBlackScholes();
-         return 33.33;
-    }
     
-    
-    //Setters
+
+
+//Setters
     public void setDaysToExpiration(double days){
         this.daysToExpiration=days;
         build();
@@ -201,7 +173,7 @@ public abstract class QAbstractModel extends Qoption implements QOptionable, Run
         return payoff(underlyingValue,strike,cpFlag);
         }
     
-    private double calcImpliedVlt(){
+    protected double calcImpliedVlt(){
     impliedVol=volatModel;
             
         if(optionMktValue>0 && opcionConVida){
@@ -251,7 +223,6 @@ public abstract class QAbstractModel extends Qoption implements QOptionable, Run
         derivativesArray[0][7]=impliedVol;
         derivativesArray[0][8]=System.currentTimeMillis() - startTime;
         derivativesArray[0][9]=modelNumber;
-      
-    }
     
+    }
 }

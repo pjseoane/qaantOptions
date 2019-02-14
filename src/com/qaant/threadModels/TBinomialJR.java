@@ -3,44 +3,41 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.qaant.optionModels;
+package com.qaant.threadModels;
+
 
 import com.qaant.structures.Qunderlying;
+
 /**
  *
  * @author pauli
  */
-
-
-public class QBinomialJRudd extends QAbstractModel implements QOptionable{
-    static {modelMap.put(4,"Binomial JR- QAANT");}
+public class TBinomialJR extends TGenericModel implements Runnable{
     
-    protected double u,d,p,interv,drift;
-    protected double[][]undTree,optTree,underlyingTree;  
+    protected double u,d,p,interv,drift,firstTerm,secondTerm;
+    protected double[][]undTree,optTree,underlyingTree;
     
-    public QBinomialJRudd(){super();}
-    public QBinomialJRudd(char tipoEjercicio, Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
-        super(tipoEjercicio,und, callPut, strike, daysToExpiration, rate, optionMktValue, steps);
-    }
     
-    public QBinomialJRudd(char tipoEjercicio, char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
-        super(tipoEjercicio,tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
+    
+    public TBinomialJR(){};
+    public TBinomialJR(char tipoEjercicio, Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
+       super(tipoEjercicio,und, callPut, strike,daysToExpiration,rate, optionMktValue,steps);
+        
     }
     
     @Override
-    //public void runModel(){
         public void run() {
          
-        pModelName="Binomial J-Rudd QAANT";
-        modelNumber=4;
-        
-        
-        interv=dayYear/steps;
-        
-        drift=(tipoContrato=='F')? 1: Math.exp(rate*interv);
-        
-        double firstTerm=(rate-0.5*Math.pow(volatModel,2))*interv;
-        double secondTerm=volatModel*Math.sqrt(interv);
+    //    pModelName="Binomial J-Rudd QAANT";
+    //    modelNumber=4;
+        dayYear             =daysToExpiration/365;
+        interv              =dayYear/steps;
+        z                   =Math.exp(-rate*dayYear/steps);
+        drift               =(tipoContrato=='F')? 1: Math.exp(rate*interv);
+        underlyingNPV       =underlyingValue*Math.exp(-dividendRate*dayYear);
+        firstTerm           =(rate-0.5*Math.pow(volatModel,2))*interv;
+        secondTerm          =volatModel*Math.sqrt(interv);
+        cpFlag              =(callPut==CALL)?1:-1;
         
         u= Math.exp(firstTerm+secondTerm);
         d= Math.exp(firstTerm-secondTerm);
@@ -61,19 +58,21 @@ public class QBinomialJRudd extends QAbstractModel implements QOptionable{
         rho=0;
         
         if(optionMktValue>-1){
-            QBinomialJRudd optJR2=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration-1, rate, -1, steps);
-            theta=optJR2.getPrima()-prima;
+          //  QBinomialJRudd optJR2=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration-1, rate, -1, steps);
+          //  theta=optJR2.getPrima()-prima;
             
-            optJR2=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
-            vega=optJR2.getPrima()-prima;
+          //  optJR2=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
+          //  vega=optJR2.getPrima()-prima;
             
-            optJR2=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.0001, -1, steps);
-            rho=(optJR2.getPrima()-prima)*100;
+          //  optJR2=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.0001, -1, steps);
+          //  rho=(optJR2.getPrima()-prima)*100;
         }
-
+        impliedVol=calcImpliedVlt();
+        fillDerivativesArray();
 
     }  
     protected double[][] buildUnderlyingTree(){
+            
             undTree=new double[steps+1][steps+1];
             undTree[0][0]=underlyingNPV;
             
@@ -106,12 +105,6 @@ public class QBinomialJRudd extends QAbstractModel implements QOptionable{
                 }
             }
         return optionTree;
-        
-        
-    }
-     @Override
-    protected double modelGetPrima(double volForLambda){
-        //System.out.println("Vol for Lambda....:"+volForLambda);
-        return new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,-1,steps).getPrima();
-    }
+ }
+    
 }

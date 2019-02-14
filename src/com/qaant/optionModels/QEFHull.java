@@ -38,8 +38,9 @@ public class QEFHull extends QBinomialJRudd implements QOptionable{
     }
 
     @Override
-    public void runModel(){
-      
+    //public void runModel(){
+    
+    public void run() {
         q=(tipoContrato==STOCK) ? 0:rate;
         underlyingNPV=underlyingNPV*Math.exp(-q*dayYear);
         
