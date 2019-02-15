@@ -36,9 +36,9 @@ public class QImpliedVolCalc
      */
     public static double bisection(DoubleUnaryOperator func, double a, double b,
                                int maxIterations, double tolerance){
-        int    iterations   = 0;  
-        double solution     = 0;
-        //double solution= (a+b)/2.0;
+        int    iterations       = 0;  
+        double solution         = 0;
+        //double funcAtSolution   ;
         
         while (Math.abs(b-a) > tolerance && iterations <= maxIterations){
        //while (Math.abs(solution)>tolerance && iterations <= maxIterations ){
@@ -50,7 +50,7 @@ public class QImpliedVolCalc
             }
             
             iterations++;
-            //System.out.print("\nIterations: "+iterations);
+           // System.out.print("\nIterations: "+iterations);
         }
         return ((a+b)/2);
     }

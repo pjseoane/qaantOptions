@@ -61,13 +61,13 @@ public class TBinomialJR extends TGenericModel implements Runnable{
             TBinomialJR optRho    =new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.0001, -1, steps);
           
             Thread worker1= new Thread(optTheta);
-            System.out.println("Theta Started");
+            //System.out.println("Theta Started");
             
             Thread worker2= new Thread(optVega);
-            System.out.println("Vega Started");
+            //System.out.println("Vega Started");
             
             Thread worker3= new Thread(optRho);
-            System.out.println("Rho Started");
+            //System.out.println("Rho Started");
             
           
             worker1.start();
@@ -91,7 +91,7 @@ public class TBinomialJR extends TGenericModel implements Runnable{
         impliedVol=calcImpliedVlt();
         fillDerivativesArray();
         
-        System.out.println("\nBinomial JR-Thread Call***inside thread:" + Arrays.toString(getDerivativesArray()[0]));
+      //  System.out.println("\nBinomial JR-Thread Call***inside thread:" + Arrays.toString(getDerivativesArray()[0]));
     }  
     protected double[][] buildUnderlyingTree(){
             

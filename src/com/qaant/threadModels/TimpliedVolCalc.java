@@ -16,7 +16,7 @@ public abstract class TimpliedVolCalc implements Runnable{
     
     double primaModelo,optionMktValue, volatModel,impliedVol;
     protected int MAXITERATIONS =50;
-    protected double ACCURACY   =0.00001;
+    protected double ACCURACY   =0.00009;
     
     TimpliedVolCalc (double primaModelo,double optionMktValue,double volatModel){
         this.primaModelo    =primaModelo;

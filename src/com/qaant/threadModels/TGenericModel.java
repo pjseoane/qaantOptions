@@ -32,7 +32,7 @@ public abstract class TGenericModel extends Qoption implements QOptionable{
     
      //Para calculos de implied vol
     protected int MAXITERATIONS =50;
-    protected double ACCURACY   =0.00001;
+    protected double ACCURACY   =0.00009;
     
         
     //Constructor 0:
