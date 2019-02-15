@@ -35,7 +35,7 @@ public class PJSOptions2019 {
         // TODO code application logic here
         
        
-        char   contrato     ='S';
+        char   contrato     ='F';
         char   option       ='P';
         double undValue     =100;
         double X            =100;
@@ -195,7 +195,7 @@ public class PJSOptions2019 {
         
         //********* Estudio Threads
         
-        contrato     ='S';
+        contrato     ='F';
         option       ='P';
         undValue     =100;
         X            =100;
@@ -208,32 +208,36 @@ public class PJSOptions2019 {
         
         someStock   = new Qunderlying(contrato, undValue, vh30Und, divYield);
         
-        
-        
-        
         int processors= Runtime.getRuntime().availableProcessors();
         
-        System.out.print("\nCantidad procesadores...: "+processors);
+        System.out.print("\nCantidad procesadores......: "+processors);
+        
         double startTime=System.currentTimeMillis();
+        
         TBinomialJR tOptC =new TBinomialJR('A',someStock,'C', X,days,riskFreeRate,mktValue,steps);
         TBinomialJR tOptP =new TBinomialJR('A',someStock,'P', X,days,riskFreeRate,mktValue,steps);
+        TBinomialJR tOpt3 =new TBinomialJR('E',someStock,'P', X,days,riskFreeRate,mktValue,steps);
         
         Thread worker0= new Thread(tOptC);
         Thread worker1= new Thread(tOptP);
+        Thread worker2= new Thread(tOpt3);
         
         worker0.start();
         worker1.start();
+        worker2.start();
+   
         try{
             worker0.join();
             worker1.join();
+            worker2.join();
         }
         catch (InterruptedException e){
         }
         
-     
-        
         System.out.println("\nBinomial AMER JR-Thread Call:" + Arrays.toString(tOptC.getDerivativesArray()[0])+"Implied VLT.."+tOptC.getImpliedVlt());
         System.out.println("Binomial AMER JR-Thread Put :" + Arrays.toString(tOptP.getDerivativesArray()[0])+"Implied VLT.."+tOptP.getImpliedVlt());
+        System.out.println("Binomial EUR  JR-Thread Put :" + Arrays.toString(tOpt3.getDerivativesArray()[0])+"Implied VLT.."+tOpt3.getImpliedVlt());
+        
         System.out.println("\nElapsed Time                :" + (System.currentTimeMillis()-startTime));
     }
 }

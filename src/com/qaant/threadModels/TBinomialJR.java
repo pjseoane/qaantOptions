@@ -77,8 +77,9 @@ public class TBinomialJR extends TGenericModel implements Runnable{
             vega    =optVega.getPrima()-prima;
             rho     =(optRho.getPrima()-prima)*100;
         }
+        
+        
         impliedVol=calcImpliedVlt();
-     
         fillDerivativesArray();
 
     }  
