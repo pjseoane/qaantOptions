@@ -224,7 +224,7 @@ public class PJSOptions2019 {
         worker0.start();
         worker1.start();
         try{
-           // worker0.join();
+            worker0.join();
             worker1.join();
         }
         catch (InterruptedException e){
