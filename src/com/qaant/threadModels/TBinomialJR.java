@@ -16,51 +16,69 @@ public class TBinomialJR extends TGenericModel implements Runnable{
     
     protected double u,d,p,drift,firstTerm,secondTerm;
     protected double[][]undTree,optTree,underlyingTree;
-    
-    
+      
     
     public TBinomialJR(){};
     public TBinomialJR(char tipoEjercicio, Qunderlying und,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
        super(tipoEjercicio,und, callPut, strike,daysToExpiration,rate, optionMktValue,steps);
-        
     }
     
+    public TBinomialJR(char tipoEjercicio, char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
+        super(tipoEjercicio,tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
+    }
+        
     @Override
-        public void run() {
-    
-        drift               =(tipoContrato=='F')? 1: Math.exp(rate*interv);
-        firstTerm           =(rate-0.5*Math.pow(volatModel,2))*interv;
-        secondTerm          =volatModel*Math.sqrt(interv);
+    public void run() {
+        //startTime   =System.currentTimeMillis();
+        drift       =(tipoContrato=='F')? 1: Math.exp(rate*interv);
+        firstTerm   =(rate-0.5*Math.pow(volatModel,2))*interv;
+        secondTerm  =volatModel*Math.sqrt(interv);
         
-        u= Math.exp(firstTerm+secondTerm);
-        d= Math.exp(firstTerm-secondTerm);
-        p=(drift-d)/(u-d);
+        u           = Math.exp(firstTerm+secondTerm);
+        d           = Math.exp(firstTerm-secondTerm);
+        p           =(drift-d)/(u-d);
         
-        undTree=buildUnderlyingTree();
-        optTree=buildOptionTree();
+        undTree     =buildUnderlyingTree();
+        optTree     =buildOptionTree();
         
-        prima=optTree[0][0];
-        delta=(optTree[1][1] - optTree[1][0]) / (undTree[1][1] - undTree[1][0]);
-        gamma=((optTree[2][0] - optTree[2][1]) / (undTree[2][0] - undTree[2][1]) - (
+        prima       =optTree[0][0];
+        delta       =(optTree[1][1] - optTree[1][0]) / (undTree[1][1] - undTree[1][0]);
+        gamma       =((optTree[2][0] - optTree[2][1]) / (undTree[2][0] - undTree[2][1]) - (
                     optTree[2][1] - optTree[2][2]) / (undTree[2][1] - undTree[2][2])) / (
                                  (undTree[2][0] - undTree[2][2]) / 2);
         
        // theta=(optTree[2][1] - optTree[0][0]) / (2 * 365 * interv);
-        theta=0;
-        vega=0;
-        rho=0;
+        theta       =0;
+        vega        =0;
+        rho         =0;
         
         if(optionMktValue>-1){
-          //  QBinomialJRudd optJR2=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration-1, rate, -1, steps);
-          //  theta=optJR2.getPrima()-prima;
-            
-          //  optJR2=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
-          //  vega=optJR2.getPrima()-prima;
-            
-          //  optJR2=new QBinomialJRudd(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.0001, -1, steps);
-          //  rho=(optJR2.getPrima()-prima)*100;
+            TBinomialJR optTheta  =new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration-1, rate, -1, steps);
+            TBinomialJR optVega   =new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
+            TBinomialJR optRho    =new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.0001, -1, steps);
+          
+            Thread worker1= new Thread(optTheta);
+            Thread worker2= new Thread(optVega);
+            Thread worker3= new Thread(optRho);
+          
+            worker1.start();
+            worker2.start();
+            worker3.start();
+        
+            try{
+                worker1.join();
+                worker2.join();
+                worker3.join();
+            }
+            catch (InterruptedException e){
+            }
+          
+            theta   =optTheta.getPrima()-prima;
+            vega    =optVega.getPrima()-prima;
+            rho     =(optRho.getPrima()-prima)*100;
         }
         impliedVol=calcImpliedVlt();
+     
         fillDerivativesArray();
 
     }  
@@ -98,11 +116,14 @@ public class TBinomialJR extends TGenericModel implements Runnable{
                 }
             }
         return optionTree;
- }
+    }
+    
     @Override
     protected double modelGetPrima(double volForLambda){
-        //System.out.println("Vol for Lambda....:"+volForLambda);
-       // return new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,-1,steps).getPrima();
-       return 1.0;
+       
+       TBinomialJR opt= new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,-1,steps); 
+       opt.run();
+       return opt.getPrima();
+       
     }
 }

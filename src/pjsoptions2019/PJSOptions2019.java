@@ -20,6 +20,7 @@ import com.qaant.optionModels.QEFWilmott;
 import java.util.Arrays;
 import com.qaant.structures.Qunderlying;
 import com.qaant.threadModels.TBinomialJR;
+import java.util.ArrayList;
 //import java.util.function.Consumer;
 /**
  *
@@ -50,6 +51,8 @@ public class PJSOptions2019 {
         
         Qunderlying someStock   = new Qunderlying(contrato, undValue, vh30Und, divYield);
         
+        ArrayList<QAbstractModel> arrayListOptions =new ArrayList <>();
+        
        
        //QBlackScholes       op1 =new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
         QAbstractModel       op1 =new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
@@ -58,7 +61,17 @@ public class PJSOptions2019 {
         QAbstractModel   opEFHeur=new QEFHull ('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
         QAbstractModel   opEFWeur=new QEFWilmott ('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
         
-        Thread t1   =new Thread(op1);
+        arrayListOptions.add(op1);
+        arrayListOptions.add(opJReur);
+        arrayListOptions.add(opCRReur);
+        arrayListOptions.add(opEFHeur);
+        arrayListOptions.add(opEFWeur);
+         
+         
+         
+         arrayListOptions.get(0);
+        
+       // Thread t1   =new Thread(op1);
         //t1.start();
         
         
@@ -182,9 +195,45 @@ public class PJSOptions2019 {
         
         //********* Estudio Threads
         
-        TBinomialJR tOpt =new TBinomialJR('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        Thread optionThread= new Thread(tOpt);
-        optionThread.start();
+        contrato     ='S';
+        option       ='P';
+        undValue     =100;
+        X            =100;
+        days         =10;
+        vh30Und      =0.30;
+        riskFreeRate =.10;
+        divYield     =0;
+        mktValue     =4;
+        steps           =1000;
         
+        someStock   = new Qunderlying(contrato, undValue, vh30Und, divYield);
+        
+        
+        
+        
+        int processors= Runtime.getRuntime().availableProcessors();
+        
+        System.out.print("\nCantidad procesadores...: "+processors);
+        double startTime=System.currentTimeMillis();
+        TBinomialJR tOptC =new TBinomialJR('A',someStock,'C', X,days,riskFreeRate,mktValue,steps);
+        TBinomialJR tOptP =new TBinomialJR('A',someStock,'P', X,days,riskFreeRate,mktValue,steps);
+        
+        Thread worker0= new Thread(tOptC);
+        Thread worker1= new Thread(tOptP);
+        
+        worker0.start();
+        worker1.start();
+        try{
+           // worker0.join();
+            worker1.join();
+        }
+        catch (InterruptedException e){
+        }
+        
+     
+        
+        System.out.println("\nBinomial AMER JR-Thread Call:" + Arrays.toString(tOptC.getDerivativesArray()[0])+"Implied VLT.."+tOptC.getImpliedVlt());
+        System.out.println("Binomial AMER JR-Thread Put :" + Arrays.toString(tOptP.getDerivativesArray()[0])+"Implied VLT.."+tOptP.getImpliedVlt());
+        System.out.println("\nElapsed Time                :" + (System.currentTimeMillis()-startTime));
     }
 }
