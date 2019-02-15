@@ -35,6 +35,27 @@ public class QImpliedVolCalc
      *     specified maximum number of iterations
      */
     public static double bisection(DoubleUnaryOperator func, double a, double b,
+                               int maxIterations, double tolerance){
+        int    iterations   = 0;  
+        double solution     = 0;
+        //double solution= (a+b)/2.0;
+        
+        while (Math.abs(b-a) > tolerance && iterations <= maxIterations){
+       //while (Math.abs(solution)>tolerance && iterations <= maxIterations ){
+            solution=(a+b)/2.0;
+            if (func.applyAsDouble(a)*func.applyAsDouble(solution)>0){
+                a=solution;
+            }else{
+                b=solution;
+            }
+            
+            iterations++;
+            //System.out.print("\nIterations: "+iterations);
+        }
+        return ((a+b)/2);
+    }
+    
+    public static double bisectionPRO(DoubleUnaryOperator func, double a, double b,
                                int maxIterations, double tolerance)
         throws IllegalArgumentException, ArithmeticException
             
@@ -46,12 +67,12 @@ public class QImpliedVolCalc
           }
         else if (func.applyAsDouble(a)*func.applyAsDouble(b) > 0.0)
           {
-              /*
+            /*
             String message = "function values at " + a + " and " + b
                 +  " should have opposite signs; func.applyAsDouble(" + a + ") = " + func.applyAsDouble(a)
                 + ", func.applyAsDouble(" + b + ") = " + func.applyAsDouble(b);
             throw new IllegalArgumentException(message);
-              */
+            */
               return 0;
           }
           
@@ -71,6 +92,7 @@ public class QImpliedVolCalc
 
                 solution = (a + b) / 2.0;
                 ++iterations;
+              //  System.out.print("\nIterations: "+iterations);
               }
           }
 

@@ -7,6 +7,7 @@ package com.qaant.threadModels;
 
 
 import com.qaant.structures.Qunderlying;
+import java.util.Arrays;
 
 /**
  *
@@ -29,7 +30,7 @@ public class TBinomialJR extends TGenericModel implements Runnable{
         
     @Override
     public void run() {
-        //startTime   =System.currentTimeMillis();
+        startTime   =System.currentTimeMillis();
         drift       =(tipoContrato=='F')? 1: Math.exp(rate*interv);
         firstTerm   =(rate-0.5*Math.pow(volatModel,2))*interv;
         secondTerm  =volatModel*Math.sqrt(interv);
@@ -51,15 +52,23 @@ public class TBinomialJR extends TGenericModel implements Runnable{
         theta       =0;
         vega        =0;
         rho         =0;
+       
         
         if(optionMktValue>-1){
+            
             TBinomialJR optTheta  =new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration-1, rate, -1, steps);
             TBinomialJR optVega   =new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
             TBinomialJR optRho    =new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.0001, -1, steps);
           
             Thread worker1= new Thread(optTheta);
+            System.out.println("Theta Started");
+            
             Thread worker2= new Thread(optVega);
+            System.out.println("Vega Started");
+            
             Thread worker3= new Thread(optRho);
+            System.out.println("Rho Started");
+            
           
             worker1.start();
             worker2.start();
@@ -81,7 +90,8 @@ public class TBinomialJR extends TGenericModel implements Runnable{
         
         impliedVol=calcImpliedVlt();
         fillDerivativesArray();
-
+        
+        System.out.println("\nBinomial JR-Thread Call***inside thread:" + Arrays.toString(getDerivativesArray()[0]));
     }  
     protected double[][] buildUnderlyingTree(){
             

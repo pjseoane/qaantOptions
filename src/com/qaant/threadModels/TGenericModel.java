@@ -22,8 +22,8 @@ public abstract class TGenericModel extends Qoption implements QOptionable{
             
     public final static char EUROPEAN='E';
     public final static char AMERICAN='A';
-    protected double startTime, elapsedTime, interv;
-    protected double dayYear, sqrDayYear,payoff,z,underlyingNPV;
+    protected long startTime, elapsedTime;
+    protected double dayYear, sqrDayYear,payoff,z,underlyingNPV, interv;
     protected double prima=-2,delta=-2,gamma=-2,vega=-2,theta=-2,rho=-2,impliedVol=0;
     protected int cpFlag, modelNumber;
     protected boolean opcionConVida;
@@ -55,7 +55,7 @@ public abstract class TGenericModel extends Qoption implements QOptionable{
     
     
     private void build(){
-        startTime=System.currentTimeMillis();  
+        //startTime=System.currentTimeMillis();  
         
         this.dayYear              =daysToExpiration/365;
         this.sqrDayYear           =Math.sqrt(dayYear);

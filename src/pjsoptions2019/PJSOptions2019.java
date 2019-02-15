@@ -203,8 +203,8 @@ public class PJSOptions2019 {
         vh30Und      =0.30;
         riskFreeRate =.10;
         divYield     =0;
-        mktValue     =4;
-        steps           =1000;
+        mktValue     =3;
+        steps        =1000;
         
         someStock   = new Qunderlying(contrato, undValue, vh30Und, divYield);
         
@@ -212,20 +212,21 @@ public class PJSOptions2019 {
         
         System.out.print("\nCantidad procesadores......: "+processors);
         
-        double startTime=System.currentTimeMillis();
+        long startTime0=System.currentTimeMillis();
         
-        TBinomialJR tOptC =new TBinomialJR('A',someStock,'C', X,days,riskFreeRate,mktValue,steps);
-        TBinomialJR tOptP =new TBinomialJR('A',someStock,'P', X,days,riskFreeRate,mktValue,steps);
-        TBinomialJR tOpt3 =new TBinomialJR('E',someStock,'P', X,days,riskFreeRate,mktValue,steps);
+        TBinomialJR tOpt1 =new TBinomialJR('A',someStock,'C', X,days,riskFreeRate,mktValue,steps);
+   //     TBinomialJR tOpt2 =new TBinomialJR('A',someStock,'P', X,days,riskFreeRate,mktValue,steps);
+     //   TBinomialJR tOpt3 =new TBinomialJR('E',someStock,'P', X,days,riskFreeRate,mktValue,steps);
         
-        Thread worker0= new Thread(tOptC);
-        Thread worker1= new Thread(tOptP);
-        Thread worker2= new Thread(tOpt3);
+        Thread worker0= new Thread(tOpt1);
+     //   Thread worker1= new Thread(tOpt2);
+     //   Thread worker2= new Thread(tOpt3);
         
         worker0.start();
-        worker1.start();
-        worker2.start();
+       // worker1.start();
+       // worker2.start();
    
+        /*
         try{
             worker0.join();
             worker1.join();
@@ -233,11 +234,13 @@ public class PJSOptions2019 {
         }
         catch (InterruptedException e){
         }
+        */
+        System.out.println("\nBinomial AMER JR-Thread Call:" + Arrays.toString(tOpt1.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt1.getImpliedVlt());
+    //    System.out.println("Binomial AMER JR-Thread Put :" + Arrays.toString(tOpt2.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt2.getImpliedVlt());
+    //    System.out.println("Binomial EUR  JR-Thread Put :" + Arrays.toString(tOpt3.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt3.getImpliedVlt());
         
-        System.out.println("\nBinomial AMER JR-Thread Call:" + Arrays.toString(tOptC.getDerivativesArray()[0])+"Implied VLT.."+tOptC.getImpliedVlt());
-        System.out.println("Binomial AMER JR-Thread Put :" + Arrays.toString(tOptP.getDerivativesArray()[0])+"Implied VLT.."+tOptP.getImpliedVlt());
-        System.out.println("Binomial EUR  JR-Thread Put :" + Arrays.toString(tOpt3.getDerivativesArray()[0])+"Implied VLT.."+tOpt3.getImpliedVlt());
+        System.out.println("\nElapsed Time Total           :" + (System.currentTimeMillis()-startTime0));
         
-        System.out.println("\nElapsed Time                :" + (System.currentTimeMillis()-startTime));
+        
     }
 }
