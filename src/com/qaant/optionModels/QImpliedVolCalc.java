@@ -113,10 +113,11 @@ public class QImpliedVolCalc
     double dif=func.applyAsDouble(iv);
     
     while (Math.abs(dif)> tolerance && c < maxIterations ){  
+            //System.out.print("\nNewton count: "+c);
             dif=func.applyAsDouble(iv);    
             iv +=(dif/vega/100);
             c++;
-            }
+    }
     return iv; 
     //  throw new ArithmeticException("IV Vega Algorithm failed to converge");          
   }

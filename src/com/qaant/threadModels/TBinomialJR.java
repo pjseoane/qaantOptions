@@ -7,13 +7,14 @@ package com.qaant.threadModels;
 
 
 import com.qaant.structures.Qunderlying;
-import java.util.Arrays;
+
 
 /**
  *
  * @author pauli
  */
 public class TBinomialJR extends TGenericModel implements Runnable{
+    static {modelMap.put(4,"Binomial JR- Thread QAANT");}
     
     protected double u,d,p,drift,firstTerm,secondTerm;
     protected double[][]undTree,optTree,underlyingTree;
@@ -31,68 +32,74 @@ public class TBinomialJR extends TGenericModel implements Runnable{
     @Override
     public void run() {
         startTime   =System.currentTimeMillis();
-        drift       =(tipoContrato=='F')? 1: Math.exp(rate*interv);
-        firstTerm   =(rate-0.5*Math.pow(volatModel,2))*interv;
-        secondTerm  =volatModel*Math.sqrt(interv);
         
-        u           = Math.exp(firstTerm+secondTerm);
-        d           = Math.exp(firstTerm-secondTerm);
-        p           =(drift-d)/(u-d);
+        if (opcionConVida && strike !=0){
+            opcionConVida();
+        }else{
+            opcionSinVida();
+        }
+      
+    impliedVol=calcImpliedVlt();
+    fillDerivativesArray();
+    }
+    
+    private void opcionConVida(){
+            
+            drift       =(tipoContrato=='F')? 1: Math.exp(rate*interv);
+            firstTerm   =(rate-0.5*Math.pow(volatModel,2))*interv;
+            secondTerm  =volatModel*Math.sqrt(interv);
         
-        undTree     =buildUnderlyingTree();
-        optTree     =buildOptionTree();
+            u           = Math.exp(firstTerm+secondTerm);
+            d           = Math.exp(firstTerm-secondTerm);
+            p           =(drift-d)/(u-d);
         
-        prima       =optTree[0][0];
-        delta       =(optTree[1][1] - optTree[1][0]) / (undTree[1][1] - undTree[1][0]);
-        gamma       =((optTree[2][0] - optTree[2][1]) / (undTree[2][0] - undTree[2][1]) - (
+            undTree     =buildUnderlyingTree();
+            optTree     =buildOptionTree();
+        
+            prima       =optTree[0][0];
+            delta       =(optTree[1][1] - optTree[1][0]) / (undTree[1][1] - undTree[1][0]);
+            gamma       =((optTree[2][0] - optTree[2][1]) / (undTree[2][0] - undTree[2][1]) - (
                     optTree[2][1] - optTree[2][2]) / (undTree[2][1] - undTree[2][2])) / (
                                  (undTree[2][0] - undTree[2][2]) / 2);
         
-       // theta=(optTree[2][1] - optTree[0][0]) / (2 * 365 * interv);
-        theta       =0;
-        vega        =0;
-        rho         =0;
-       
-        
-        if(optionMktValue>-1){
+            // theta=(optTree[2][1] - optTree[0][0]) / (2 * 365 * interv);
+            theta       =0;
+            vega        =0;
+            rho         =0;
+              
+            if(optionMktValue>-1){
             
-            TBinomialJR optTheta  =new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration-1, rate, -1, steps);
-            TBinomialJR optVega   =new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
-            TBinomialJR optRho    =new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.0001, -1, steps);
+                TBinomialJR optTheta  =new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration-1, rate, -1, steps);
+                TBinomialJR optVega   =new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volatModel+0.01, dividendRate,callPut,  strike, daysToExpiration, rate, -1, steps);
+                TBinomialJR optRho    =new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volatModel, dividendRate,callPut,  strike, daysToExpiration, rate+0.0001, -1, steps);
           
-            Thread worker1= new Thread(optTheta);
-            //System.out.println("Theta Started");
+                Thread worker1= new Thread(optTheta);
+                Thread worker2= new Thread(optVega);
+                Thread worker3= new Thread(optRho);
             
-            Thread worker2= new Thread(optVega);
-            //System.out.println("Vega Started");
+                //Si se usa multithread aca con start() puede haber conflicto de variables
+                worker1.run();
+                worker2.run();
+                worker3.run();
             
-            Thread worker3= new Thread(optRho);
-            //System.out.println("Rho Started");
+                /*
+                worker1.start();
+                worker2.start();
+                worker3.start();
             
-          
-            worker1.start();
-            worker2.start();
-            worker3.start();
-        
-            try{
-                worker1.join();
-                worker2.join();
-                worker3.join();
-            }
-            catch (InterruptedException e){
-            }
-          
-            theta   =optTheta.getPrima()-prima;
-            vega    =optVega.getPrima()-prima;
-            rho     =(optRho.getPrima()-prima)*100;
-        }
-        
-        
-        impliedVol=calcImpliedVlt();
-        fillDerivativesArray();
-        
-      //  System.out.println("\nBinomial JR-Thread Call***inside thread:" + Arrays.toString(getDerivativesArray()[0]));
-    }  
+                try{
+                    worker1.join();
+                    worker2.join();
+                    worker3.join();
+                }
+                catch (InterruptedException e){
+                }
+                */
+                theta   =optTheta.getPrima()-prima;
+                vega    =optVega.getPrima()-prima;
+                rho     =(optRho.getPrima()-prima)*100;
+    }
+    }
     protected double[][] buildUnderlyingTree(){
             
             undTree=new double[steps+1][steps+1];
@@ -135,6 +142,5 @@ public class TBinomialJR extends TGenericModel implements Runnable{
        TBinomialJR opt= new TBinomialJR(tipoEjercicio,tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,-1,steps); 
        opt.run();
        return opt.getPrima();
-       
     }
 }

@@ -9,6 +9,7 @@ import com.qaant.optionModels.QImpliedVolCalc;
 import com.qaant.optionModels.QOptionable;
 import com.qaant.structures.Qoption;
 import com.qaant.structures.Qunderlying;
+import java.util.HashMap;
 import java.util.function.DoubleUnaryOperator;
 
 /**
@@ -34,7 +35,9 @@ public abstract class TGenericModel extends Qoption implements QOptionable{
     protected int MAXITERATIONS =50;
     protected double ACCURACY   =0.00009;
     
-        
+    public static final HashMap<Integer, String> modelMap =new HashMap<>();   
+    
+
     //Constructor 0:
     public TGenericModel() {build();}
     
@@ -64,14 +67,9 @@ public abstract class TGenericModel extends Qoption implements QOptionable{
         this.opcionConVida        =daysToExpiration>0;
         this.z                    =Math.exp(-rate*dayYear/steps);
         this.underlyingNPV        =underlyingValue*Math.exp(-dividendRate*dayYear); 
-        this.cpFlag              =(callPut==CALL)?1:-1;
+        this.cpFlag               =(callPut==CALL)?1:-1;
         
-        /*
-        if (!opcionConVida && strike ==0){
-             opcionSinVida();
-            
-        }
-        */
+       
     }// end of build()
     @Override
     abstract public void run(); //Cada modelo implementa runModel()
@@ -185,7 +183,7 @@ public abstract class TGenericModel extends Qoption implements QOptionable{
     protected double calcImpliedVlt(){
     impliedVol=volatModel;
             
-        if(optionMktValue>0 && opcionConVida){
+        if(optionMktValue>0 && opcionConVida && strike!=0){
             double volMin;
             double volMax;
         
@@ -198,9 +196,12 @@ public abstract class TGenericModel extends Qoption implements QOptionable{
             }
         //definicion de funcion para mandar a algo de impVlt (la dif entre valor mercado y valor teorico, buscamos que sea cero)      
         DoubleUnaryOperator opt1 = xVlt-> optionMktValue - modelGetPrima(xVlt);
-        impliedVol= QImpliedVolCalc.bisection(opt1, volMin, volMax, MAXITERATIONS, ACCURACY);
+        //impliedVol= QImpliedVolCalc.bisection(opt1, volMin, volMax, MAXITERATIONS, ACCURACY);
+       impliedVol= QImpliedVolCalc.ivNewton(opt1, volatModel, vega, MAXITERATIONS,  ACCURACY);
+                   
               
         }
+        //System.out.println("Implied Vol   :"+impliedVol);
     return impliedVol;
     }
    
