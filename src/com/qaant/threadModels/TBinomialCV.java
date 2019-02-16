@@ -33,16 +33,40 @@ public class TBinomialCV extends TGenericModel implements QOptionable,Runnable{
     }
     
     @Override
-    //public void runModel(){
-             public void run() {
-        
-        pModelName="Binomial CV- QAANT";
-        modelNumber=5;
+    public void run(){
+        startTime   =System.currentTimeMillis();
+        if (opcionConVida && strike !=0){
+            opcionConVida();
+        }else{
+            opcionSinVida();
+        }
+      
+    impliedVol=calcImpliedVlt();
+    fillDerivativesArray();
+    }
+    
+    private void opcionConVida(){
                
-        QBinomialJRudd amerOpt = new QBinomialJRudd('A',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
-        QBinomialJRudd euroOpt = new QBinomialJRudd('E',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
-        QBlackScholes bsOpt             = new QBlackScholes(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue);
+        TBinomialJR amerOpt = new TBinomialJR('A',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
+        TBinomialJR euroOpt = new TBinomialJR('E',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
+        TBlackScholes bsOpt = new TBlackScholes(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue);
    
+        Thread worker0= new Thread(amerOpt);
+        Thread worker1= new Thread(euroOpt);
+        Thread worker2= new Thread(bsOpt);
+        
+        worker0.start();
+        worker1.start();
+        worker2.start();
+           
+        try{
+            worker0.join();
+            worker1.join();
+            worker2.join();
+        }
+        catch (InterruptedException e){
+        }
+        
         prima=amerOpt.getPrima()+bsOpt.getPrima()-euroOpt.getPrima();
         delta=amerOpt.getDelta()+bsOpt.getDelta()-euroOpt.getDelta();
         gamma=amerOpt.getGamma()+bsOpt.getGamma()-euroOpt.getGamma();
@@ -54,6 +78,9 @@ public class TBinomialCV extends TGenericModel implements QOptionable,Runnable{
    
     @Override
     protected double modelGetPrima(double volForLambda){
-        return new TBinomialCV(tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,-1,steps).getPrima();
+       TBinomialCV opt= new TBinomialCV(tipoContrato, underlyingValue, volForLambda,dividendRate, callPut, strike, daysToExpiration,rate,-1,steps); 
+       opt.run();
+       return opt.getPrima();
+        
     }
 }

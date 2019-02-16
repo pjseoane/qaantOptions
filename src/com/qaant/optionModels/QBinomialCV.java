@@ -40,7 +40,7 @@ public class QBinomialCV extends QAbstractModel implements QOptionable{
                
         QBinomialJRudd amerOpt = new QBinomialJRudd('A',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
         QBinomialJRudd euroOpt = new QBinomialJRudd('E',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
-        QBlackScholes bsOpt             = new QBlackScholes(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue);
+        QBlackScholes bsOpt    = new QBlackScholes(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue);
    
         prima=amerOpt.getPrima()+bsOpt.getPrima()-euroOpt.getPrima();
         delta=amerOpt.getDelta()+bsOpt.getDelta()-euroOpt.getDelta();

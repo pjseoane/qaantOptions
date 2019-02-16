@@ -292,13 +292,15 @@ public class PJSOptions2019 {
         
         worker7.start();
         worker8.start();
-           
+        
+        
         try{
             worker7.join();
             worker8.join();
             }
         catch (InterruptedException e){
         }
+        
         System.out.println("\nBlack Scholes-Thread Call:" + Arrays.toString(tOpt7.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt1.getImpliedVlt());
         System.out.println("Black Scholes-Thread Put :" + Arrays.toString(tOpt8.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt2.getImpliedVlt());
         
