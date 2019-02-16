@@ -207,10 +207,10 @@ public abstract class TGenericModel extends Qoption implements QOptionable{
                 volMax=volatModel;
             }
         //definicion de funcion para mandar a algo de impVlt (la dif entre valor mercado y valor teorico, buscamos que sea cero)      
-        DoubleUnaryOperator opt1 = xVlt-> optionMktValue - modelGetPrima(xVlt);
-        //impliedVol= QImpliedVolCalc.bisection(opt1, volMin, volMax, MAXITERATIONS, ACCURACY);
-       impliedVol= QImpliedVolCalc.ivNewton(opt1, volatModel, vega, MAXITERATIONS,  ACCURACY);
-                   
+        DoubleUnaryOperator difFunc = xVlt-> optionMktValue - modelGetPrima(xVlt);
+       // impliedVol= QImpliedVolCalc.bisection(difFunc, volMin, volMax, MAXITERATIONS, ACCURACY);
+       // impliedVol= QImpliedVolCalc.ivNewton(difFunc, volatModel, vega, MAXITERATIONS,  ACCURACY);
+        impliedVol= QImpliedVolCalc.turboNewton(difFunc, volatModel, vega, MAXITERATIONS,  ACCURACY);        
               
         }
         //System.out.println("Implied Vol   :"+impliedVol);

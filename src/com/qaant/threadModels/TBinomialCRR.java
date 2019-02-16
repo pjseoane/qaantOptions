@@ -70,8 +70,18 @@ public class TBinomialCRR extends TBinomialJR implements Runnable{
             Thread worker1= new Thread(optVega);
             Thread worker2= new Thread(optRho);
             
-            worker1.run();
-            worker2.run();
+            worker1.start();
+            worker2.start();
+            
+             try{
+                    worker1.join();
+                    worker2.join();
+                  
+                }
+                catch (InterruptedException e){
+                }
+            
+                        
             vega=optVega.getPrima()-prima;
             rho=(optRho.getPrima()-prima)*100;
         }

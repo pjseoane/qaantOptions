@@ -14,12 +14,12 @@ public class QImpliedVolCalc
     /**
      * Apply the bisection algorithm to solve an equation of the form
      * f(x) = 0, where f is continuous on an interval [a, b], and f(a)
-     * and f(b) have opposite signs.  The algorithm returns a solution
-     * x if either f(x) == 0.0 or x differs from a root by less than
-     * the specified tolerance.
-     * 
-     * //@param df implements the function f for the equation to solve//
+     * and f(b) have opposite signs.The algorithm returns a solution
+ x if either f(x) == 0.0 or x differs from a root by less than
+ the specified tolerance.//@param df implements the function f for the equation to solve//
      * @param func the function to be integrated
+     * @param left
+     * @param right
      * @param a  the lower bound of interval containing the solution
      * @param b  the upper bound of interval containing the solution
      * @param maxIterations the maximum number of iterations to attempt
@@ -37,22 +37,26 @@ public class QImpliedVolCalc
     public static double bisection(DoubleUnaryOperator func, double a, double b,
                                int maxIterations, double tolerance){
         int    iterations       = 0;  
-        double solution         = 0;
-        //double funcAtSolution   ;
+        double solution         = (a+b)/2.0;
+        double funcAtLeft,funcAtRight   ;
+        double difFunc=1;
         
-        while (Math.abs(b-a) > tolerance && iterations <= maxIterations){
+        while (Math.abs(b-a) > tolerance && iterations <= maxIterations && Math.abs(difFunc)> tolerance){
        //while (Math.abs(solution)>tolerance && iterations <= maxIterations ){
-            solution=(a+b)/2.0;
-            if (func.applyAsDouble(a)*func.applyAsDouble(solution)>0){
+            funcAtLeft  =func.applyAsDouble(a);
+            funcAtRight =func.applyAsDouble(solution);
+            difFunc     =funcAtLeft-funcAtRight;
+            
+            if (funcAtLeft*funcAtRight>0){
                 a=solution;
             }else{
                 b=solution;
             }
-            
+            solution=(a+b)/2.0;
             iterations++;
            // System.out.print("\nIterations: "+iterations);
         }
-        return ((a+b)/2);
+        return solution;
     }
     
     public static double bisectionPRO(DoubleUnaryOperator func, double a, double b,
@@ -99,11 +103,7 @@ public class QImpliedVolCalc
         throw new ArithmeticException("Bisection Algorithm failed to converge");
       }
     
-    /*
-    *Using Vega
-    *
-    *
-    */
+    
   public static double ivNewton(DoubleUnaryOperator func, double vol, double vega,
                                int maxIterations, double tolerance){
         //throws IllegalArgumentException, ArithmeticException{
@@ -114,12 +114,36 @@ public class QImpliedVolCalc
     
     while (Math.abs(dif)> tolerance && c < maxIterations ){  
             //System.out.print("\nNewton count: "+c);
-            dif=func.applyAsDouble(iv);    
             iv +=(dif/vega/100);
+            dif=func.applyAsDouble(iv);    
+            
             c++;
     }
     return iv; 
     //  throw new ArithmeticException("IV Vega Algorithm failed to converge");          
   }
   
+  public static double turboNewton(DoubleUnaryOperator func, double vol, double vega,
+                               int maxIterations, double tolerance){
+      double iv=vol;
+      double ivAnt=vol;
+      double dif=func.applyAsDouble(iv);
+      double a,b;
+      //loopea 3 veces suficiente para aproximar la IV y luego hace biseccion, por si eventualmente se va a la mierda con vega
+      for(int i=0;i<3;i++){
+          ivAnt=iv;
+          iv +=(dif/vega/100);
+          dif=func.applyAsDouble(iv);    
+      }
+      
+      if (iv<=ivAnt){
+          a=iv;
+          b=ivAnt;
+      }else{
+          a=ivAnt;
+          b=iv;
+      }
+     // System.out.println("a y b antes de entrar a biseccion "+" "+a+" "+b);
+      return (bisection(func, a, b,maxIterations, tolerance));
+    }
 }

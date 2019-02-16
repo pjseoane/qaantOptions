@@ -77,12 +77,12 @@ public class TBinomialJR extends TGenericModel implements Runnable{
                 Thread worker2= new Thread(optVega);
                 Thread worker3= new Thread(optRho);
             
-                //Si se usa multithread aca con start() puede haber conflicto de variables
-                worker1.run();
-                worker2.run();
-                worker3.run();
+                //Si se usa multithread aca con start() puede haber conflicto de variables???
+                //worker1.run();
+                //worker2.run();
+                //worker3.run();
             
-                /*
+                
                 worker1.start();
                 worker2.start();
                 worker3.start();
@@ -94,7 +94,7 @@ public class TBinomialJR extends TGenericModel implements Runnable{
                 }
                 catch (InterruptedException e){
                 }
-                */
+               
                 theta   =optTheta.getPrima()-prima;
                 vega    =optVega.getPrima()-prima;
                 rho     =(optRho.getPrima()-prima)*100;
