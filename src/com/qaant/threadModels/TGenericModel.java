@@ -41,6 +41,18 @@ public abstract class TGenericModel extends Qoption implements QOptionable{
     //Constructor 0:
     public TGenericModel() {build();}
     
+    //Constructor 1:
+    public TGenericModel (Qunderlying und, char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
+        super(und, callPut, strike,daysToExpiration,rate, optionMktValue);
+        build();
+    }
+    
+    //Constructor 2:
+     public TGenericModel (char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue){
+        super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike,daysToExpiration,rate, optionMktValue);
+        build();
+    }
+     
     //Constructor 3:
     public TGenericModel (char tipoEjercicio, char tipoContrato, double underlyingValue,double underlyingHistVolatility,double dividendRate,char callPut, double strike,double daysToExpiration,double rate,double optionMktValue,int steps){
         super(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike,daysToExpiration,rate, optionMktValue,steps);

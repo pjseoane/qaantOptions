@@ -21,6 +21,7 @@ import java.util.Arrays;
 import com.qaant.structures.Qunderlying;
 import com.qaant.threadModels.TBinomialCRR;
 import com.qaant.threadModels.TBinomialJR;
+import com.qaant.threadModels.TBlackScholes;
 import java.util.ArrayList;
 //import java.util.function.Consumer;
 /**
@@ -277,6 +278,29 @@ public class PJSOptions2019 {
         System.out.println("\nBinomial AMER CRR-Thread Call:" + Arrays.toString(tOpt4.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt1.getImpliedVlt());
         System.out.println("Binomial AMER CRR-Thread Put :" + Arrays.toString(tOpt5.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt2.getImpliedVlt());
         System.out.println("Binomial EUR  CRR-Thread Put :" + Arrays.toString(tOpt6.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt3.getImpliedVlt());
+        
+        System.out.println("\nElapsed Time Total           :" + (System.currentTimeMillis()-startTime));
+        
+        //*****************************************************************************************
+        // Estudio BS
+        startTime= System.currentTimeMillis();
+        TBlackScholes tOpt7 =new TBlackScholes(someStock,'C', X,days,riskFreeRate,mktValue);
+        TBlackScholes tOpt8 =new TBlackScholes(someStock,'P', X,days,riskFreeRate,mktValue);
+       
+        Thread worker7= new Thread(tOpt7);
+        Thread worker8= new Thread(tOpt8);
+        
+        worker7.start();
+        worker8.start();
+           
+        try{
+            worker7.join();
+            worker8.join();
+            }
+        catch (InterruptedException e){
+        }
+        System.out.println("\nBlack Scholes-Thread Call:" + Arrays.toString(tOpt7.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt1.getImpliedVlt());
+        System.out.println("Black Scholes-Thread Put :" + Arrays.toString(tOpt8.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt2.getImpliedVlt());
         
         System.out.println("\nElapsed Time Total           :" + (System.currentTimeMillis()-startTime));
         
