@@ -5,7 +5,7 @@
  */
 package com.qaant.threadModels;
 
-import com.qaant.optionModels.*;
+
 import com.qaant.structures.Qunderlying;
 
 
@@ -13,7 +13,7 @@ import com.qaant.structures.Qunderlying;
  *
  * @author pauli
  */
-public class TBinomialCRR extends TBinomialJR implements QOptionable,Runnable{
+public class TBinomialCRR extends TBinomialJR implements Runnable{
     static {modelMap.put(3,"Binomial CRR- Thread QAANT");}
    
     

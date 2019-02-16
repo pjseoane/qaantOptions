@@ -7,7 +7,7 @@
 package com.qaant.threadModels;
 
 
-import com.qaant.optionModels.*;
+
 import org.apache.commons.math3.distribution.NormalDistribution;
 import com.qaant.structures.Qunderlying;
 
@@ -15,7 +15,7 @@ import com.qaant.structures.Qunderlying;
  *
  * @author pseoane Modelo OK, chequeado valores aca: http://www.math.drexel.edu/~pg/fin/VanillaCalculator.html
  */
-public class TBlackScholes extends TGenericModel implements QOptionable,Runnable{
+public class TBlackScholes extends TGenericModel implements Runnable{
     
     
     static {modelMap.put(1,"Black Scholes -QAANT");}

@@ -5,7 +5,7 @@
  */
 package com.qaant.threadModels;
 
-import com.qaant.optionModels.*;
+
 import com.qaant.structures.Qunderlying;
 
 /**
@@ -20,7 +20,7 @@ binomial american+bseuropean-binomialeuropean.
 Hull pag 333 y 351
 */
 
-public class TBinomialCV extends TGenericModel implements QOptionable,Runnable{
+public class TBinomialCV extends TGenericModel implements Runnable{
     static {modelMap.put(5,"Binomial CV- QAANT");}
     
     
@@ -47,8 +47,8 @@ public class TBinomialCV extends TGenericModel implements QOptionable,Runnable{
     
     private void opcionConVida(){
                
-        TBinomialJR amerOpt = new TBinomialJR('A',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
-        TBinomialJR euroOpt = new TBinomialJR('E',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
+        TBinomialCRR amerOpt = new TBinomialCRR('A',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
+        TBinomialCRR euroOpt = new TBinomialCRR('E',tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue,steps);
         TBlackScholes bsOpt = new TBlackScholes(tipoContrato, underlyingValue, underlyingHistVolatility, dividendRate,callPut, strike, daysToExpiration, rate, optionMktValue);
    
         Thread worker0= new Thread(amerOpt);
