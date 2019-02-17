@@ -15,6 +15,7 @@ import com.qaant.optionModels.QBlackScholes;
 import com.qaant.optionModels.QBinomialCRR;
 import com.qaant.optionModels.QEFHull;
 import com.qaant.optionModels.QEFWilmott;
+import com.qaant.optionModels.QOptionable;
 
 
 import java.util.Arrays;
@@ -23,6 +24,7 @@ import com.qaant.threadModels.TBinomialCRR;
 import com.qaant.threadModels.TBinomialCV;
 import com.qaant.threadModels.TBinomialJR;
 import com.qaant.threadModels.TBlackScholes;
+import com.qaant.threadModels.TGenericModel;
 import com.qaant.threadModels.TWhaley;
 import java.util.ArrayList;
 //import java.util.function.Consumer;
@@ -55,25 +57,20 @@ public class PJSOptions2019 {
         
         Qunderlying someStock   = new Qunderlying(contrato, undValue, vh30Und, divYield);
         
-        ArrayList<QAbstractModel> arrayListOptions =new ArrayList <>();
-        
        
-       //QBlackScholes       op1 =new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
+        
+        /*
+        //QBlackScholes       op1 =new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
         QAbstractModel       op1 =new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
         QAbstractModel   opJReur =new QBinomialJRudd('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
         QAbstractModel   opCRReur=new QBinomialCRR('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
         QAbstractModel   opEFHeur=new QEFHull ('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
         QAbstractModel   opEFWeur=new QEFWilmott ('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
         
-        arrayListOptions.add(op1);
-        arrayListOptions.add(opJReur);
-        arrayListOptions.add(opCRReur);
-        arrayListOptions.add(opEFHeur);
-        arrayListOptions.add(opEFWeur);
+       
          
          
-         
-         arrayListOptions.get(0);
+        
         
        // Thread t1   =new Thread(op1);
         //t1.start();
@@ -84,7 +81,7 @@ public class PJSOptions2019 {
         System.out.println("Binomial EUR CRR-QAANT:" + Arrays.toString(opCRReur.getDerivativesArray()[0])+"Implied VLT.."+opCRReur.getImpliedVlt());
         System.out.println("EF Hulll EUR CRR-QAANT:" + Arrays.toString(opEFHeur.getDerivativesArray()[0])+"Implied VLT.."+opEFHeur.getImpliedVlt());
         System.out.println("EF Wilmott EUR CRR-QAANT:" + Arrays.toString(opEFWeur.getDerivativesArray()[0])+"Implied VLT.."+opEFWeur.getImpliedVlt());
-        
+        */
         
         System.out.println("\nTEST AMERICAN :\n");
         
@@ -197,7 +194,9 @@ public class PJSOptions2019 {
         System.out.println ("Price Range....:"+Arrays.toString(ticket1.getUnderlyingPriceRange()[0]));
         System.out.println ("PL Output.....:"+Arrays.toString(ticket1.getPLOutput()[0]));
         
-        //********* Estudio Threads
+        //********************************** Estudio Threads
+        ArrayList<TBinomialJR> arrayListOptions =new ArrayList <>();
+        
         
         contrato     ='F';
         option       ='P';
@@ -218,42 +217,39 @@ public class PJSOptions2019 {
         
         long startTime=System.currentTimeMillis();
         
-        TBinomialJR tOpt1 =new TBinomialJR('A',someStock,'C', X,days,riskFreeRate,mktValue,steps);
-        TBinomialJR tOpt2 =new TBinomialJR('A',someStock,'P', X,days,riskFreeRate,mktValue,steps);
-        TBinomialJR tOpt3 =new TBinomialJR('E',someStock,'P', X,days,riskFreeRate,mktValue,steps);
+        TBinomialJR JRAC =new TBinomialJR('A',someStock,'C', X,days,riskFreeRate,mktValue,steps);
+        TBinomialJR JRAP =new TBinomialJR('A',someStock,'P', X,days,riskFreeRate,mktValue,steps);
+        TBinomialJR JREP =new TBinomialJR('E',someStock,'P', X,days,riskFreeRate,mktValue,steps);
         
-        Thread worker0= new Thread(tOpt1);
-        Thread worker1= new Thread(tOpt2);
-        Thread worker2= new Thread(tOpt3);
+        arrayListOptions.add(JRAC);
+        arrayListOptions.add(JRAP);
+        arrayListOptions.add(JREP);
+        //arrayListOptions.add(opEFHeur);
+        //arrayListOptions.add(opEFWeur);
         
-        worker0.start();
-        worker1.start();
-        worker2.start();
+        Thread[] worker = new Thread[arrayListOptions.size()];
+        
+        
+        System.out.println("\nNumero elementos: "+arrayListOptions.size());
+       
+        for (int i=0 ;i<arrayListOptions.size();i++){
+           worker[i] = new Thread(arrayListOptions.get(i));
+           worker[i].start();
+        }
+       
+        for (int i=0 ;i<arrayListOptions.size();i++){
+            try{
+                worker[i].join();
+            }
+            catch (InterruptedException e){
+            }
+        }
+         for (int i=0 ;i<arrayListOptions.size();i++){
+             System.out.println("Binomial JR-Thread:" + Arrays.toString(arrayListOptions.get(i).getDerivativesArray()[0]));//+"Implied VLT.."+tOpt1.getImpliedVlt());
+        
+         }
+         System.out.println("\nElapsed Time Total           :" + (System.currentTimeMillis()-startTime));
            
-        try{
-            worker0.join();
-            worker1.join();
-            worker2.join();
-        }
-        catch (InterruptedException e){
-        }
-        
-        System.out.println("\nBinomial AMER JR-Thread Call:" + Arrays.toString(tOpt1.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt1.getImpliedVlt());
-        System.out.println("Binomial AMER JR-Thread Put :" + Arrays.toString(tOpt2.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt2.getImpliedVlt());
-        System.out.println("Binomial EUR  JR-Thread Put :" + Arrays.toString(tOpt3.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt3.getImpliedVlt());
-        
-        System.out.println("\nElapsed Time Total           :" + (System.currentTimeMillis()-startTime));
-        
-        startTime= System.currentTimeMillis();
-        QBinomialJRudd opJRC1=new QBinomialJRudd('A',someStock,'C', X,days,riskFreeRate,mktValue,steps);
-        QBinomialJRudd opJRP1=new QBinomialJRudd('A',someStock,'P', X,days,riskFreeRate,mktValue,steps);
-        QBinomialJRudd opJRE1=new QBinomialJRudd('E',someStock,'P', X,days,riskFreeRate,mktValue,steps);
-        
-        System.out.println("\nBinomial AMER JR- Call:" + Arrays.toString(opJRC1.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt1.getImpliedVlt());
-        System.out.println("Binomial AMER JR- Put :" + Arrays.toString(opJRP1.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt2.getImpliedVlt());
-        System.out.println("Binomial EUR  JR- Put :" + Arrays.toString(opJRE1.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt3.getImpliedVlt());
-        
-        System.out.println("\nElapsed Time Total           :" + (System.currentTimeMillis()-startTime));
         
         //*****************************************************************************************
         // Estudio CRR
@@ -336,17 +332,16 @@ public class PJSOptions2019 {
         
         //***********************************************************
         // Estudio Whaley Thread
-        startTime= System.currentTimeMillis();
-        TWhaley tOptWC =new TWhaley(someStock,'C', X,days,riskFreeRate,mktValue);
-        TWhaley tOptWP =new TWhaley(someStock,'P', X,days,riskFreeRate,mktValue);
+        startTime       = System.currentTimeMillis();
+        TWhaley tOptWC  =new TWhaley(someStock,'C', X,days,riskFreeRate,mktValue);
+        TWhaley tOptWP  =new TWhaley(someStock,'P', X,days,riskFreeRate,mktValue);
        
-        Thread worker11= new Thread(tOptWC);
-        Thread worker12= new Thread(tOptWP);
+        Thread worker11 = new Thread(tOptWC);
+        Thread worker12 = new Thread(tOptWP);
         
         worker11.start();
         worker12.start();
-        
-        
+                
         try{
             worker11.join();
             worker12.join();

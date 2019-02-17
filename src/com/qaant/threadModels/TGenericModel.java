@@ -16,7 +16,7 @@ import java.util.function.DoubleUnaryOperator;
  *
  * @author pauli
  */
-public abstract class TGenericModel extends Qoption implements QOptionable{
+public abstract class TGenericModel extends Qoption implements QOptionable,Runnable{
     
     protected char tipoEjercicio;
     enum TipoEjercicio {AMERICAN,EUROPEAN}
@@ -225,8 +225,6 @@ public abstract class TGenericModel extends Qoption implements QOptionable{
         gamma=vega=theta=rho=0;
         prima = payoff(underlyingValue,strike,cpFlag);
       
-        //delta=(prima==0)?0:cpFlag;
-       
     }
     
     protected double payoff(double underlyingValue, double strike, int cpFlag){
