@@ -113,6 +113,7 @@ public abstract class TGenericModel extends Qoption implements QOptionable,Runna
     public void setOptionUndValue(double optUndValue){
         this.underlyingValue=optUndValue;
         build();
+        
     }
     
     

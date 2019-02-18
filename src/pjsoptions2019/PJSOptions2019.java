@@ -290,8 +290,7 @@ public class PJSOptions2019 {
         
         worker7.start();
         worker8.start();
-        
-        
+                
         try{
             worker7.join();
             worker8.join();
@@ -351,8 +350,25 @@ public class PJSOptions2019 {
         
         System.out.println("\nWhaley-Thread Call:" + Arrays.toString(tOptWC.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt1.getImpliedVlt());
         System.out.println("Whaley-Thread Put :" + Arrays.toString(tOptWP.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt2.getImpliedVlt());
-        
         System.out.println("\nElapsed Time Total           :" + (System.currentTimeMillis()-startTime));
+        
+        //***********************************
+        
+        JRAC.setOptionUndValue(undValue*.99);
+        JRAC.run();
+        
+        
+        System.out.println ("CRR Caida 1%...:"+ Arrays.toString(JRAC.getDerivativesArray()[0]));
+        
+        //***
+        //El .run() podria incluirse en el method en TGenericModel, pero de esa forma no se maneja el Thread
+        //Aqui se puede poner .run() o mandar a un thread
+        JRAC.setOptionUndValue(undValue*1.01);
+        JRAC.run();
+        
+        System.out.println ("CRR Suba 1%...:"+ Arrays.toString(JRAC.getDerivativesArray()[0]));
+        System.out.println ("und value...:"+ JRAC.getUnderlyingValue());
+        
         
     }
 }
