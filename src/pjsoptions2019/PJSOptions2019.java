@@ -26,6 +26,7 @@ import com.qaant.threadModels.TBinomialJR;
 import com.qaant.threadModels.TBlackScholes;
 import com.qaant.threadModels.TGenericModel;
 import com.qaant.threadModels.TWhaley;
+import com.qaant.threadModels.Tticket;
 import java.util.ArrayList;
 //import java.util.function.Consumer;
 /**
@@ -189,7 +190,7 @@ public class PJSOptions2019 {
         Qunderlying RFX20Mar    = new Qunderlying(contrato, undValue, vh30Und, divYield);
         QWhaley       opw       = new QWhaley (RFX20Mar, option, X,days,riskFreeRate,mktValue);
         
-        Qticket     ticket1     = new Qticket (opw,1,mktValue,1,10);// +/-lots,price,multiplier,nodes
+        Qticket     ticket1     = new Qticket (opw,1,mktValue,1,10);// option,+/-lots,price,multiplier,nodes
         
         System.out.println ("Price Range....:"+Arrays.toString(ticket1.getUnderlyingPriceRange()[0]));
         System.out.println ("PL Output.....:"+Arrays.toString(ticket1.getPLOutput()[0]));
@@ -369,6 +370,33 @@ public class PJSOptions2019 {
         System.out.println ("CRR Suba 1%...:"+ Arrays.toString(JRAC.getDerivativesArray()[0]));
         System.out.println ("und value...:"+ JRAC.getUnderlyingValue());
         
+        //******* Tickets & Book *************************
+        ArrayList<Tticket> book =new ArrayList <>();
         
+        Tticket     ticket     = new Tticket (tOptWC,1,3.15,1,10);// option,+/-lots,price,multiplier,nodes
+        Tticket     ticket2    = new Tticket (tOptWC,1,3.00,1,10);
+        book.add(ticket);
+        book.add(ticket2);
+        
+        Thread[] ticketWorkers = new Thread[book.size()];
+        
+        for (int i=0 ;i<book.size();i++){
+           ticketWorkers[i] = new Thread(book.get(i));
+           ticketWorkers[i].start();
+        }
+       
+        for (int i=0 ;i<book.size();i++){
+            try{
+                ticketWorkers[i].join();
+            }
+            catch (InterruptedException e){
+            }
+        }
+        
+        System.out.println ("Price Range....:"+Arrays.toString(ticket.getUnderlyingPriceRange()[0]));
+        
+        for (int i=0 ;i<book.size();i++){
+            System.out.println ("PL Output.....:"+Arrays.toString(book.get(i).getPLOutput()[0]));
+        }
     }
 }
