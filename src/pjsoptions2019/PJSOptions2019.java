@@ -6,17 +6,6 @@
 package pjsoptions2019;
 
 
-import bookPosition.Qticket;
-import com.qaant.optionModels.QAbstractModel;
-import com.qaant.optionModels.QWhaley;
-import com.qaant.optionModels.QBinomialJRudd;
-import com.qaant.optionModels.QBinomialCV;
-import com.qaant.optionModels.QBlackScholes;
-import com.qaant.optionModels.QBinomialCRR;
-import com.qaant.optionModels.QEFHull;
-import com.qaant.optionModels.QEFWilmott;
-import com.qaant.optionModels.QOptionable;
-
 
 import java.util.Arrays;
 import com.qaant.structures.Qunderlying;
@@ -24,7 +13,6 @@ import com.qaant.threadModels.TBinomialCRR;
 import com.qaant.threadModels.TBinomialCV;
 import com.qaant.threadModels.TBinomialJR;
 import com.qaant.threadModels.TBlackScholes;
-import com.qaant.threadModels.TGenericModel;
 import com.qaant.threadModels.TWhaley;
 import com.qaant.threadModels.Tticket;
 import java.util.ArrayList;
@@ -54,163 +42,11 @@ public class PJSOptions2019 {
         int steps           =1000;
         
         
-        System.out.println("TEST EUROPEAN :\n");
-        
         Qunderlying someStock   = new Qunderlying(contrato, undValue, vh30Und, divYield);
-        
        
-        
-        /*
-        //QBlackScholes       op1 =new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
-        QAbstractModel       op1 =new QBlackScholes (someStock, option, X,days,riskFreeRate,mktValue);
-        QAbstractModel   opJReur =new QBinomialJRudd('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        QAbstractModel   opCRReur=new QBinomialCRR('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        QAbstractModel   opEFHeur=new QEFHull ('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        QAbstractModel   opEFWeur=new QEFWilmott ('E',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        
-       
-         
-         
-        
-        
-       // Thread t1   =new Thread(op1);
-        //t1.start();
-        
-        
-        System.out.println("Black Scholes -QAANT  :" + Arrays.toString(op1.getDerivativesArray()[0])+"Implied VLT.."+op1.getImpliedVlt());
-        System.out.println("Binomial EUR JR -QAANT:" + Arrays.toString(opJReur.getDerivativesArray()[0])+"Implied VLT.."+opJReur.getImpliedVlt());
-        System.out.println("Binomial EUR CRR-QAANT:" + Arrays.toString(opCRReur.getDerivativesArray()[0])+"Implied VLT.."+opCRReur.getImpliedVlt());
-        System.out.println("EF Hulll EUR CRR-QAANT:" + Arrays.toString(opEFHeur.getDerivativesArray()[0])+"Implied VLT.."+opEFHeur.getImpliedVlt());
-        System.out.println("EF Wilmott EUR CRR-QAANT:" + Arrays.toString(opEFWeur.getDerivativesArray()[0])+"Implied VLT.."+opEFWeur.getImpliedVlt());
-        */
-        
-        System.out.println("\nTEST AMERICAN :\n");
-        
-        QBinomialJRudd opJRamer     =new QBinomialJRudd('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        QBinomialCRR opCRRamer      =new QBinomialCRR('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        QBinomialCV opCVamer        =new QBinomialCV(someStock,option, X,days,riskFreeRate,mktValue,steps);
-        QWhaley opW2                =new QWhaley (someStock, option, X,days,riskFreeRate,mktValue);
-        QEFHull         opEFHamer   =new QEFHull ('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        QEFWilmott      opEFWamer   =new QEFWilmott ('A',someStock,option, X,days,riskFreeRate,mktValue,steps);
-        
-        
-        System.out.println("Binomial AMER JR-QAANT:" + Arrays.toString(opJRamer.getDerivativesArray()[0])+"Implied VLT.."+opJRamer.getImpliedVlt());
-        System.out.println("Binomial AMER CRR-QAANT:" + Arrays.toString(opCRRamer.getDerivativesArray()[0])+"Implied VLT.."+opCRRamer.getImpliedVlt());
-        System.out.println("Binomial AMER CV-QAANT:" + Arrays.toString(opCVamer.getDerivativesArray()[0])+"Implied VLT.."+opCVamer.getImpliedVlt());
-        System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Implied VLT.."+opW2.getImpliedVlt());
-        System.out.println("EF Hull -QAANT  :" + Arrays.toString(opEFHamer.getDerivativesArray()[0])+"Implied VLT.."+opW2.getImpliedVlt());
-        System.out.println("EF Wilmott -QAANT  :" + Arrays.toString(opEFWamer.getDerivativesArray()[0])+"Implied VLT.."+opW2.getImpliedVlt());
-        
-        
-        System.out.println("\nTEST Put/Call Parity :\n");
-        
-        opJRamer=new QBinomialJRudd('A',someStock,'C', X,days,riskFreeRate,mktValue,steps);
-        System.out.println("Binomial AMER JR-QAANT:" + Arrays.toString(opJRamer.getDerivativesArray()[0])+"Implied VLT.."+opJRamer.getImpliedVlt());
-        
-        opJRamer=new QBinomialJRudd('A',someStock,'P', X,days,riskFreeRate,mktValue,steps);
-        System.out.println("Binomial AMER JR-QAANT:" + Arrays.toString(opJRamer.getDerivativesArray()[0])+"Implied VLT.."+opJRamer.getImpliedVlt());
-        
-        System.out.println("\n");
-        opCRRamer= new QBinomialCRR('A',someStock,'C', X,days,riskFreeRate,mktValue,steps);
-        System.out.println("Binomial AMER CRR-QAANT:" + Arrays.toString(opCRRamer.getDerivativesArray()[0])+"Implied VLT.."+opCRRamer.getImpliedVlt());
-        opCRRamer= new QBinomialCRR('A',someStock,'P', X,days,riskFreeRate,mktValue,steps);
-        System.out.println("Binomial AMER CRR-QAANT:" + Arrays.toString(opCRRamer.getDerivativesArray()[0])+"Implied VLT.."+opCRRamer.getImpliedVlt());
-        
-        System.out.println("\n");
-        opCVamer=new QBinomialCV(someStock,'C', X,days,riskFreeRate,mktValue,steps);
-        System.out.println("Binomial AMER CV-QAANT:" + Arrays.toString(opCVamer.getDerivativesArray()[0])+"Implied VLT.."+opCVamer.getImpliedVlt());
-        opCVamer=new QBinomialCV(someStock,'P', X,days,riskFreeRate,mktValue,steps);
-        System.out.println("Binomial AMER CV-QAANT:" + Arrays.toString(opCVamer.getDerivativesArray()[0])+"Implied VLT.."+opCVamer.getImpliedVlt());
-        
-        System.out.println("\n");
-        opW2=new QWhaley (someStock, 'C', X,days,riskFreeRate,mktValue);
-        System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Implied VLT.."+opW2.getImpliedVlt());
-        opW2=new QWhaley (someStock, 'P', X,days,riskFreeRate,mktValue);
-        System.out.println("Whaley -QAANT  :" + Arrays.toString(opW2.getDerivativesArray()[0])+"Implied VLT.."+opW2.getImpliedVlt());
-        
-        opEFHamer=new QEFHull ('A',someStock,'C', X,days,riskFreeRate,mktValue,steps);
-        System.out.println("EF Hull -QAANT  :" + Arrays.toString(opEFHamer.getDerivativesArray()[0])+"Implied VLT.."+opEFHamer.getImpliedVlt());
-        
-        opEFHamer=new QEFHull ('A',someStock,'P', X,days,riskFreeRate,mktValue,steps);
-        System.out.println("EF Hull -QAANT  :" + Arrays.toString(opEFHamer.getDerivativesArray()[0])+"Implied VLT.."+opEFHamer.getImpliedVlt());
-        
-        
-        opEFWamer=new QEFWilmott ('A',someStock,'C', X,days,riskFreeRate,mktValue,steps);
-        System.out.println("EF Wilmott -QAANT  :" + Arrays.toString(opEFWamer.getDerivativesArray()[0])+"Implied VLT.."+opEFWamer.getImpliedVlt());
-        
-        opEFWamer=new QEFWilmott ('A',someStock,'P', X,days,riskFreeRate,mktValue,steps);
-        System.out.println("EF Wilmott -QAANT  :" + Arrays.toString(opEFWamer.getDerivativesArray()[0])+"Implied VLT.."+opEFWamer.getImpliedVlt());
-        
-        
-        
-        //********************************************************************
-        System.out.println ("\nCRR Prima...:"+ opJRamer.getPrima());
-        
-        opJRamer.setOptionUndValue(undValue*.99);
-       
-        System.out.println ("CRR Caida 1%...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
-        
-        opJRamer.setOptionUndValue(undValue*1.01);
-        System.out.println ("CRR Suba 1%...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
-        System.out.println ("und value...:"+ opJRamer.getUnderlyingValue());
-        
-        opJRamer.setDaysToExpiration(0);
-       // 
-       opJRamer.run();
-        
-        System.out.println ("Days to zero JR...:"+opJRamer.getDaysToExpiration()+" "+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
-        System.out.println (QAbstractModel.modelChooser());
-        
-        opJRamer.setDaysToExpiration(365);
-        opJRamer.setVolatModel(0.5);
-        System.out.println ("Chg Volat...:"+ Arrays.toString(opJRamer.getDerivativesArray()[0]));
-        
-        opJRamer.setUnderlyingValue(98.40);
-        System.out.println ("Intrinsic Value...:"+ opJRamer.getIntrinsicValue());
-        System.out.println ("Time      Value...:"+ opJRamer.getTimeValue());
-        System.out.println ("Hash Map Models...:"+ QAbstractModel.modelMap);
-        System.out.println ("Hash Map Get (4)...:"+ QAbstractModel.modelMap.get(4));
-        
-        System.out.println ("******************************* TICKETS:\n");
-        //System.out.println ("Price Range....:"+Arrays.toString(opW2.getUnderlyingPriceRange()[0]));
-        //opW2.setNumberOfNodes(6);
-        //System.out.println ("Price Range....:"+Arrays.toString(opW2.getUnderlyingPriceRange()[0]));
-        
-        contrato     ='F';
-        option       ='C';
-        undValue     =45400;
-        X            =0;
-        days         =56;
-        vh30Und      =0.30;
-        riskFreeRate =.39;
-        divYield     =0;
-        mktValue     =41000;
-     //   steps        =1000;
-        
-        Qunderlying RFX20Mar    = new Qunderlying(contrato, undValue, vh30Und, divYield);
-        QWhaley       opw       = new QWhaley (RFX20Mar, option, X,days,riskFreeRate,mktValue);
-        
-        Qticket     ticket1     = new Qticket (opw,1,mktValue,1,10);// option,+/-lots,price,multiplier,nodes
-        
-        System.out.println ("Price Range....:"+Arrays.toString(ticket1.getUnderlyingPriceRange()[0]));
-        System.out.println ("PL Output.....:"+Arrays.toString(ticket1.getPLOutput()[0]));
         
         //********************************** Estudio Threads
         ArrayList<TBinomialJR> arrayListOptions =new ArrayList <>();
-        
-        
-        contrato     ='F';
-        option       ='P';
-        undValue     =100;
-        X            =100;
-        days         =10;
-        vh30Und      =0.30;
-        riskFreeRate =.10;
-        divYield     =0;
-        mktValue     =3;
-        steps        =1000;
-        
-        someStock   = new Qunderlying(contrato, undValue, vh30Und, divYield);
         
         int processors= Runtime.getRuntime().availableProcessors();
         
@@ -231,7 +67,7 @@ public class PJSOptions2019 {
         Thread[] worker = new Thread[arrayListOptions.size()];
         
         
-        System.out.println("\nNumero elementos: "+arrayListOptions.size());
+        System.out.println("\nNumero elementos en Array: "+arrayListOptions.size());
        
         for (int i=0 ;i<arrayListOptions.size();i++){
            worker[i] = new Thread(arrayListOptions.get(i));
@@ -279,6 +115,14 @@ public class PJSOptions2019 {
         System.out.println("Binomial EUR  CRR-Thread Put :" + Arrays.toString(tOpt6.getDerivativesArray()[0]));//+"Implied VLT.."+tOpt3.getImpliedVlt());
         
         System.out.println("\nElapsed Time Total           :" + (System.currentTimeMillis()-startTime));
+        
+        System.out.println("\nDays to Zero           :");
+        tOpt4.setDaysToExpiration(0);
+        tOpt4.run();
+        System.out.println("\nDays to Zero Output:"+Arrays.toString(tOpt4.getDerivativesArray()[0]));
+        
+        
+        
         
         //*****************************************************************************************
         // Estudio BS
@@ -394,7 +238,6 @@ public class PJSOptions2019 {
         }
         
         System.out.println ("Price Range....:"+Arrays.toString(ticket.getUnderlyingPriceRange()[0]));
-        
         for (int i=0 ;i<book.size();i++){
             System.out.println ("PL Output.....:"+Arrays.toString(book.get(i).getPLOutput()[0]));
         }
